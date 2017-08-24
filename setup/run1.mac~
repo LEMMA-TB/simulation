@@ -1,0 +1,14 @@
+# Macro file for  mainMCMC 
+# Can be run in batch, without graphic:
+# [] ./mainMCMC  run1.mac
+# or interactively: 
+#---------------------------------
+# [] ./mainMCMC
+# Idle> /control/execute run1.mac
+#---------------------------------
+
+/run/verbose 1
+
+#/tracking/verbose 1      # track info for each event
+
+/run/beamOn 1000000         # number of generated events
