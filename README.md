@@ -1,6 +1,14 @@
 # simulation
 Geant4 simulation of LEMMA test beam, done @CERN on ~August 2017.
 
+### HOW TO RUN
+- You have to have Geant4 up and running
+- type:
+cd build
+cmake -DGeant4_DIR=$G4INSTALL ../setup/
+make
+./mainMCMC
+
 ### GEOMETRY
 The geometry is the one of the final configuration
 
@@ -17,6 +25,8 @@ BEAM vector (one entry per primary particle):
 - BeamCY: Y directive cosine  of primary particle;
 - BeamCZ: Z directive cosine  of primary particle;
 - BeamEne: kinetic energy of the beam [GeV];
+- BeamPart: PDG code of primary particle (11=e-, -11=e+, 22=gamma...);
+
 INTERACTIONS vector (one entry per interaction happening at the border between two different regions, to spare CPU time and disk space):
 - Subdet: number of subdetector in which the interactio happened
 - Idp: PDG code of particle interacting (11=e-, -11=e+, 22=gamma...);
@@ -39,9 +49,12 @@ INTERACTIONS vector (one entry per interaction happening at the border between t
 - PZvdir: Z component of momentum of interaction vertex vector [normalised to P];
 - Iev: event id (in this way we also store the number of entries to the INTERACTIONS vector for each event);
 - Step: number of current step;
-- InextStep: is 1 if there will be another step, 0 if the particle is going to die
+- InextStep: is 1 if there will be another step, 0 if the particle is going to die.
 
+Please note that due to Geant4 issues regarding multi core root output, multi thread is currently disabled (can be enabled in mainMCMC.cc)
 
 ### CHANGE-LOG
 2017.09.11 Modified by collamaf
-- 
+- added Cerenkov absorber (with generic dimensions)
+- created README file
+- added MuonBeamFlag
