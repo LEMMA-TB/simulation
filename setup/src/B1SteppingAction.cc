@@ -91,7 +91,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		G4int Itrack = step->GetTrack()->GetTrackID();
 		G4int Istep = step->GetTrack()->GetCurrentStepNumber();
 		G4ThreeVector xsubdet = step->GetPreStepPoint()->GetPosition();
-		G4double time = step->GetTrack()->GetGlobalTime();
+		G4double time = step->GetTrack()->GetGlobalTime()/ns;
 		G4ThreeVector xvertex(0.,0.,0.);
 		G4ThreeVector pvertexdir(0.,0.,0.);
 		G4double kinev=0.;

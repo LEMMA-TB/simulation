@@ -49,7 +49,7 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	z0 = -1.e-5*mm;
 	
 	
-	G4bool SimpleFlag=true;
+	G4bool SimpleFlag=false;
 	
 	G4double p_smear;
 	G4double EnergySpread;
