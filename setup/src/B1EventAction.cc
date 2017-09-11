@@ -62,7 +62,7 @@ void B1EventAction::EndOfEventAction(const G4Event*){
 	analysisManager->FillNtupleDColumn(4,fBeamCY);
 	analysisManager->FillNtupleDColumn(5,fBeamCZ);
 	analysisManager->FillNtupleDColumn(6,fBeamEne);
-
+	analysisManager->FillNtupleDColumn(7,fBeamPart);
 
 	
 	analysisManager->AddNtupleRow();

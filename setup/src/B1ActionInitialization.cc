@@ -5,8 +5,8 @@
 #include "B1SteppingAction.hh"
 #include "B1StackingAction.hh"
 
-B1ActionInitialization::B1ActionInitialization()
-: G4VUserActionInitialization()
+B1ActionInitialization::B1ActionInitialization(G4bool MuonBeamFlag)
+: G4VUserActionInitialization(), fMuonBeamFlag(MuonBeamFlag)
 {}
 
 
@@ -26,7 +26,7 @@ void B1ActionInitialization::Build() const
 	SetUserAction(runAction);
 	
 	B1EventAction* eventAction = new B1EventAction(runAction);
-	SetUserAction(new B1PrimaryGeneratorAction(eventAction));
+	SetUserAction(new B1PrimaryGeneratorAction(eventAction, fMuonBeamFlag));
 	
 	SetUserAction(eventAction);
 	SetUserAction(new B1SteppingAction(eventAction, runAction));

@@ -9,17 +9,26 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
-B1PrimaryGeneratorAction::B1PrimaryGeneratorAction(B1EventAction* eventAction)
+B1PrimaryGeneratorAction::B1PrimaryGeneratorAction(B1EventAction* eventAction, G4bool MuonBeamFlag)
 : G4VUserPrimaryGeneratorAction(),
 fParticleGun(0),
 fEnvelopeBox(0),
-evtPrimAction(eventAction)
+evtPrimAction(eventAction),
+fMuonBeamFlag(MuonBeamFlag)
 {
 	G4int n_particle = 1;
 	fParticleGun  = new G4ParticleGun(n_particle);
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 	G4String particleName;
-	G4ParticleDefinition* particle = particleTable->FindParticle(particleName="e+");
+	
+	G4ParticleDefinition* particle;
+	if(fMuonBeamFlag) {
+		particle = particleTable->FindParticle(particleName="mu-"); //Primary Muon Beam
+		G4cout<<"I am simulating a Mu- primary beam"<<G4endl;
+	} else {
+		particle = particleTable->FindParticle(particleName="e+"); //Primary Positron Beam
+		G4cout<<"I am simulating a e+ primary beam"<<G4endl;
+	}
 	fParticleGun->SetParticleDefinition(particle);
 }
 
@@ -69,16 +78,16 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	
 	//-- Uniform shoot
 	//----------------
-
+	
 	x0 = sizeX * (G4UniformRand()-0.5);
 	y0 = sizeY * (G4UniformRand()-0.5);
 	
 	fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0)); // GUN POSITION
 	
-
+	
 	//-- ENERGY and ANGULAR SPREAD
 	//   =========================
-
+	
 	G4double px_smear = G4RandGauss::shoot(0.,p_smear);
 	G4double py_smear = G4RandGauss::shoot(0.,p_smear);
 	//  G4double px_smear = p_smear*(G4UniformRand()-0.5);
@@ -86,8 +95,15 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(px_smear,py_smear,1-px_smear*px_smear-py_smear*py_smear));
 	// DA MATTIA DIVERGENZA ~140urad
 	// no energy spread
-	G4double Energy0 = 45.*GeV;
-//	G4double EnergySpread = 0.0; //0.01
+	G4double Energy0;
+	
+	if(fMuonBeamFlag) {
+		Energy0 = 22.*GeV; //Primary Muon Beam
+	} else {
+		Energy0 = 45.*GeV; //Primary Positron Beam
+	}
+	
+	//	G4double EnergySpread = 0.0; //0.01
 	G4double Energy = G4RandGauss::shoot(Energy0, Energy0*EnergySpread);
 	fParticleGun->SetParticleEnergy(Energy);
 	
@@ -99,6 +115,7 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	evtPrimAction->SetBeamCY(py_smear);
 	evtPrimAction->SetBeamCZ(sqrt(1-px_smear*px_smear-py_smear*py_smear));   //corrected by collamaf
 	evtPrimAction->SetBeamEne(Energy/GeV);
+	evtPrimAction->SetBeamPart(fParticleGun->GetParticleDefinition()->GetPDGEncoding());
 	
 	
 	/*

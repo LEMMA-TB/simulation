@@ -15,7 +15,7 @@ class G4Box;
 class B1PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-	B1PrimaryGeneratorAction(B1EventAction* eventAction);
+	B1PrimaryGeneratorAction(B1EventAction* eventAction, G4bool MuonBeamFlag);
 	virtual ~B1PrimaryGeneratorAction();
 	
 	// method from the base class
@@ -28,6 +28,7 @@ private:
 	G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
 	G4Box* fEnvelopeBox;
 	B1EventAction* evtPrimAction;
+	G4bool fMuonBeamFlag;
 	
 	
 };

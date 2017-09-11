@@ -24,6 +24,7 @@ public:
 	void SetBeamCY(G4double bcy) {fBeamCY=bcy;}
 	void SetBeamCZ(G4double bcz) {fBeamCZ=bcz;}
 	void SetBeamEne(G4double ben) {fBeamEne=ben;}
+	void SetBeamPart(G4double bpart) {fBeamPart=bpart;}
 	
 private:
 	B1RunAction* fRunAction;
@@ -32,6 +33,7 @@ private:
 	G4double fBeamY;
 	G4double fBeamZ;
 	G4double fBeamEne;
+	G4double fBeamPart;
 	G4double fBeamCX;
 	G4double fBeamCY;
 	G4double fBeamCZ;

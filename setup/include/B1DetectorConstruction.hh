@@ -13,7 +13,7 @@ class PurgMagTabulatedField3D;
 class B1DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-	B1DetectorConstruction();
+	B1DetectorConstruction(G4bool MuonBeamFlag);
 	virtual ~B1DetectorConstruction();
 	virtual G4VPhysicalVolume* Construct();
 	virtual void ConstructSDandField();
@@ -51,6 +51,7 @@ protected:
 private:
 	G4bool channeling;
 	G4String ctype;
+	G4bool fMuonBeamFlag;
 public:
 	void SetChanneling(bool aBool, G4String aString) {
 		channeling=aBool;

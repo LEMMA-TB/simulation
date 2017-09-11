@@ -53,6 +53,7 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn("BeamCY");   //4
 	analysisManager->CreateNtupleDColumn("BeamCZ");   //5
 	analysisManager->CreateNtupleDColumn("BeamEne");   //6
+	analysisManager->CreateNtupleDColumn("BeamPart");   //7
 	
 
 	analysisManager->CreateNtupleDColumn(0,"Subdet", RunVectorSubdet);
