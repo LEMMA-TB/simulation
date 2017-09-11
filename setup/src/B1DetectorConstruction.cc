@@ -146,6 +146,11 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double LeadGlass_sizeY = 11.5*cm;
 	G4double LeadGlass_sizeZ = 11.5*cm;
 	
+	// Cerenkov counter :          // TO BE CHECKED
+	G4double Cerenkov_sizeX = 20*cm;
+	G4double Cerenkov_sizeY = 20*cm;
+	G4double Cerenkov_sizeZ = 50*cm;
+	
 	// ============
 	//   positions
 	// ============
@@ -190,7 +195,8 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	//	 G4Transform3D transform1 = G4Transform3D(rotEcal,posEcal);
 	G4ThreeVector posShield= G4ThreeVector(92.7/2.*cm,0.*cm,3082.4*cm); // Shield center
 	G4ThreeVector posChamber  = G4ThreeVector(ChamberOffsetX,0.,3132.4*cm); // D-ghost Subdet 70
-	G4ThreeVector posLeadGlass  = G4ThreeVector(-40*cm-LeadGlass_sizeX/2.,0.,3132.4*cm+29*cm+10*cm); // D-ghost Subdet 70
+	G4ThreeVector posLeadGlass  = G4ThreeVector(-40*cm-LeadGlass_sizeX/2.,0.,3132.4*cm+29*cm+10*cm);
+	G4ThreeVector posCerenkov  = G4ThreeVector(-40*cm-LeadGlass_sizeX/2.,0.,3132.4*cm+29*cm+10*cm + 10*cm + LeadGlass_sizeZ/2. + Cerenkov_sizeZ/2.);  //centered behing LeadGlass
 	
 	
 	G4double EcalAngle=7.94*CLHEP::deg;
@@ -225,6 +231,22 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	PbWO4->AddElement(elO,natoms=4);
 	PbWO4->AddElement(elW,natoms=1);
 	PbWO4->AddElement(elPb,natoms=1);
+	
+	
+	G4Element* elSi = new G4Element("Silicon" ,"Si" , 14., 28.09*g/mole);
+
+	G4Material* SiO2 =
+	new G4Material("quartz",d= 2.200*g/cm3, natoms=2);
+	SiO2->AddElement(elSi, natoms=1);
+	SiO2->AddElement(elO , natoms=2);
+	
+	
+	// lead glass
+	G4Material* PbGl = new G4Material("Lead Glass", d= 3.85*g/cm3,
+									  natoms=2);
+	PbGl->AddElement(elPb, 0.5316);
+	PbGl->AddMaterial(SiO2, 0.4684);
+	
 	
 	G4bool checkOverlaps = true;
 	
@@ -380,8 +402,13 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	
 	//-- LeadGlass
 	G4Box* solidLeadGlass = new G4Box("LeadGlass",LeadGlass_sizeX/2,LeadGlass_sizeY/2,LeadGlass_sizeZ/2);
-	G4LogicalVolume* logicLeadGlass = new G4LogicalVolume(solidLeadGlass, plastica,"LeadGlass");
+	G4LogicalVolume* logicLeadGlass = new G4LogicalVolume(solidLeadGlass, PbGl,"LeadGlass");
 	new G4PVPlacement(0,posLeadGlass,logicLeadGlass,"LeadGlass",logicWorld,false,0,checkOverlaps);
+	
+	//-- Cerenkov counter
+	G4Box* solidCerenkov = new G4Box("Cerenkov",Cerenkov_sizeX/2,Cerenkov_sizeY/2,Cerenkov_sizeZ/2);
+	G4LogicalVolume* logicCerenkov = new G4LogicalVolume(solidCerenkov, PbGl,"Cerenkov");
+	new G4PVPlacement(0,posCerenkov,logicCerenkov,"Cerenkov",logicWorld,false,0,checkOverlaps);
 	
 	
 	fScoringVolume_Trk1  = logicTrk1;
