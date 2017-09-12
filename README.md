@@ -55,7 +55,7 @@ INTERACTIONS vector (one entry per interaction happening at the border between t
 Please note that due to Geant4 issues regarding multi core root output, multi thread is currently disabled (can be enabled in mainMCMC.cc)
 
 ### CHANGE-LOG
-2017.09.11 Modified by collamaf
+2017.09.11 Modified by collamaf (francesco.collamati@roma1.infn.it)
 - added Cerenkov absorber (with generic dimensions)
 - created README file
 - added MuonBeamFlag
