@@ -54,16 +54,16 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn("BeamCZ");   //5
 	analysisManager->CreateNtupleDColumn("BeamEne");   //6
 	analysisManager->CreateNtupleDColumn("BeamPart");   //7
-	
+	analysisManager->CreateNtupleDColumn("nhits");   //8
 
-	analysisManager->CreateNtupleDColumn(0,"Subdet", RunVectorSubdet);
+	analysisManager->CreateNtupleDColumn(0,"subdet", RunVectorSubdet);
 	analysisManager->CreateNtupleDColumn(0,"Idp", RunVectorIdp);
 	analysisManager->CreateNtupleDColumn(0,"Ipar", RunVectorIpar);
-	analysisManager->CreateNtupleDColumn(0,"Itrack", RunVectorItrack);
+	analysisManager->CreateNtupleDColumn(0,"itrack", RunVectorItrack);
 	analysisManager->CreateNtupleDColumn(0,"Time", RunVectorTime);
-	analysisManager->CreateNtupleDColumn(0,"X", RunVectorX);
-	analysisManager->CreateNtupleDColumn(0,"Y", RunVectorY);
-	analysisManager->CreateNtupleDColumn(0,"Z", RunVectorZ);
+	analysisManager->CreateNtupleDColumn(0,"xh", RunVectorX);
+	analysisManager->CreateNtupleDColumn(0,"yh", RunVectorY);
+	analysisManager->CreateNtupleDColumn(0,"zh", RunVectorZ);
 	analysisManager->CreateNtupleDColumn(0,"P", RunVectorP);
 	analysisManager->CreateNtupleDColumn(0,"PX", RunVectorPX);
 	analysisManager->CreateNtupleDColumn(0,"PY", RunVectorPY);
@@ -71,13 +71,16 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn(0,"VertexX", RunVectorVertexX);
 	analysisManager->CreateNtupleDColumn(0,"VertexY", RunVectorVertexY);
 	analysisManager->CreateNtupleDColumn(0,"VertexZ", RunVectorVertexZ);
-		analysisManager->CreateNtupleDColumn(0,"Kinev", RunVectorKinev);
+	analysisManager->CreateNtupleDColumn(0,"Kinev", RunVectorKinev);
 	analysisManager->CreateNtupleDColumn(0,"PXvdir", RunVectorPXvdir);
 	analysisManager->CreateNtupleDColumn(0,"PYvdir", RunVectorPYvdir);
 	analysisManager->CreateNtupleDColumn(0,"PZvdir", RunVectorPZvdir);
 	analysisManager->CreateNtupleDColumn(0,"Iev", RunVectorIev);
 	analysisManager->CreateNtupleDColumn(0,"Step", RunVectorStep);
 	analysisManager->CreateNtupleDColumn(0,"InextStep", RunVectorInextStep);
+//	analysisManager->CreateNtupleDColumn(0,"nhits", RunVectorNHits);
+//	analysisManager->CreateNtupleDColumn(0,"itrack", RunVectorItrack);
+	
 	
 	/*
   analysisManager->CreateNtupleIColumn("subdet");

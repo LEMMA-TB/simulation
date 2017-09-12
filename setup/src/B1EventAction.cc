@@ -9,7 +9,8 @@
 
 B1EventAction::B1EventAction(B1RunAction* runAction)
   : G4UserEventAction(),
-fRunAction(runAction)
+fRunAction(runAction),
+fNHits(0)
 {} 
 
 B1EventAction::~B1EventAction(){}
@@ -63,7 +64,7 @@ void B1EventAction::EndOfEventAction(const G4Event*){
 	analysisManager->FillNtupleDColumn(5,fBeamCZ);
 	analysisManager->FillNtupleDColumn(6,fBeamEne);
 	analysisManager->FillNtupleDColumn(7,fBeamPart);
-
+	analysisManager->FillNtupleDColumn(8,fNHits);
 	
 	analysisManager->AddNtupleRow();
 	

@@ -479,6 +479,7 @@ void B1DetectorConstruction::ConstructSDandField(){
 		
 	} else {
 		G4double fieldValue = -0.7*1.8*tesla;
+//		G4double fieldValue = -1.1557*tesla; //calculated rescaling the map for the current bias
 		G4UniformMagField* myField = new G4UniformMagField(G4ThreeVector(0., fieldValue, 0.));
 		G4LogicalVolume* logicBend = G4LogicalVolumeStore::GetInstance()->GetVolume("Bend");
 		G4FieldManager* localfieldMgr = new G4FieldManager(myField);

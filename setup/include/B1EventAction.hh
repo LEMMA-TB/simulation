@@ -25,6 +25,8 @@ public:
 	void SetBeamCZ(G4double bcz) {fBeamCZ=bcz;}
 	void SetBeamEne(G4double ben) {fBeamEne=ben;}
 	void SetBeamPart(G4double bpart) {fBeamPart=bpart;}
+	void AddNHits(G4int bnhits) {fNHits+=bnhits;}
+	
 	
 private:
 	B1RunAction* fRunAction;
@@ -37,7 +39,8 @@ private:
 	G4double fBeamCX;
 	G4double fBeamCY;
 	G4double fBeamCZ;
-
+	G4int fNHits;
+//	G4int NHitsCounter;
 };
 
 

@@ -67,13 +67,13 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	G4int subdet;
 	if      (volume==fScoringVolume_Trk1) {subdet=10; dofill=true;}  // Trk1
 	else if (volume==fScoringVolume_Trk2) {subdet=20; dofill=true;}  // Trk2
-	else if (volume==fScoringVolume_T1)   {subdet=25; dofill=true;}  // T1
+	else if (volume==fScoringVolume_T1)   {subdet=25; dofill=true;}  // T1 target
 	else if (volume==fScoringVolume_Trk3) {subdet=30; dofill=true;}  // Trk3
 	else if (volume==fScoringVolume_Trk4) {subdet=40; dofill=true;}  // Trk4
-	else if (volume==fScoringVolume_Trk5a) {subdet=50; dofill=true;}  // Trk5a
-	else if (volume==fScoringVolume_Trk5b) {subdet=52; dofill=true;}  // Trk5b
-	else if (volume==fScoringVolume_Trk6a) {subdet=55; dofill=true;}  // Trk6a
-	else if (volume==fScoringVolume_Trk6b) {subdet=57; dofill=true;}  // Trk6b
+	else if (volume==fScoringVolume_Trk5a) {subdet=51; dofill=true;}  // Trk5a
+	else if (volume==fScoringVolume_Trk5b) {subdet=50; dofill=true;}  // Trk5b
+	else if (volume==fScoringVolume_Trk6a) {subdet=56; dofill=true;}  // Trk6a
+	else if (volume==fScoringVolume_Trk6b) {subdet=55; dofill=true;}  // Trk6b
 	else if (volume==fScoringVolume_Chamber)   {subdet=70; dofill=true;}  // chamber
 	else if (volume==fScoringVolume_ScintA)   {subdet=72; dofill=true;}  // scintA
 	else if (volume==fScoringVolume_ScintB)   {subdet=74; dofill=true;}  // scintB
@@ -97,7 +97,8 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		G4double kinev=0.;
 		G4String process;
 		G4int pro=0;
-		
+//		G4int HitsCounter=0;
+		fEventAction->AddNHits(1);
 		
 		G4ThreeVector momentum = step->GetPreStepPoint()->GetMomentum();
 		G4double pmod = momentum.mag();
@@ -143,7 +144,10 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		(runStepAction->GetIev()).push_back(iev);
 		(runStepAction->GetStep()).push_back(Istep);
 		(runStepAction->GetInextStep()).push_back(Inextstep);
+//		(runStepAction->GetNHits()).push_back(Inextstep);
+//		(runStepAction->GetItrack()).push_back(-999);
 		
+
 
 
 		if (SHOW) G4cout<<

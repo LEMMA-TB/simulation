@@ -55,6 +55,10 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename,
 	double lenUnit= millimeter;
 	double fieldUnit= tesla;
 	
+	double NominalCurrent=500; //500 mA
+	double ActualCurrent=437.5; //437.5 mA
+	double ScaleFactor=ActualCurrent/NominalCurrent;
+	
 	//	G4LogicalVolume* logicBend = G4LogicalVolumeStore::GetInstance()->GetVolume("Bend");
 	//	G4VPhysicalVolume* physicalBend = G4PhysicalVolumeStore::GetInstance()->GetVolume("Bend");
 	//	zOffset=physicalBend->GetTranslation().z();
@@ -127,7 +131,7 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename,
 			  minz = zval * lenUnit;
 		  }
 				//						  	  if ( ix>=nx*0.7 && iy>=ny*0.7 && iz>=nz*0.7 ) {
-				if ( 0) {
+				if ( 0) { //magnetic field debug
 					G4cout<<"### ix = "<<ix<<", iy "<<iy<<", iz "<<iz<<G4endl;
 					G4cout<<"### nx0-1+ix = "<<nx0-1+ix<<", ny0-1+iy "<<ny0-1+iy<<", nz0-1+iz "<<nz0-1+iz<<G4endl;
 					G4cout<<"### xval, yval, zval = "<<xval<<" "<<yval<<" "<<zval<<G4endl;
@@ -135,9 +139,9 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename,
 				}
 				
 				
-				xField[ix][iy][iz] = bx * fieldUnit;
-				yField[ix][iy][iz] = -1*by * fieldUnit;
-				zField[ix][iy][iz] = bz * fieldUnit;
+				xField[ix][iy][iz] = bx *ScaleFactor * fieldUnit;
+				yField[ix][iy][iz] = -1*by *ScaleFactor * fieldUnit;
+				zField[ix][iy][iz] = bz *ScaleFactor * fieldUnit;
 				
 				/*
 				xField[nx0-1+ix][ny0-1+iy][nz0-1+iz] = bx * fieldUnit;
