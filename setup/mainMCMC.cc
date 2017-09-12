@@ -48,7 +48,7 @@ int main(int argc,char** argv)
   G4RunManager* runManager = new G4RunManager;
 #endif
 	
-	G4bool MuonBeamFlag=true;  //switching on this flag generates 22GeV mu- beam, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
+	G4bool MuonBeamFlag=false;  //switching on this flag generates 22GeV mu- beam, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
  
 // INITIALIZE
 
