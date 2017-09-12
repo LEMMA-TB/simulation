@@ -25,17 +25,18 @@ BEAM vector (one entry per primary particle):
 - BeamCY: Y directive cosine  of primary particle;
 - BeamCZ: Z directive cosine  of primary particle;
 - BeamEne: kinetic energy of the beam [GeV];
-- BeamPart: PDG code of primary particle (11=e-, -11=e+, 22=gamma...);
+- BeamPart: PDG code of primary particle (11=e-, -11=e+, 22=gamma, 13=mu-...);
+- nhits: number of entries to the INTERACTIONS vector (see below) per event
 
 INTERACTIONS vector (one entry per interaction happening at the border between two different regions, to spare CPU time and disk space):
-- Subdet: number of subdetector in which the interactio happened
-- Idp: PDG code of particle interacting (11=e-, -11=e+, 22=gamma...);
-- Ipar: parent ID of the track (0 is primary...);
+- subdet: number of subdetector in which the interactio happened
+- Idp: PDG code of particle interacting (11=e-, -11=e+, 22=gamma, 13=mu-...);
+- ipar: parent ID of the track (0 is primary...);
 - Itrack: track ID of the track;
 - Time: time age of the track [ns];
-- X: X coordinate of the interaction [cm];
-- Y: Y coordinate of the interaction [cm];
-- Z: Z coordinate of the interaction [cm];
+- xh: X coordinate of the interaction [cm];
+- yh: Y coordinate of the interaction [cm];
+- zh: Z coordinate of the interaction [cm];
 - P: momentum of the particle [GeV];
 - PX: X component of momentum of the particle [GeV];
 - PY: Y component of momentum of the particle [GeV];
@@ -58,3 +59,19 @@ Please note that due to Geant4 issues regarding multi core root output, multi th
 - added Cerenkov absorber (with generic dimensions)
 - created README file
 - added MuonBeamFlag
+
+2017.09.12 by collamaf
+- fixed subdet table to match data
+- added magnetic field scaling due to actual current
+
+
+
+
+
+
+
+
+
+
+
+
