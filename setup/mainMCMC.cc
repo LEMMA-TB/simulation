@@ -48,7 +48,10 @@ int main(int argc,char** argv)
   G4RunManager* runManager = new G4RunManager;
 #endif
 	
-	G4bool MuonBeamFlag=false;  //switching on this flag generates 22GeV mu- beam, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
+	G4bool MuonBeamFlag=false;  //switching on this flag generates 22GeV mu- beam, and removes the target, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
+	
+	G4bool ElectronBeamFlag=true;  //switching on this flag generates 22GeV e- beam, and removes the target, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
+	
  
 // INITIALIZE
 
@@ -57,7 +60,7 @@ int main(int argc,char** argv)
   G4bool channeling = false;
   G4String ctype = "Si" ;  // "C" or "Si"
 //==================================================
-  B1DetectorConstruction* detector =new B1DetectorConstruction(MuonBeamFlag);
+  B1DetectorConstruction* detector =new B1DetectorConstruction(MuonBeamFlag, ElectronBeamFlag);
   detector->SetChanneling(channeling,ctype);
   
   if ( FTFP ){
@@ -79,7 +82,7 @@ int main(int argc,char** argv)
   }
   
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new B1ActionInitialization(MuonBeamFlag));
+  runManager->SetUserInitialization(new B1ActionInitialization(MuonBeamFlag,ElectronBeamFlag));
   runManager->Initialize();  // init kernel
   
   

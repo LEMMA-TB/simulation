@@ -36,7 +36,7 @@
 
 
 
-B1DetectorConstruction::B1DetectorConstruction(G4bool MuonBeamFlag)
+B1DetectorConstruction::B1DetectorConstruction(G4bool MuonBeamFlag, G4bool ElectronBeamFlag)
 : G4VUserDetectorConstruction(),
 fScoringVolume_Trk1(0),
 fScoringVolume_Trk2(0),
@@ -52,7 +52,8 @@ fScoringVolume_ScintA(0),
 fScoringVolume_ScintB(0),
 fScoringVolume_Ecal(0),
 fScoringVolume_Gcal(0),
-fMuonBeamFlag(MuonBeamFlag)
+fMuonBeamFlag(MuonBeamFlag),
+fElectronBeamFlag(ElectronBeamFlag)
 { }
 
 
@@ -221,7 +222,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4Material* plastica = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
 	G4Material* alluminium = nist->FindOrBuildMaterial("G4_ALUMINUM_OXIDE");
 	
-	if (fMuonBeamFlag) berillio=nist->FindOrBuildMaterial("G4_Galactic");;  //if MuonBeam case I want no target
+	if (fMuonBeamFlag || fElectronBeamFlag) berillio=nist->FindOrBuildMaterial("G4_Galactic");;  //if MuonBeam case I want no target
 	//--PbWO4 G-CAL crystal (CMS)
 	G4double A,Z,d;
 	d=8.28*g/cm3;
@@ -457,7 +458,7 @@ void B1DetectorConstruction::ConstructSDandField(){
 	//	G4double zOffset=posBend.z();
 	G4VPhysicalVolume* physicalBend = G4PhysicalVolumeStore::GetInstance()->GetVolume("Bend");
 	G4double zOffset=physicalBend->GetTranslation().z();
-	G4bool MagMapFlag=true;
+	G4bool MagMapFlag=false;
 #if 1
 	//	/*
 	if(MagMapFlag) {

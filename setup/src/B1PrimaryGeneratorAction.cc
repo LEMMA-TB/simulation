@@ -9,12 +9,13 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
-B1PrimaryGeneratorAction::B1PrimaryGeneratorAction(B1EventAction* eventAction, G4bool MuonBeamFlag)
+B1PrimaryGeneratorAction::B1PrimaryGeneratorAction(B1EventAction* eventAction, G4bool MuonBeamFlag, G4bool ElectronBeamFlag)
 : G4VUserPrimaryGeneratorAction(),
 fParticleGun(0),
 fEnvelopeBox(0),
 evtPrimAction(eventAction),
-fMuonBeamFlag(MuonBeamFlag)
+fMuonBeamFlag(MuonBeamFlag),
+fElectronBeamFlag(ElectronBeamFlag)
 {
 	G4int n_particle = 1;
 	fParticleGun  = new G4ParticleGun(n_particle);
@@ -25,6 +26,9 @@ fMuonBeamFlag(MuonBeamFlag)
 	if(fMuonBeamFlag) {
 		particle = particleTable->FindParticle(particleName="mu-"); //Primary Muon Beam
 		G4cout<<"I am simulating a Mu- primary beam"<<G4endl;
+	} else if(fElectronBeamFlag) {
+		particle = particleTable->FindParticle(particleName="e-"); //Primary Electron Beam
+		G4cout<<"I am simulating a e- primary beam"<<G4endl;
 	} else {
 		particle = particleTable->FindParticle(particleName="e+"); //Primary Positron Beam
 		G4cout<<"I am simulating a e+ primary beam"<<G4endl;
@@ -99,6 +103,8 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	
 	if(fMuonBeamFlag) {
 		Energy0 = 22.*GeV; //Primary Muon Beam
+	} else if(fElectronBeamFlag) {
+		Energy0 = 22.*GeV; //Primary Electron Beam
 	} else {
 		Energy0 = 45.*GeV; //Primary Positron Beam
 	}

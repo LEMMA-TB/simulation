@@ -11,4 +11,4 @@
 
 #/tracking/verbose 1      # track info for each event
 
-/run/beamOn 10         # number of generated events
+/run/beamOn 1000         # number of generated events
