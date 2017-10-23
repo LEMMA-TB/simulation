@@ -38,10 +38,12 @@
 #include "globals.hh"
 #include "G4MagneticField.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <fstream>
 #include <vector>
 #include <cmath>
+//#include <algorithm>
 
 using namespace std;
 
@@ -60,6 +62,7 @@ class PurgMagTabulatedField3D
 	int nx0,ny0,nz0;
 	// The physical limits of the defined region
 	double minx, maxx, miny, maxy, minz, maxz;
+	double BxMax=0*tesla, ByMax=0*tesla, BzMax=0*tesla;
 	// The physical extent of the defined region
 	double dx, dy, dz;
 	double fZoffset;

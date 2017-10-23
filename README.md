@@ -64,7 +64,11 @@ Please note that due to Geant4 issues regarding multi core root output, multi th
 - fixed subdet table to match data
 - added magnetic field scaling due to actual current
 
+2017.10.19 by collamaf
+- added global flag (ElectronBeamFlag) to generate electrons as primary particle (thus removing the target). To generate a positron beam at the current time it's enought to make false both ElectronBeamFlag and MuonBeamFlag
 
+2017.10.23 by collamaf
+- fixed the problem with the magnetic field, that was showing remarkable differences between map and fixed values. It was due to an error in the handling of the ZOffset in GetFieldValue of PurgMagTabulatedField3D.cc (now changed the sign of the offset passed to it by DetectorConstruction.c). Now very good agreement between map and fixed field!
 
 
 

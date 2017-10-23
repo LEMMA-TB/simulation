@@ -158,7 +158,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	// ============
 	G4double xTrk5=5.1*cm+trk_sizeXb/2.;
 	G4double zTrk5=1563*cm;
-	G4double zBendMagn=zTrk5-260*cm;
+	G4double zBendMagn=zTrk5-260*cm;  //1563-260=1303
 	G4double xTrk6=14.85*cm+trk_sizeXb/2.;
 	G4double zTrk6=2137.4*cm;
 	//	G4double xScintA=5.1*cm+ScintA_sizeX/2.;
@@ -465,8 +465,9 @@ void B1DetectorConstruction::ConstructSDandField(){
 		//G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("PurgMag3D.TABLE", 0);
 //		G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("MappaBTB.TABLE", 45*cm, 30*cm, -(zOffset-70*cm));
 		G4cout<<"lemmaDEBUG zoffset= "<<zOffset<<G4endl;
-		G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("MappaBTB.TABLE",  -zOffset+100*cm);
-		fField.Put(PurgMagField);
+//		G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("MappaBTB.TABLE",  -zOffset+100*cm);
+		G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("MappaBTB.TABLE",  zOffset+00*cm);
+	fField.Put(PurgMagField);
 		
 //		G4FieldManager* localfieldMgr = new G4FieldManager(PurgMagField);
 	///*
@@ -479,7 +480,7 @@ void B1DetectorConstruction::ConstructSDandField(){
 		//		logicBend->SetFieldManager(localfieldMgr,true);
 		
 	} else {
-		G4double fieldValue = -0.7*1.8*tesla;
+		G4double fieldValue = -0.7*1.8*tesla;  //=-1,26
 //		G4double fieldValue = -1.1557*tesla; //calculated rescaling the map for the current bias
 		G4UniformMagField* myField = new G4UniformMagField(G4ThreeVector(0., fieldValue, 0.));
 		G4LogicalVolume* logicBend = G4LogicalVolumeStore::GetInstance()->GetVolume("Bend");

@@ -56,8 +56,8 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename,
 	double fieldUnit= tesla;
 	
 	double NominalCurrent=500; //500 mA
-	double ActualCurrent=437.5; //437.5 mA
-	double ScaleFactor=ActualCurrent/NominalCurrent;
+	double ActualCurrent=437.5; //437.5 mA quella dichiarata, 476.96 per avere mappa con max 1.26T
+	double ScaleFactor=ActualCurrent/NominalCurrent; //0.875 --> 1.155T
 	
 	//	G4LogicalVolume* logicBend = G4LogicalVolumeStore::GetInstance()->GetVolume("Bend");
 	//	G4VPhysicalVolume* physicalBend = G4PhysicalVolumeStore::GetInstance()->GetVolume("Bend");
@@ -122,7 +122,7 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename,
 	
 	//  double permeability; // Not used in this example.
 	for (ix=0; ix<nx; ix++) {
-		for (iy=0; iy<ny; iy++) {
+		for (iy=0; iy<ny; iy++ /*&& G4cout<<"NUOVO"<<G4endl*/) {
 			for (iz=0; iz<nz; iz++) {
 				file >> xval >> yval >> zval >> bx >> by >> bz;  	// estrae i valori
 		  if ( ix==0 && iy==0 && iz==0 ) {
@@ -130,18 +130,35 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename,
 			  miny = yval * lenUnit;
 			  minz = zval * lenUnit;
 		  }
+			
+				
+				xField[ix][iy][iz] = -1*bx *ScaleFactor * fieldUnit;
+				yField[ix][iy][iz] = -1*by *ScaleFactor * fieldUnit;
+				zField[ix][iy][iz] = -1*bz *ScaleFactor * fieldUnit;
+			/*
+				if (fabs(xField[ix][iy][iz])>BxMax) BxMax=xField[ix][iy][iz];
+				if (fabs(yField[ix][iy][iz])>ByMax) ByMax=yField[ix][iy][iz];
+				if (fabs(zField[ix][iy][iz])>BzMax) BzMax=zField[ix][iy][iz];
+*/
+				if (bx*fieldUnit>BxMax) BxMax=bx*fieldUnit;
+				if (by*fieldUnit>ByMax) ByMax=by*fieldUnit;
+				if (bz*fieldUnit>BzMax) BzMax=bz*fieldUnit;
+				//Max Field Value: Bx= 1.8064, By= 2.41933, Bz= 0.51616
+				
+				//				1.3208538 is max By value in Map
 				//						  	  if ( ix>=nx*0.7 && iy>=ny*0.7 && iz>=nz*0.7 ) {
+//				G4cout<<"######### bx, by, bz SCALED = "<<xField[ix][iy][iz]<<" "<<yField[ix][iy][iz]/tesla<<" "<<zField[ix][iy][iz]<<G4endl;
+	//			G4cout<<"# xval, yval, zval = "<<xval<<" "<<yval<<" "<<zval<<G4endl;
+		//		G4cout<<"## bx, by, bz SCALED = "<<xField[ix][iy][iz]<<" "<<yField[ix][iy][iz]/tesla<<" "<<zField[ix][iy][iz]<<G4endl<<G4endl;
 				if ( 0) { //magnetic field debug
 					G4cout<<"### ix = "<<ix<<", iy "<<iy<<", iz "<<iz<<G4endl;
 					G4cout<<"### nx0-1+ix = "<<nx0-1+ix<<", ny0-1+iy "<<ny0-1+iy<<", nz0-1+iz "<<nz0-1+iz<<G4endl;
 					G4cout<<"### xval, yval, zval = "<<xval<<" "<<yval<<" "<<zval<<G4endl;
-					G4cout<<"######### bx, by, bz = "<<bx<<" "<<by<<" "<<bz<<G4endl;
+					G4cout<<"######### bx, by, bz ORIG = "<<bx<<" "<<by/tesla<<" "<<bz<<G4endl;
+					G4cout<<"######### bx, by, bz SCALED = "<<xField[ix][iy][iz]<<" "<<yField[ix][iy][iz]/tesla<<" "<<zField[ix][iy][iz]<<G4endl;
 				}
 				
 				
-				xField[ix][iy][iz] = bx *ScaleFactor * fieldUnit;
-				yField[ix][iy][iz] = -1*by *ScaleFactor * fieldUnit;
-				zField[ix][iy][iz] = bz *ScaleFactor * fieldUnit;
 				
 				/*
 				xField[nx0-1+ix][ny0-1+iy][nz0-1+iz] = bx * fieldUnit;
@@ -191,12 +208,24 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename,
 	G4cout << "\n ---> Dif values x,y,z (range): "
 	<< dx/cm << " " << dy/cm << " " << dz/cm << " cm in z "
 	<< "\n-----------------------------------------------------------" << endl;
+	
+	G4cout <<"Max Field Value: Bx= "<<
+	BxMax/tesla<<", By= "<<
+	ByMax/tesla<<", Bz= "<<
+	BzMax/tesla
+	<<G4endl;
+	
+	G4cout <<"Max Field Value After Scaling: Bx= "<<
+	BxMax*ScaleFactor/tesla<<", By= "<<
+	ByMax*ScaleFactor/tesla<<", Bz= "<<
+	BzMax*ScaleFactor/tesla
+	<<G4endl;
 }
 
 void PurgMagTabulatedField3D::GetFieldValue(const double point[4],
 											double *Bfield ) const
 {
-	/*
+	/* //ORIGINAL VERSION
 	double x = point[0];
 	double y = point[1];
 	double z = point[2] + fZoffset;
@@ -215,12 +244,12 @@ void PurgMagTabulatedField3D::GetFieldValue(const double point[4],
 	} else {
 		y = point[1];
 	}
-	if (point[2]<0) {
-		z=fabs(point[2])+fZoffset;
+//	if (point[2]<0) {   //corrected Zoffset problem by collamaf - 23.10.2017
+		z=fabs(point[2]-fZoffset);
 //		cout <<"lemmaDEBUG invertito segno a z"<<endl;
-	} else {
-		z = point[2]+ fZoffset;
-	}
+//	} else {
+//		z = point[2]+ fZoffset;
+//	}
 	
 	// Check that the point is within the defined region
 	if ( x>=minx && x<=maxx &&
