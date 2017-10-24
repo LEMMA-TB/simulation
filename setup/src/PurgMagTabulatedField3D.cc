@@ -48,8 +48,8 @@ namespace{
 }
 
 PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename,
-												  double zOffset  )
-:fZoffset(zOffset),invertX(false),invertY(false),invertZ(false)
+												  double zOffset, G4bool FlipFieldFlag)
+:fZoffset(zOffset),invertX(false),invertY(false),invertZ(false), fFlipFieldFlag(FlipFieldFlag)
 {
  
 	double lenUnit= millimeter;
@@ -131,10 +131,15 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename,
 			  minz = zval * lenUnit;
 		  }
 			
-				
+				if (fFlipFieldFlag) {
 				xField[ix][iy][iz] = -1*bx *ScaleFactor * fieldUnit;
 				yField[ix][iy][iz] = -1*by *ScaleFactor * fieldUnit;
 				zField[ix][iy][iz] = -1*bz *ScaleFactor * fieldUnit;
+				} else {
+					xField[ix][iy][iz] = 1*bx *ScaleFactor * fieldUnit;
+					yField[ix][iy][iz] = 1*by *ScaleFactor * fieldUnit;
+					zField[ix][iy][iz] = 1*bz *ScaleFactor * fieldUnit;
+				}
 			/*
 				if (fabs(xField[ix][iy][iz])>BxMax) BxMax=xField[ix][iy][iz];
 				if (fabs(yField[ix][iy][iz])>ByMax) ByMax=yField[ix][iy][iz];

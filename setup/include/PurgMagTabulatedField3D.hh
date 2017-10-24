@@ -69,8 +69,10 @@ class PurgMagTabulatedField3D
 	bool invertX, invertY, invertZ;
 	
 public:
-	PurgMagTabulatedField3D(const char* filename,  double zOffset  );
+	PurgMagTabulatedField3D(const char* filename,  double zOffset, G4bool FlipFieldFlag);
 	void  GetFieldValue( const  double Point[4],
 						double *Bfield          ) const;
+private:
+	G4bool fFlipFieldFlag;
 };
 

@@ -51,9 +51,9 @@
 #/vis/scene/add/hits
 #
 # To draw only gammas:
-/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/create/particleFilter
 #/vis/filtering/trajectories/particleFilter-0/add e+
-/vis/filtering/trajectories/particleFilter-0/add mu-
+#/vis/filtering/trajectories/particleFilter-0/add mu-
 #
 # To invert the above, drawing all particles except gammas,
 # keep the above two lines but also add:
@@ -61,7 +61,7 @@
 #
 # Many other options are available with /vis/modeling and /vis/filtering.
 # For example, to select colour by particle ID:
-#/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/create/drawByParticleID
 #/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
 # To select or override default colours (note: e+ is blue by default):
 #/vis/modeling/trajectories/list
@@ -82,7 +82,7 @@
 #
 # Axes, scale, etc.
 #/vis/scene/add/scale   # Simple scale line
-/vis/scene/add/scale 30 m z 0 1 0 manual 0 0 15 m
+/vis/scene/add/scale 31.324 m z 0 1 0 manual 0 0 15.662 m
 /vis/scene/add/axes    # Simple axes: x=red, y=green, z=blue.
 /vis/scene/add/eventID # Drawn at end of event
 #/vis/scene/add/date    # Date stamp

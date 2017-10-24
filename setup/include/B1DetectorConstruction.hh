@@ -13,7 +13,7 @@ class PurgMagTabulatedField3D;
 class B1DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-	B1DetectorConstruction(G4bool MuonBeamFlag,G4bool ElectronBeamFlag);
+	B1DetectorConstruction(G4bool MuonBeamFlag,G4bool ElectronBeamFlag, G4bool TargetFlag, G4bool FlipFieldFlag, G4bool MagMapFlag);
 	virtual ~B1DetectorConstruction();
 	virtual G4VPhysicalVolume* Construct();
 	virtual void ConstructSDandField();
@@ -53,6 +53,10 @@ private:
 	G4String ctype;
 	G4bool fMuonBeamFlag;
 	G4bool fElectronBeamFlag;
+	G4bool fTargetFlag;
+	G4bool fFlipFieldFlag;
+	G4bool fMagMapFlag;
+
 public:
 	void SetChanneling(bool aBool, G4String aString) {
 		channeling=aBool;

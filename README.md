@@ -52,7 +52,7 @@ INTERACTIONS vector (one entry per interaction happening at the border between t
 - Step: number of current step;
 - InextStep: is 1 if there will be another step, 0 if the particle is going to die.
 
-Please note that due to Geant4 issues regarding multi core root output, multi thread is currently disabled (can be enabled in mainMCMC.cc)
+Please note that due to Geant4 issues regarding multi core root output, multi thread is currently disabled (can be enabled in mainMCMC.cc, but creates N-root files...)
 
 ### CHANGE-LOG
 2017.09.11 Modified by collamaf (francesco.collamati@roma1.infn.it)
@@ -72,6 +72,7 @@ Please note that due to Geant4 issues regarding multi core root output, multi th
 
 2017.10.24 by collamaf
 - added 12-leyer structure for the muon chamber
+- moved all flags to mainMCMC.cc
 
 
 

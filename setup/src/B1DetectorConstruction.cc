@@ -36,7 +36,7 @@
 
 
 
-B1DetectorConstruction::B1DetectorConstruction(G4bool MuonBeamFlag, G4bool ElectronBeamFlag)
+B1DetectorConstruction::B1DetectorConstruction(G4bool MuonBeamFlag, G4bool ElectronBeamFlag, G4bool TargetFlag, G4bool FlipFieldFlag, G4bool MagMapFlag)
 : G4VUserDetectorConstruction(),
 fScoringVolume_Trk1(0),
 fScoringVolume_Trk2(0),
@@ -53,7 +53,10 @@ fScoringVolume_ScintB(0),
 fScoringVolume_Ecal(0),
 fScoringVolume_Gcal(0),
 fMuonBeamFlag(MuonBeamFlag),
-fElectronBeamFlag(ElectronBeamFlag)
+fElectronBeamFlag(ElectronBeamFlag),
+fTargetFlag(TargetFlag),
+fFlipFieldFlag(FlipFieldFlag),
+fMagMapFlag(MagMapFlag)
 { }
 
 
@@ -132,7 +135,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double Chamber_sizeX = 2.55*m;
 	G4double Chamber_sizeY = 2.55*m;
 //	G4double Chamber_sizeZ = 29*cm; //entire chamber
-	G4double Chamber_sizeZ = 1.2*cm; //chamber layer is 1.2, but use smaller value since we just use z position
+	G4double Chamber_sizeZ = 0.1*cm; //chamber layer is 1.2, but use smaller value since we just use z position
 
 	// Scintillator A behind T6a:
 	G4double ScintA_sizeX = 10*cm;
@@ -164,7 +167,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double zTrk6=2137.4*cm;
 	//	G4double xScintA=5.1*cm+ScintA_sizeX/2.;
 	G4double zCalo=2941*cm;
-	G4double CaloOffset=5*cm;
+	G4double CaloOffset=0*cm; //5cm
 	G4double DistXGcalIron=5*cm;
 	G4double DistXIronEcal=2*cm;
 	G4double DistXEcalColumn=10*cm;
@@ -224,7 +227,8 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4Material* plastica = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
 	G4Material* alluminium = nist->FindOrBuildMaterial("G4_ALUMINUM_OXIDE");
 	
-	if (fMuonBeamFlag || fElectronBeamFlag) berillio=nist->FindOrBuildMaterial("G4_Galactic");;  //if MuonBeam case I want no target
+//	if (fMuonBeamFlag || fElectronBeamFlag) berillio=nist->FindOrBuildMaterial("G4_Galactic");;  //if MuonBeam case I want no target
+	if (!fTargetFlag) berillio=nist->FindOrBuildMaterial("G4_Galactic");;  //if I do not want the target
 	//--PbWO4 G-CAL crystal (CMS)
 	G4double A,Z,d;
 	d=8.28*g/cm3;
@@ -419,12 +423,12 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	
 	//-- LeadGlass
 	G4Box* solidLeadGlass = new G4Box("LeadGlass",LeadGlass_sizeX/2,LeadGlass_sizeY/2,LeadGlass_sizeZ/2);
-	G4LogicalVolume* logicLeadGlass = new G4LogicalVolume(solidLeadGlass, PbGl,"LeadGlass");
+	G4LogicalVolume* logicLeadGlass = new G4LogicalVolume(solidLeadGlass, vuoto /*PbGl*/,"LeadGlass");
 	new G4PVPlacement(0,posLeadGlass,logicLeadGlass,"LeadGlass",logicWorld,false,0,checkOverlaps);
 	
 	//-- Cerenkov counter
 	G4Box* solidCerenkov = new G4Box("Cerenkov",Cerenkov_sizeX/2,Cerenkov_sizeY/2,Cerenkov_sizeZ/2);
-	G4LogicalVolume* logicCerenkov = new G4LogicalVolume(solidCerenkov, PbGl,"Cerenkov");
+	G4LogicalVolume* logicCerenkov = new G4LogicalVolume(solidCerenkov,  vuoto /*PbGl*/,"Cerenkov");
 	new G4PVPlacement(0,posCerenkov,logicCerenkov,"Cerenkov",logicWorld,false,0,checkOverlaps);
 	
 	
@@ -468,22 +472,19 @@ void B1DetectorConstruction::ConstructSDandField(){
 	// =============================
 	//       MAGNETIC FIELD
 	// =============================
+	// Conventional sign: non-flipped field sends positrons towards the "clean channel" (just chamber, no calos)
 	
 	//	G4double zOffset=posBend.z();
 	G4VPhysicalVolume* physicalBend = G4PhysicalVolumeStore::GetInstance()->GetVolume("Bend");
 	G4double zOffset=physicalBend->GetTranslation().z();
-	G4bool MagMapFlag=true;
 #if 1
 	//	/*
-	if(MagMapFlag) {
-		//G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("PurgMag3D.TABLE", 0);
-//		G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("MappaBTB.TABLE", 45*cm, 30*cm, -(zOffset-70*cm));
+	if(fMagMapFlag) {
 		G4cout<<"lemmaDEBUG zoffset= "<<zOffset<<G4endl;
 //		G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("MappaBTB.TABLE",  -zOffset+100*cm);
-		G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("MappaBTB.TABLE",  zOffset+00*cm);
-	fField.Put(PurgMagField);
+		G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("MappaBTB.TABLE",  zOffset+00*cm, fFlipFieldFlag);
+		fField.Put(PurgMagField);
 		
-//		G4FieldManager* localfieldMgr = new G4FieldManager(PurgMagField);
 	///*
 		G4FieldManager* pFieldMgr =
 	 G4TransportationManager::GetTransportationManager()->GetFieldManager();
@@ -491,10 +492,11 @@ void B1DetectorConstruction::ConstructSDandField(){
 		pFieldMgr->SetDetectorField(fField.Get());
 		pFieldMgr->CreateChordFinder(fField.Get());
 	//*/
-		//		logicBend->SetFieldManager(localfieldMgr,true);
-		
 	} else {
-		G4double fieldValue = -0.7*1.8*tesla;  //=-1,26
+		G4double fieldValue;
+		if (fFlipFieldFlag) fieldValue= -0.7*1.8*tesla;  //=-1,26
+		else fieldValue=0.7*1.8*tesla;
+		
 //		G4double fieldValue = -1.1557*tesla; //calculated rescaling the map for the current bias
 		G4UniformMagField* myField = new G4UniformMagField(G4ThreeVector(0., fieldValue, 0.));
 		G4LogicalVolume* logicBend = G4LogicalVolumeStore::GetInstance()->GetVolume("Bend");

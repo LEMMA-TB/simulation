@@ -9,13 +9,15 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
-B1PrimaryGeneratorAction::B1PrimaryGeneratorAction(B1EventAction* eventAction, G4bool MuonBeamFlag, G4bool ElectronBeamFlag)
+B1PrimaryGeneratorAction::B1PrimaryGeneratorAction(B1EventAction* eventAction, G4double BeamEnergy, G4bool MuonBeamFlag, G4bool ElectronBeamFlag, G4bool SimpleFlag)
 : G4VUserPrimaryGeneratorAction(),
 fParticleGun(0),
 fEnvelopeBox(0),
 evtPrimAction(eventAction),
+fBeamEnergy(BeamEnergy),
 fMuonBeamFlag(MuonBeamFlag),
-fElectronBeamFlag(ElectronBeamFlag)
+fElectronBeamFlag(ElectronBeamFlag),
+fSimpleFlag(SimpleFlag)
 {
 	G4int n_particle = 1;
 	fParticleGun  = new G4ParticleGun(n_particle);
@@ -25,13 +27,13 @@ fElectronBeamFlag(ElectronBeamFlag)
 	G4ParticleDefinition* particle;
 	if(fMuonBeamFlag) {
 		particle = particleTable->FindParticle(particleName="mu-"); //Primary Muon Beam
-		G4cout<<"I am simulating a Mu- primary beam"<<G4endl;
+		G4cout<<"I am simulating a Mu- primary beam of energy "<<fBeamEnergy/GeV<<" GeV"<<G4endl;
 	} else if(fElectronBeamFlag) {
 		particle = particleTable->FindParticle(particleName="e-"); //Primary Electron Beam
-		G4cout<<"I am simulating a e- primary beam"<<G4endl;
+		G4cout<<"I am simulating a e- primary beam of energy "<<fBeamEnergy/GeV<<" GeV"<<G4endl;
 	} else {
 		particle = particleTable->FindParticle(particleName="e+"); //Primary Positron Beam
-		G4cout<<"I am simulating a e+ primary beam"<<G4endl;
+		G4cout<<"I am simulating a e+ primary beam of energy "<<fBeamEnergy/GeV<<" GeV"<<G4endl;
 	}
 	fParticleGun->SetParticleDefinition(particle);
 }
@@ -62,12 +64,12 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	z0 = -1.e-5*mm;
 	
 	
-	G4bool SimpleFlag=false;
+	
 	
 	G4double p_smear;
 	G4double EnergySpread;
 	
-	if (SimpleFlag) {
+	if (fSimpleFlag) {
 		p_smear = 0;
 		EnergySpread = 0.0;
 		sizeX=0;
@@ -99,16 +101,17 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(px_smear,py_smear,1-px_smear*px_smear-py_smear*py_smear));
 	// DA MATTIA DIVERGENZA ~140urad
 	// no energy spread
-	G4double Energy0;
+	G4double Energy0=fBeamEnergy;
 	
+	/*
 	if(fMuonBeamFlag) {
 		Energy0 = 22.*GeV; //Primary Muon Beam
 	} else if(fElectronBeamFlag) {
 		Energy0 = 22.*GeV; //Primary Electron Beam
 	} else {
-		Energy0 = 45.*GeV; //Primary Positron Beam
+		Energy0 = 45.*GeV; //Primary Positron Beam (18, 22, 26 GeV options for calibration) - 45 GeV for real TB
 	}
-	
+	*/
 	//	G4double EnergySpread = 0.0; //0.01
 	G4double Energy = G4RandGauss::shoot(Energy0, Energy0*EnergySpread);
 	fParticleGun->SetParticleEnergy(Energy);

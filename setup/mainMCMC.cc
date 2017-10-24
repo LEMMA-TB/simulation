@@ -22,7 +22,7 @@
 #include "G4GenericBiasingPhysics.hh"
 #include "G4ProcessTable.hh"
 #include "G4EmStandardPhysicsSS.hh"
-
+#include "G4SystemOfUnits.hh"
 //------------------------------
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -48,19 +48,22 @@ int main(int argc,char** argv)
   G4RunManager* runManager = new G4RunManager;
 #endif
 	
+	// FLAG DEFINITION TO CHOOSE THE DESIRED CONFIGURATION
 	G4bool MuonBeamFlag=false;  //switching on this flag generates 22GeV mu- beam, and removes the target, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
-	
 	G4bool ElectronBeamFlag=false;  //switching on this flag generates 22GeV e- beam, and removes the target, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
-	
- 
-// INITIALIZE
+	G4double BeamEnergy=22.*GeV; //Primary Beam Energy (18, 22, 26 GeV options for e+ calibration) - 45 GeV for real TB
+	G4bool TargetFlag=false;
+	G4bool FlipFieldFlag=false; //non-flipped field sends positrons towards the "clean channel" (just chamber, no calos)
+	G4bool MagMapFlag=false;
+	G4bool SimpleFlag=false;
+	// INITIALIZE
 
 //==================================================
   G4bool FTFP = false; // standard Geant4 PhysicsList
   G4bool channeling = false;
   G4String ctype = "Si" ;  // "C" or "Si"
 //==================================================
-  B1DetectorConstruction* detector =new B1DetectorConstruction(MuonBeamFlag, ElectronBeamFlag);
+  B1DetectorConstruction* detector =new B1DetectorConstruction(MuonBeamFlag, ElectronBeamFlag, TargetFlag, FlipFieldFlag, MagMapFlag);
   detector->SetChanneling(channeling,ctype);
   
   if ( FTFP ){
@@ -82,7 +85,7 @@ int main(int argc,char** argv)
   }
   
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new B1ActionInitialization(MuonBeamFlag,ElectronBeamFlag));
+  runManager->SetUserInitialization(new B1ActionInitialization(BeamEnergy, MuonBeamFlag,ElectronBeamFlag));
   runManager->Initialize();  // init kernel
   
   
