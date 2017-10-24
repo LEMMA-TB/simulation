@@ -85,7 +85,7 @@ int main(int argc,char** argv)
   }
   
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new B1ActionInitialization(BeamEnergy, MuonBeamFlag,ElectronBeamFlag));
+  runManager->SetUserInitialization(new B1ActionInitialization(BeamEnergy, MuonBeamFlag,ElectronBeamFlag, SimpleFlag));
   runManager->Initialize();  // init kernel
   
   
