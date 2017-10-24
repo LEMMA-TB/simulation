@@ -70,6 +70,8 @@ Please note that due to Geant4 issues regarding multi core root output, multi th
 2017.10.23 by collamaf
 - fixed the problem with the magnetic field, that was showing remarkable differences between map and fixed values. It was due to an error in the handling of the ZOffset in GetFieldValue of PurgMagTabulatedField3D.cc (now changed the sign of the offset passed to it by DetectorConstruction.c). Now very good agreement between map and fixed field!
 
+2017.10.24 by collamaf
+- added 12-leyer structure for the muon chamber
 
 
 

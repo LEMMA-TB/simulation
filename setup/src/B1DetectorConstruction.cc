@@ -131,8 +131,9 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	//--> detectors (D-ghost): // ghost-detectors
 	G4double Chamber_sizeX = 2.55*m;
 	G4double Chamber_sizeY = 2.55*m;
-	G4double Chamber_sizeZ = 29*cm;
-	
+//	G4double Chamber_sizeZ = 29*cm; //entire chamber
+	G4double Chamber_sizeZ = 1.2*cm; //chamber layer is 1.2, but use smaller value since we just use z position
+
 	// Scintillator A behind T6a:
 	G4double ScintA_sizeX = 10*cm;
 	G4double ScintA_sizeY = 4*cm;
@@ -171,8 +172,9 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double ChamberOffsetX=3*cm;
 	G4double X3Corr=1*cm;
 	G4double Y3Corr=-0.5*cm;
-	
-	
+	G4double ChamberLayerZ[12]={-10.75*cm, -9.45*cm, -8.15*cm, -6.85*cm,  7.45*cm, 8.75*cm, 10.05*cm,11.35*cm, 12.85*cm, 14.15*cm, 15.45*cm, 16.75*cm}; //vero da Bertolin ma da capire il significato
+//	G4double ChamberLayerZ[12]={0*cm, 1.5*cm, 3*cm, 4.5*cm, 6*cm, 7.5*cm, 9*cm, 10.5*cm, 12*cm, 13.5*cm, 15*cm, 16.5*cm};
+
 	
 	G4ThreeVector posTrk1  = G4ThreeVector(0.,0.,0*mm); // Si-Trk1  Subdet 10
 	G4ThreeVector posPipe12  = G4ThreeVector(0.,0.,277.4*cm); // Pipe between T1 and T2
@@ -398,10 +400,22 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4LogicalVolume* logicShield = new G4LogicalVolume(shield, ferro, "Shield");
 	new G4PVPlacement(0,posShield,logicShield,"Shield",logicWorld,false,0,checkOverlaps);
 	
-	//-- Muon Chamber
+	//-- Muon Chamber - FULL
+	/*
 	G4Box* solidChamber = new G4Box("Chamber",Chamber_sizeX/2,Chamber_sizeY/2,Chamber_sizeZ/2);
 	G4LogicalVolume* logicChamber = new G4LogicalVolume(solidChamber, alluminium,"Chamber");
 	new G4PVPlacement(0,posChamber,logicChamber,"Chamber",logicWorld,false,0,checkOverlaps);
+	 */
+	
+	//-- Muon Chamber Layer
+	G4Box* solidChamber = new G4Box("Chamber",Chamber_sizeX/2,Chamber_sizeY/2,Chamber_sizeZ/2);
+	G4LogicalVolume* logicChamber = new G4LogicalVolume(solidChamber, alluminium,"Chamber");
+	double ztemp=posChamber.z();
+
+	for (int ii=0; ii<12; ii++) {
+		posChamber.setZ(ztemp+ChamberLayerZ[ii]+10.75*cm+Chamber_sizeZ/2.);
+	new G4PVPlacement(0,posChamber,logicChamber,"Chamber",logicWorld,false,0,checkOverlaps);
+	}
 	
 	//-- LeadGlass
 	G4Box* solidLeadGlass = new G4Box("LeadGlass",LeadGlass_sizeX/2,LeadGlass_sizeY/2,LeadGlass_sizeZ/2);
@@ -458,7 +472,7 @@ void B1DetectorConstruction::ConstructSDandField(){
 	//	G4double zOffset=posBend.z();
 	G4VPhysicalVolume* physicalBend = G4PhysicalVolumeStore::GetInstance()->GetVolume("Bend");
 	G4double zOffset=physicalBend->GetTranslation().z();
-	G4bool MagMapFlag=false;
+	G4bool MagMapFlag=true;
 #if 1
 	//	/*
 	if(MagMapFlag) {
