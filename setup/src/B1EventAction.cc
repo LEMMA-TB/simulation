@@ -48,7 +48,20 @@ void B1EventAction::BeginOfEventAction(const G4Event* evt){
 	(fRunAction->GetIev()).clear();
 	(fRunAction->GetStep()).clear();
 	(fRunAction->GetInextStep()).clear();
-
+	
+	fDEVAEneTot1=0;
+	fDEVAEneTot2=0;
+	fDEVAEneTot3=0;
+	fDEVAEneTot4=0;
+	fDEVAEneTot5=0;
+	fDEVAEneTot6=0;
+	fDEVAEneTot7=0;
+	fDEVAEneTot8=0;
+	fDEVAEneTot9=0;
+	fDEVAEneTot10=0;
+	fDEVAEneTot11=0;
+	fDEVAEneTot12=0;
+	fDEVAEneTot=0;
 	
 }
 
@@ -65,10 +78,26 @@ void B1EventAction::EndOfEventAction(const G4Event*){
 	analysisManager->FillNtupleDColumn(6,fBeamEne);
 	analysisManager->FillNtupleDColumn(7,fBeamPart);
 	analysisManager->FillNtupleDColumn(8,fNHits);
+	analysisManager->FillNtupleDColumn(9,fDEVAEneTot1);
+	analysisManager->FillNtupleDColumn(10,fDEVAEneTot2);
+	analysisManager->FillNtupleDColumn(11,fDEVAEneTot3);
+	analysisManager->FillNtupleDColumn(12,fDEVAEneTot4);
+	analysisManager->FillNtupleDColumn(13,fDEVAEneTot5);
+	analysisManager->FillNtupleDColumn(14,fDEVAEneTot6);
+	analysisManager->FillNtupleDColumn(15,fDEVAEneTot7);
+	analysisManager->FillNtupleDColumn(16,fDEVAEneTot8);
+	analysisManager->FillNtupleDColumn(17,fDEVAEneTot9);
+	analysisManager->FillNtupleDColumn(18,fDEVAEneTot10);
+	analysisManager->FillNtupleDColumn(19,fDEVAEneTot11);
+	analysisManager->FillNtupleDColumn(20,fDEVAEneTot12);
+	analysisManager->FillNtupleDColumn(21,fDEVAEneTot);
+
+
 	
 	analysisManager->AddNtupleRow();
 	
 	G4cout <<"\n---> End of Event:"<<G4endl;
 	
 }
+
 

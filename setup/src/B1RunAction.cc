@@ -55,7 +55,20 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn("BeamEne");   //6
 	analysisManager->CreateNtupleDColumn("BeamPart");   //7
 	analysisManager->CreateNtupleDColumn("nhits");   //8
-
+	analysisManager->CreateNtupleDColumn("DEVAEneTot1");   //9
+	analysisManager->CreateNtupleDColumn("DEVAEneTot2");   //10
+	analysisManager->CreateNtupleDColumn("DEVAEneTot3");   //11
+	analysisManager->CreateNtupleDColumn("DEVAEneTot4");   //12
+	analysisManager->CreateNtupleDColumn("DEVAEneTot5");   //13
+	analysisManager->CreateNtupleDColumn("DEVAEneTot6");   //14
+	analysisManager->CreateNtupleDColumn("DEVAEneTot7");   //15
+	analysisManager->CreateNtupleDColumn("DEVAEneTot8");   //16
+	analysisManager->CreateNtupleDColumn("DEVAEneTot9");   //17
+	analysisManager->CreateNtupleDColumn("DEVAEneTot10");   //18
+	analysisManager->CreateNtupleDColumn("DEVAEneTot11");   //19
+	analysisManager->CreateNtupleDColumn("DEVAEneTot12");   //20
+	analysisManager->CreateNtupleDColumn("DEVAEneTot");   //21
+	
 	analysisManager->CreateNtupleDColumn(0,"subdet", RunVectorSubdet);
 	analysisManager->CreateNtupleDColumn(0,"Idp", RunVectorIdp);
 	analysisManager->CreateNtupleDColumn(0,"Ipar", RunVectorIpar);

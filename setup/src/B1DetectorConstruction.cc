@@ -418,7 +418,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	for (int ii=0; ii<12; ii++) {
 		if (ii<9) posDevaAct.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ/2-DEVAact_sizeZ*ii-DEVAabs_sizeZ*ii));
 		else posDevaAct.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ/2-DEVAact_sizeZ*ii-DEVAabs_sizeZ*8-DEVAabs_sizeZbis*(ii-8)));
-		new G4PVPlacement(0,posDevaAct, logicDevaAct,"DEVAact",logicEcal,false,0,checkOverlaps);
+		new G4PVPlacement(0,posDevaAct, logicDevaAct,"DEVAact",logicEcal,false,ii,checkOverlaps);
 	}
 	
 	//DEVA absorber components
@@ -429,14 +429,14 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 			posDevaAbs.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ-DEVAabs_sizeZ/2.-DEVAact_sizeZ*ii-DEVAabs_sizeZ*ii));
 			G4Box* devaAbs = new G4Box("DEVAabs",DEVAabs_sizeX/2, DEVAabs_sizeY/2, DEVAabs_sizeZ/2);
 			G4LogicalVolume* logicDevaAbs = new G4LogicalVolume(devaAbs, piombo, "DEVAabs");
-			new G4PVPlacement(0,posDevaAbs, logicDevaAbs,"DEVAabs",logicEcal,false,0,checkOverlaps);
+			new G4PVPlacement(0,posDevaAbs, logicDevaAbs,"DEVAabs",logicEcal,false,ii,checkOverlaps);
 
 		}
 		else {
 			posDevaAbs.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ-DEVAact_sizeZ*ii-DEVAabs_sizeZ*7-DEVAabs_sizeZbis*(ii-7)));
 			G4Box* devaAbs = new G4Box("DEVAabs",DEVAabs_sizeX/2, DEVAabs_sizeY/2, DEVAabs_sizeZbis/2);
 			G4LogicalVolume* logicDevaAbs = new G4LogicalVolume(devaAbs, piombo, "DEVAabs");
-			new G4PVPlacement(0,posDevaAbs, logicDevaAbs,"DEVAabs",logicEcal,false,0,checkOverlaps);
+			new G4PVPlacement(0,posDevaAbs, logicDevaAbs,"DEVAabs",logicEcal,false,ii,checkOverlaps);
 
 		}
 		
@@ -501,6 +501,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	fScoringVolume_ScintA  = logicScintA;
 	fScoringVolume_ScintB = logicScintB;
 	fScoringVolume_Ecal= logicEcal;
+	fScoringVolume_DEVA= logicDevaAct;
 	fScoringVolume_Gcal=logicGcal;
 	
 	

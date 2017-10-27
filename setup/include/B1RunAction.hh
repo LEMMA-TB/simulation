@@ -72,6 +72,7 @@ private:
 	std::vector<G4double> RunVectorIev;
 	std::vector<G4double> RunVectorStep;
 	std::vector<G4double> RunVectorInextStep;
+	
 //	std::vector<G4double> RunVectorNHits;
 //	std::vector<G4double> RunVectorItrack;
 

@@ -29,6 +29,7 @@ fScoringVolume_Chamber(0),
 fScoringVolume_ScintA(0),
 fScoringVolume_ScintB(0),
 fScoringVolume_Ecal(0),
+fScoringVolume_DEVA(0),
 fScoringVolume_Gcal(0)
 {}
 
@@ -51,6 +52,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	if (!fScoringVolume_ScintA)   {fScoringVolume_ScintA   = detectorConstruction->GetScoringVolume_ScintA();}
 	if (!fScoringVolume_ScintB)   {fScoringVolume_ScintB   = detectorConstruction->GetScoringVolume_ScintB();}
 	if (!fScoringVolume_Ecal)   {fScoringVolume_Ecal   = detectorConstruction->GetScoringVolume_Ecal();}
+	if (!fScoringVolume_DEVA)   {fScoringVolume_DEVA   = detectorConstruction->GetScoringVolume_DEVA();}
 	if (!fScoringVolume_Gcal)   {fScoringVolume_Gcal   = detectorConstruction->GetScoringVolume_Gcal();}
 	//	G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 	
@@ -62,6 +64,8 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	//--------------------------------------------------------
 	G4LogicalVolume* volume =
 	step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
+//	G4VPhysicalVolume* physVol=
+//	step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
 	G4bool SHOW = false;
 	G4bool dofill = false;
 	G4int subdet;
@@ -77,9 +81,28 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	else if (volume==fScoringVolume_Chamber)   {subdet=70; dofill=true;}  // chamber
 	else if (volume==fScoringVolume_ScintA)   {subdet=72; dofill=true;}  // scintA
 	else if (volume==fScoringVolume_ScintB)   {subdet=74; dofill=true;}  // scintB
-	else if (volume==fScoringVolume_Ecal)   {subdet=76; dofill=true;}  // Ecal
+	else if (volume==fScoringVolume_Ecal)   {subdet=76; dofill=true;}  // Ecal - DEVA
+	else if (volume==fScoringVolume_DEVA)   {subdet=77; dofill=true;}  // Ecal - DEVA active components
 	else if (volume==fScoringVolume_Gcal)   {subdet=78; dofill=true;}  // Gcal
 	
+	G4int CopyNb=step->GetPostStepPoint()->GetTouchableHandle()->GetCopyNumber();
+	G4double DepEne=step->GetTotalEnergyDeposit();
+	if (subdet==77) {
+		fEventAction->AddDEVAEneTot(DepEne);
+		if (CopyNb==0) fEventAction->AddDEVAEneTot1(DepEne);
+		if (CopyNb==1) fEventAction->AddDEVAEneTot2(DepEne);
+		if (CopyNb==2) fEventAction->AddDEVAEneTot3(DepEne);
+		if (CopyNb==3) fEventAction->AddDEVAEneTot4(DepEne);
+		if (CopyNb==4) fEventAction->AddDEVAEneTot5(DepEne);
+		if (CopyNb==5) fEventAction->AddDEVAEneTot6(DepEne);
+		if (CopyNb==6) fEventAction->AddDEVAEneTot7(DepEne);
+		if (CopyNb==7) fEventAction->AddDEVAEneTot8(DepEne);
+		if (CopyNb==8) fEventAction->AddDEVAEneTot9(DepEne);
+		if (CopyNb==9) fEventAction->AddDEVAEneTot10(DepEne);
+		if (CopyNb==10) fEventAction->AddDEVAEneTot11(DepEne);
+		if (CopyNb==11) fEventAction->AddDEVAEneTot12(DepEne);
+	
+	}
 	//-- store info
 	if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary)
 				   || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary))) {

@@ -26,7 +26,20 @@ public:
 	void SetBeamEne(G4double ben) {fBeamEne=ben;}
 	void SetBeamPart(G4double bpart) {fBeamPart=bpart;}
 	void AddNHits(G4int bnhits) {fNHits+=bnhits;}
-	
+	void AddDEVAEneTot1(G4double ene) {fDEVAEneTot1+=ene;}
+	void AddDEVAEneTot2(G4double ene) {fDEVAEneTot2+=ene;}
+	void AddDEVAEneTot3(G4double ene) {fDEVAEneTot3+=ene;}
+	void AddDEVAEneTot4(G4double ene) {fDEVAEneTot4+=ene;}
+	void AddDEVAEneTot5(G4double ene) {fDEVAEneTot5+=ene;}
+	void AddDEVAEneTot6(G4double ene) {fDEVAEneTot6+=ene;}
+	void AddDEVAEneTot7(G4double ene) {fDEVAEneTot7+=ene;}
+	void AddDEVAEneTot8(G4double ene) {fDEVAEneTot8+=ene;}
+	void AddDEVAEneTot9(G4double ene) {fDEVAEneTot9+=ene;}
+	void AddDEVAEneTot10(G4double ene) {fDEVAEneTot10+=ene;}
+	void AddDEVAEneTot11(G4double ene) {fDEVAEneTot11+=ene;}
+	void AddDEVAEneTot12(G4double ene) {fDEVAEneTot12+=ene;}
+	void AddDEVAEneTot(G4double ene) {fDEVAEneTot+=ene;}
+
 	
 private:
 	B1RunAction* fRunAction;
@@ -41,6 +54,19 @@ private:
 	G4double fBeamCZ;
 	G4int fNHits;
 //	G4int NHitsCounter;
+	G4double fDEVAEneTot1;
+	G4double fDEVAEneTot2;
+	G4double fDEVAEneTot3;
+	G4double fDEVAEneTot4;
+	G4double fDEVAEneTot5;
+	G4double fDEVAEneTot6;
+	G4double fDEVAEneTot7;
+	G4double fDEVAEneTot8;
+	G4double fDEVAEneTot9;
+	G4double fDEVAEneTot10;
+	G4double fDEVAEneTot11;
+	G4double fDEVAEneTot12;
+	G4double fDEVAEneTot;
 };
 
 

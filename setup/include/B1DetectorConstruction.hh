@@ -31,6 +31,7 @@ public:
 	G4LogicalVolume* GetScoringVolume_ScintA()   const { return fScoringVolume_ScintA; }
 	G4LogicalVolume* GetScoringVolume_ScintB()   const { return fScoringVolume_ScintB; }
 	G4LogicalVolume* GetScoringVolume_Ecal()   const { return fScoringVolume_Ecal; }
+	G4LogicalVolume* GetScoringVolume_DEVA()   const { return fScoringVolume_DEVA; }
 	G4LogicalVolume* GetScoringVolume_Gcal()   const { return fScoringVolume_Gcal; }
 	
 protected:
@@ -47,6 +48,7 @@ protected:
 	G4LogicalVolume*  fScoringVolume_ScintA;
 	G4LogicalVolume*  fScoringVolume_ScintB;
 	G4LogicalVolume*  fScoringVolume_Ecal;
+	G4LogicalVolume*  fScoringVolume_DEVA;
 	G4LogicalVolume*  fScoringVolume_Gcal;
 private:
 	G4bool channeling;

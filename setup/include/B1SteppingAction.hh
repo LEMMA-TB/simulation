@@ -35,6 +35,7 @@ private:
 	G4LogicalVolume* fScoringVolume_ScintA;
 	G4LogicalVolume* fScoringVolume_ScintB;
 	G4LogicalVolume* fScoringVolume_Ecal;
+	G4LogicalVolume* fScoringVolume_DEVA;
 	G4LogicalVolume* fScoringVolume_Gcal;
 	
 };

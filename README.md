@@ -76,6 +76,7 @@ Please note that due to Geant4 issues regarding multi core root output, multi th
 
 2017.10.27 by collamaf
 - added exact structure of DEVA calorimeter (12 plastic scintillator tiles and 11 lead absorbers)
+- first approach to scoring of deposited energy into DEVA. For now simply saving total energy deposited in each of 12 layers using 12 (+1 total) entries in the root file
 
 
 
