@@ -121,10 +121,21 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double Icol_sizeY = 100*cm;
 	G4double Icol_sizeZ = 30*cm;
 	
-	// E-cal:
-	G4double Ecal_sizeX = 22*cm;
-	G4double Ecal_sizeY = 30*cm;
-	G4double Ecal_sizeZ = 400.*mm; // ~23Xo
+	// E-cal: "DEVA" - this is the alluminum container
+	G4double DEVAenv_sizeX = 22*cm;
+	G4double DEVAenv_sizeY = 30*cm;
+	G4double DEVAenv_sizeZ = 400.*mm; // ~23Xo
+
+	// DEVA Active element - this is the active element
+	G4double DEVAact_sizeX = 15.*cm;
+	G4double DEVAact_sizeY = 15.*cm;
+	G4double DEVAact_sizeZ = 2.*cm;
+
+	// DEVA Active element - this is the active element
+	G4double DEVAabs_sizeX = 12.*cm;
+	G4double DEVAabs_sizeY = 12.*cm;
+	G4double DEVAabs_sizeZ = .5*cm;
+	G4double DEVAabs_sizeZbis = 1.*cm;
 	
 	// shield wall:
 	G4double shield_sizeX = 1.62*m;
@@ -167,7 +178,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double zTrk6=2137.4*cm;
 	//	G4double xScintA=5.1*cm+ScintA_sizeX/2.;
 	G4double zCalo=2941*cm;
-	G4double CaloOffset=0*cm; //5cm
+	G4double CaloOffset=15*cm; //5cm iniziale - 15cm per iniziare a beccarlo al bordo sotto - 
 	G4double DistXGcalIron=5*cm;
 	G4double DistXIronEcal=2*cm;
 	G4double DistXEcalColumn=10*cm;
@@ -195,8 +206,11 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4ThreeVector posScintB  = G4ThreeVector(-xTrk6,0.,zTrk6+ScintB_sizeZ/2.+1*cm); // ScintB behind T6b
 	G4ThreeVector posGcal  = G4ThreeVector(CaloOffset,0.,zCalo+Gcal_sizeZ/2.); // GCAL center
 	G4ThreeVector posIblock  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX/2.+DistXGcalIron,0.,zCalo+Iblock_sizeZ/2.+DistZGcalIron); // GCAL center
-	G4ThreeVector posEcal  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX+DistXIronEcal+DistXGcalIron+Ecal_sizeX/2.,0.,zCalo+Ecal_sizeZ/2.); // ECAL center
-	G4ThreeVector posIcol  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX+DistXIronEcal+DistXGcalIron+Ecal_sizeX+Icol_sizeX/2.+DistXEcalColumn,0.,zCalo+Icol_sizeZ/2.); // ECAL center
+	G4ThreeVector posEcal  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX+DistXIronEcal+DistXGcalIron+DEVAenv_sizeX/2.,0.,zCalo+DEVAenv_sizeZ/2.); // ECAL center
+	G4ThreeVector posDevaAct=G4ThreeVector(0, 0, 0);
+	G4ThreeVector posDevaAbs=G4ThreeVector(0, 0, 0);
+	
+	G4ThreeVector posIcol  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX+DistXIronEcal+DistXGcalIron+DEVAenv_sizeX+Icol_sizeX/2.+DistXEcalColumn,0.,zCalo+Icol_sizeZ/2.); // ECAL center
 	
 	
 	//	 G4Transform3D transform1 = G4Transform3D(rotEcal,posEcal);
@@ -226,6 +240,8 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4Material* ferro = nist->FindOrBuildMaterial("G4_Fe");
 	G4Material* plastica = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
 	G4Material* alluminium = nist->FindOrBuildMaterial("G4_ALUMINUM_OXIDE");
+	G4Material* piombo = nist->FindOrBuildMaterial("G4_Pb");
+	
 	
 //	if (fMuonBeamFlag || fElectronBeamFlag) berillio=nist->FindOrBuildMaterial("G4_Galactic");;  //if MuonBeam case I want no target
 	if (!fTargetFlag) berillio=nist->FindOrBuildMaterial("G4_Galactic");;  //if I do not want the target
@@ -388,11 +404,47 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4LogicalVolume* logicIblock = new G4LogicalVolume(iblock, ferro, "IronBlock");
 	new G4PVPlacement(0,posIblock,logicIblock,"IronBlock",logicWorld,false,0,checkOverlaps);
 	
-	//-- ECAL (Fe)
-	G4Box* ecal = new G4Box("Ecal",Ecal_sizeX/2, Ecal_sizeY/2, Ecal_sizeZ/2);
+	//-- ECAL (Fe) - DEVA
+	G4Box* ecal = new G4Box("Ecal",DEVAenv_sizeX/2, DEVAenv_sizeY/2, DEVAenv_sizeZ/2);
 	G4LogicalVolume* logicEcal = new G4LogicalVolume(ecal, ferro, "Ecal");
 	//	new G4PVPlacement(G4Transform3D(*rotEcal,posEcal),logicEcal,"Ecal",logicWorld,false,0,checkOverlaps);
 	new G4PVPlacement(rotateEcal*translateEcal,logicEcal,"Ecal",logicWorld,false,0,checkOverlaps);
+	
+	//############# DEVA COMPONENTS
+	//DEVA active components
+	G4Box* devaAct = new G4Box("DEVAact",DEVAact_sizeX/2, DEVAact_sizeY/2, DEVAact_sizeZ/2);
+	G4LogicalVolume* logicDevaAct = new G4LogicalVolume(devaAct, plastica, "DEVAact");
+	
+	for (int ii=0; ii<12; ii++) {
+		if (ii<9) posDevaAct.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ/2-DEVAact_sizeZ*ii-DEVAabs_sizeZ*ii));
+		else posDevaAct.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ/2-DEVAact_sizeZ*ii-DEVAabs_sizeZ*8-DEVAabs_sizeZbis*(ii-8)));
+		new G4PVPlacement(0,posDevaAct, logicDevaAct,"DEVAact",logicEcal,false,0,checkOverlaps);
+	}
+	
+	//DEVA absorber components
+	
+	for (int ii=0; ii<11; ii++) {
+		
+		if (ii<8) 	{
+			posDevaAbs.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ-DEVAabs_sizeZ/2.-DEVAact_sizeZ*ii-DEVAabs_sizeZ*ii));
+			G4Box* devaAbs = new G4Box("DEVAabs",DEVAabs_sizeX/2, DEVAabs_sizeY/2, DEVAabs_sizeZ/2);
+			G4LogicalVolume* logicDevaAbs = new G4LogicalVolume(devaAbs, piombo, "DEVAabs");
+			new G4PVPlacement(0,posDevaAbs, logicDevaAbs,"DEVAabs",logicEcal,false,0,checkOverlaps);
+
+		}
+		else {
+			posDevaAbs.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ-DEVAact_sizeZ*ii-DEVAabs_sizeZ*7-DEVAabs_sizeZbis*(ii-7)));
+			G4Box* devaAbs = new G4Box("DEVAabs",DEVAabs_sizeX/2, DEVAabs_sizeY/2, DEVAabs_sizeZbis/2);
+			G4LogicalVolume* logicDevaAbs = new G4LogicalVolume(devaAbs, piombo, "DEVAabs");
+			new G4PVPlacement(0,posDevaAbs, logicDevaAbs,"DEVAabs",logicEcal,false,0,checkOverlaps);
+
+		}
+		
+	}
+	
+	//	new G4PVPlacement(G4Transform3D(*rotEcal,posEcal),logicEcal,"Ecal",logicWorld,false,0,checkOverlaps);
+	new G4PVPlacement(0,posDevaAct, logicDevaAct,"DEVAact",logicEcal,false,0,checkOverlaps);
+	//#############################
 	
 	//-- Iron Column
 	G4Box* icol = new G4Box("IronColumn",Icol_sizeX/2, Icol_sizeY/2, Icol_sizeZ/2);
@@ -413,7 +465,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	
 	//-- Muon Chamber Layer
 	G4Box* solidChamber = new G4Box("Chamber",Chamber_sizeX/2,Chamber_sizeY/2,Chamber_sizeZ/2);
-	G4LogicalVolume* logicChamber = new G4LogicalVolume(solidChamber, alluminium,"Chamber");
+	G4LogicalVolume* logicChamber = new G4LogicalVolume(solidChamber, vuoto /*alluminium*/,"Chamber");
 	double ztemp=posChamber.z();
 
 	for (int ii=0; ii<12; ii++) {

@@ -81,7 +81,8 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	else if (volume==fScoringVolume_Gcal)   {subdet=78; dofill=true;}  // Gcal
 	
 	//-- store info
-	if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary) || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary))) {
+	if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary)
+				   || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary))) {
 	
 		G4int iev = -999;
 		const G4Event* evt = G4RunManager::GetRunManager()->GetCurrentEvent();
