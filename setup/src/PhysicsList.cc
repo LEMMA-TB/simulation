@@ -204,7 +204,7 @@ void PhysicsList::ConstructGeneral()
   // Scale muon pair cross section 
   // Function call moved from SetCuts to ConstructGeneral
   // to allow proper funcionalities with MultiThread
-  SetAnnihiToMuPairFac(1.e3);
+//  SetAnnihiToMuPairFac(1.e3);
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
   
 }

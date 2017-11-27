@@ -41,7 +41,7 @@ int main(int argc,char** argv)
   G4Random::setTheSeed(seed);
   
 //#ifdef G4MULTITHREADED
-#if 0
+#if 1
 	G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads( G4Threading::G4GetNumberOfCores() );
 #else
@@ -51,12 +51,13 @@ int main(int argc,char** argv)
 	// FLAG DEFINITION TO CHOOSE THE DESIRED CONFIGURATION
 	G4bool MuonBeamFlag=false;  //switching on this flag generates 22GeV mu- beam, and removes the target, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
 	G4bool ElectronBeamFlag=false;  //switching on this flag generates 22GeV e- beam, and removes the target, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
-	G4double BeamEnergy=45.*GeV; //Primary Beam Energy (18, 22, 26 GeV options for e+ calibration) - 45 GeV for real TB
+	G4double BeamEnergy=26.*GeV; //Primary Beam Energy (18, 22, 26 GeV options for e+ calibration) - 45 GeV for real TB
 	G4bool SimpleFlag=false;
 
-	G4bool TargetFlag=true;
+	G4bool TargetFlag=false;
 	G4bool FlipFieldFlag=true; //non-flipped field sends positrons towards the "clean channel" (just chamber, no calos)
-	G4bool MagMapFlag=false;
+	G4bool MagMapFlag=true;
+	G4bool StoreCaloEnDepFlag=true; //to disable scoring of energy deposition (gamma, e+, e-, total) in DEVA calorimeter (sparing ~15% of disk space)
 	// INITIALIZE
 
 //==================================================
@@ -86,7 +87,7 @@ int main(int argc,char** argv)
   }
   
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new B1ActionInitialization(BeamEnergy, MuonBeamFlag,ElectronBeamFlag, SimpleFlag));
+  runManager->SetUserInitialization(new B1ActionInitialization(BeamEnergy, MuonBeamFlag,ElectronBeamFlag, SimpleFlag, StoreCaloEnDepFlag));
   runManager->Initialize();  // init kernel
   
   

@@ -61,13 +61,28 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn("DEVAEneTot4");   //12
 	analysisManager->CreateNtupleDColumn("DEVAEneTot5");   //13
 	analysisManager->CreateNtupleDColumn("DEVAEneTot6");   //14
-	analysisManager->CreateNtupleDColumn("DEVAEneTot7");   //15
-	analysisManager->CreateNtupleDColumn("DEVAEneTot8");   //16
-	analysisManager->CreateNtupleDColumn("DEVAEneTot9");   //17
-	analysisManager->CreateNtupleDColumn("DEVAEneTot10");   //18
-	analysisManager->CreateNtupleDColumn("DEVAEneTot11");   //19
-	analysisManager->CreateNtupleDColumn("DEVAEneTot12");   //20
-	analysisManager->CreateNtupleDColumn("DEVAEneTot");   //21
+	analysisManager->CreateNtupleDColumn("DEVAEneTot");   //15
+	analysisManager->CreateNtupleDColumn("DEVAEneFot1");   //16
+	analysisManager->CreateNtupleDColumn("DEVAEneFot2");   //17
+	analysisManager->CreateNtupleDColumn("DEVAEneFot3");   //18
+	analysisManager->CreateNtupleDColumn("DEVAEneFot4");   //19
+	analysisManager->CreateNtupleDColumn("DEVAEneFot5");   //20
+	analysisManager->CreateNtupleDColumn("DEVAEneFot6");   //21
+	analysisManager->CreateNtupleDColumn("DEVAEneFot");   //22
+	analysisManager->CreateNtupleDColumn("DEVAEnePos1");   //23
+	analysisManager->CreateNtupleDColumn("DEVAEnePos2");   //24
+	analysisManager->CreateNtupleDColumn("DEVAEnePos3");   //25
+	analysisManager->CreateNtupleDColumn("DEVAEnePos4");   //26
+	analysisManager->CreateNtupleDColumn("DEVAEnePos5");   //27
+	analysisManager->CreateNtupleDColumn("DEVAEnePos6");   //28
+	analysisManager->CreateNtupleDColumn("DEVAEnePos");   //29
+	analysisManager->CreateNtupleDColumn("DEVAEneEle1");   //30
+	analysisManager->CreateNtupleDColumn("DEVAEneEle2");   //31
+	analysisManager->CreateNtupleDColumn("DEVAEneEle3");   //32
+	analysisManager->CreateNtupleDColumn("DEVAEneEle4");   //33
+	analysisManager->CreateNtupleDColumn("DEVAEneEle5");   //34
+	analysisManager->CreateNtupleDColumn("DEVAEneEle6");   //35
+	analysisManager->CreateNtupleDColumn("DEVAEneEle");   //36
 	
 	analysisManager->CreateNtupleDColumn(0,"subdet", RunVectorSubdet);
 	analysisManager->CreateNtupleDColumn(0,"Idp", RunVectorIdp);
@@ -91,6 +106,8 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn(0,"Iev", RunVectorIev);
 	analysisManager->CreateNtupleDColumn(0,"Step", RunVectorStep);
 	analysisManager->CreateNtupleDColumn(0,"InextStep", RunVectorInextStep);
+	analysisManager->CreateNtupleDColumn(0,"CopyNb", RunVectorCopyNb);
+	
 //	analysisManager->CreateNtupleDColumn(0,"nhits", RunVectorNHits);
 //	analysisManager->CreateNtupleDColumn(0,"itrack", RunVectorItrack);
 	

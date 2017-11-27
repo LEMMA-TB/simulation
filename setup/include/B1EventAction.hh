@@ -32,14 +32,31 @@ public:
 	void AddDEVAEneTot4(G4double ene) {fDEVAEneTot4+=ene;}
 	void AddDEVAEneTot5(G4double ene) {fDEVAEneTot5+=ene;}
 	void AddDEVAEneTot6(G4double ene) {fDEVAEneTot6+=ene;}
-	void AddDEVAEneTot7(G4double ene) {fDEVAEneTot7+=ene;}
-	void AddDEVAEneTot8(G4double ene) {fDEVAEneTot8+=ene;}
-	void AddDEVAEneTot9(G4double ene) {fDEVAEneTot9+=ene;}
-	void AddDEVAEneTot10(G4double ene) {fDEVAEneTot10+=ene;}
-	void AddDEVAEneTot11(G4double ene) {fDEVAEneTot11+=ene;}
-	void AddDEVAEneTot12(G4double ene) {fDEVAEneTot12+=ene;}
 	void AddDEVAEneTot(G4double ene) {fDEVAEneTot+=ene;}
 
+	void AddDEVAEneFot1(G4double ene) {fDEVAEneFot1+=ene;}
+	void AddDEVAEneFot2(G4double ene) {fDEVAEneFot2+=ene;}
+	void AddDEVAEneFot3(G4double ene) {fDEVAEneFot3+=ene;}
+	void AddDEVAEneFot4(G4double ene) {fDEVAEneFot4+=ene;}
+	void AddDEVAEneFot5(G4double ene) {fDEVAEneFot5+=ene;}
+	void AddDEVAEneFot6(G4double ene) {fDEVAEneFot6+=ene;}
+	void AddDEVAEneFot(G4double ene) {fDEVAEneFot+=ene;}
+	
+	void AddDEVAEnePos1(G4double ene) {fDEVAEnePos1+=ene;}
+	void AddDEVAEnePos2(G4double ene) {fDEVAEnePos2+=ene;}
+	void AddDEVAEnePos3(G4double ene) {fDEVAEnePos3+=ene;}
+	void AddDEVAEnePos4(G4double ene) {fDEVAEnePos4+=ene;}
+	void AddDEVAEnePos5(G4double ene) {fDEVAEnePos5+=ene;}
+	void AddDEVAEnePos6(G4double ene) {fDEVAEnePos6+=ene;}
+	void AddDEVAEnePos(G4double ene) {fDEVAEnePos+=ene;}
+	
+	void AddDEVAEneEle1(G4double ene) {fDEVAEneEle1+=ene;}
+	void AddDEVAEneEle2(G4double ene) {fDEVAEneEle2+=ene;}
+	void AddDEVAEneEle3(G4double ene) {fDEVAEneEle3+=ene;}
+	void AddDEVAEneEle4(G4double ene) {fDEVAEneEle4+=ene;}
+	void AddDEVAEneEle5(G4double ene) {fDEVAEneEle5+=ene;}
+	void AddDEVAEneEle6(G4double ene) {fDEVAEneEle6+=ene;}
+	void AddDEVAEneEle(G4double ene) {fDEVAEneEle+=ene;}
 	
 private:
 	B1RunAction* fRunAction;
@@ -60,13 +77,31 @@ private:
 	G4double fDEVAEneTot4;
 	G4double fDEVAEneTot5;
 	G4double fDEVAEneTot6;
-	G4double fDEVAEneTot7;
-	G4double fDEVAEneTot8;
-	G4double fDEVAEneTot9;
-	G4double fDEVAEneTot10;
-	G4double fDEVAEneTot11;
-	G4double fDEVAEneTot12;
 	G4double fDEVAEneTot;
+
+	G4double fDEVAEneFot1;
+	G4double fDEVAEneFot2;
+	G4double fDEVAEneFot3;
+	G4double fDEVAEneFot4;
+	G4double fDEVAEneFot5;
+	G4double fDEVAEneFot6;
+	G4double fDEVAEneFot;
+	
+	G4double fDEVAEnePos1;
+	G4double fDEVAEnePos2;
+	G4double fDEVAEnePos3;
+	G4double fDEVAEnePos4;
+	G4double fDEVAEnePos5;
+	G4double fDEVAEnePos6;
+	G4double fDEVAEnePos;
+	
+	G4double fDEVAEneEle1;
+	G4double fDEVAEneEle2;
+	G4double fDEVAEneEle3;
+	G4double fDEVAEneEle4;
+	G4double fDEVAEneEle5;
+	G4double fDEVAEneEle6;
+	G4double fDEVAEneEle;
 };
 
 

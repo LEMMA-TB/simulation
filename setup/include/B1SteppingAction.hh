@@ -13,7 +13,7 @@ class G4LogicalVolume;
 class B1SteppingAction : public G4UserSteppingAction
 {
 public:
-	B1SteppingAction(B1EventAction* eventAction, B1RunAction* runAction);
+	B1SteppingAction(B1EventAction* eventAction, B1RunAction* runAction, G4bool StoreCaloEnDepFlag);
 	virtual ~B1SteppingAction();
 	// method from the base class
 	virtual void UserSteppingAction(const G4Step*);
@@ -37,6 +37,8 @@ private:
 	G4LogicalVolume* fScoringVolume_Ecal;
 	G4LogicalVolume* fScoringVolume_DEVA;
 	G4LogicalVolume* fScoringVolume_Gcal;
+	
+	G4bool fStoreCaloEnDepFlag;
 	
 };
 

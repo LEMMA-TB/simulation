@@ -40,6 +40,7 @@ class B1RunAction : public G4UserRunAction
 	std::vector<G4double>& GetIev() {return RunVectorIev; }
 	std::vector<G4double>& GetStep() {return RunVectorStep; }
 	std::vector<G4double>& GetInextStep() {return RunVectorInextStep; }
+	std::vector<G4double>& GetCopyNb() {return RunVectorCopyNb; }
 //	std::vector<G4double>& GetNHits() {return RunVectorNHits; }
 //	std::vector<G4double>& GetItrack() {return RunVectorItrack; }
 
@@ -72,6 +73,9 @@ private:
 	std::vector<G4double> RunVectorIev;
 	std::vector<G4double> RunVectorStep;
 	std::vector<G4double> RunVectorInextStep;
+	std::vector<G4double> RunVectorCopyNb;
+
+	
 	
 //	std::vector<G4double> RunVectorNHits;
 //	std::vector<G4double> RunVectorItrack;

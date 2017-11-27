@@ -12,7 +12,7 @@
 //---------------------------
 #include "G4ProcessType.hh"
 
-B1SteppingAction::B1SteppingAction(B1EventAction* eventAction, B1RunAction* runAction)
+B1SteppingAction::B1SteppingAction(B1EventAction* eventAction, B1RunAction* runAction, G4bool StoreCaloEnDepFlag)
 : G4UserSteppingAction(),
 fEventAction(eventAction),
 runStepAction(runAction),
@@ -30,7 +30,8 @@ fScoringVolume_ScintA(0),
 fScoringVolume_ScintB(0),
 fScoringVolume_Ecal(0),
 fScoringVolume_DEVA(0),
-fScoringVolume_Gcal(0)
+fScoringVolume_Gcal(0),
+fStoreCaloEnDepFlag(StoreCaloEnDepFlag)
 {}
 
 B1SteppingAction::~B1SteppingAction()
@@ -68,7 +69,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 //	step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
 	G4bool SHOW = false;
 	G4bool dofill = false;
-	G4int subdet;
+	G4int subdet=-10;
 	if      (volume==fScoringVolume_Trk1) {subdet=10; dofill=true;}  // Trk1
 	else if (volume==fScoringVolume_Trk2) {subdet=20; dofill=true;}  // Trk2
 	else if (volume==fScoringVolume_T1)   {subdet=25; dofill=true;}  // T1 target
@@ -85,22 +86,83 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	else if (volume==fScoringVolume_DEVA)   {subdet=77; dofill=true;}  // Ecal - DEVA active components
 	else if (volume==fScoringVolume_Gcal)   {subdet=78; dofill=true;}  // Gcal
 	
+	
+	//Score energy deposition into DEVA elements (if fStoreCaloEnDepFlag true in main!)
 	G4int CopyNb=step->GetPostStepPoint()->GetTouchableHandle()->GetCopyNumber();
-	G4double DepEne=step->GetTotalEnergyDeposit();
-	if (subdet==77) {
+	G4double DepEne=step->GetTotalEnergyDeposit()/GeV;
+	G4int Pid=step->GetTrack()->GetDynamicParticle()->GetDefinition()->GetPDGEncoding();
+	
+	// Version of the scoring into DEVA dividing for particles - cool but probably having not much sense
+	///*
+	if (subdet==77 && DepEne>0 && fStoreCaloEnDepFlag) { //avoiding saving 0ene events spares about 20% of disk space...
 		fEventAction->AddDEVAEneTot(DepEne);
-		if (CopyNb==0) fEventAction->AddDEVAEneTot1(DepEne);
-		if (CopyNb==1) fEventAction->AddDEVAEneTot2(DepEne);
-		if (CopyNb==2) fEventAction->AddDEVAEneTot3(DepEne);
-		if (CopyNb==3) fEventAction->AddDEVAEneTot4(DepEne);
-		if (CopyNb==4) fEventAction->AddDEVAEneTot5(DepEne);
-		if (CopyNb==5) fEventAction->AddDEVAEneTot6(DepEne);
-		if (CopyNb==6) fEventAction->AddDEVAEneTot7(DepEne);
-		if (CopyNb==7) fEventAction->AddDEVAEneTot8(DepEne);
-		if (CopyNb==8) fEventAction->AddDEVAEneTot9(DepEne);
-		if (CopyNb==9) fEventAction->AddDEVAEneTot10(DepEne);
-		if (CopyNb==10) fEventAction->AddDEVAEneTot11(DepEne);
-		if (CopyNb==11) fEventAction->AddDEVAEneTot12(DepEne);
+		if(Pid==22) fEventAction->AddDEVAEneFot(DepEne);
+		else if(Pid==-11) fEventAction->AddDEVAEnePos(DepEne);
+		else if(Pid==11) fEventAction->AddDEVAEneEle(DepEne);
+		
+		if (CopyNb==0 || CopyNb==1) {
+			fEventAction->AddDEVAEneTot1(DepEne);
+			if(Pid==22) fEventAction->AddDEVAEneFot1(DepEne);
+			else if(Pid==-11) fEventAction->AddDEVAEnePos1(DepEne);
+			else if(Pid==11) fEventAction->AddDEVAEneEle1(DepEne);
+		} else if (CopyNb==2 || CopyNb==3) {
+			fEventAction->AddDEVAEneTot2(DepEne);
+			if(Pid==22) fEventAction->AddDEVAEneFot2(DepEne);
+			else if(Pid==-11) fEventAction->AddDEVAEnePos2(DepEne);
+			else if(Pid==11) fEventAction->AddDEVAEneEle2(DepEne);
+		}
+		if (CopyNb==4 || CopyNb==5) {
+			fEventAction->AddDEVAEneTot3(DepEne);
+			if(Pid==22) fEventAction->AddDEVAEneFot3(DepEne);
+			else if(Pid==-11) fEventAction->AddDEVAEnePos3(DepEne);
+			else if(Pid==11) fEventAction->AddDEVAEneEle3(DepEne);
+		}
+		if (CopyNb==6 || CopyNb==7) {
+			fEventAction->AddDEVAEneTot4(DepEne);
+			if(Pid==22) fEventAction->AddDEVAEneFot4(DepEne);
+			else if(Pid==-11) fEventAction->AddDEVAEnePos4(DepEne);
+			else if(Pid==11) fEventAction->AddDEVAEneEle4(DepEne);
+		}
+		if (CopyNb==8 || CopyNb==9) {
+			fEventAction->AddDEVAEneTot5(DepEne);
+			if(Pid==22) fEventAction->AddDEVAEneFot5(DepEne);
+			else if(Pid==-11) fEventAction->AddDEVAEnePos5(DepEne);
+			else if(Pid==11) fEventAction->AddDEVAEneEle5(DepEne);
+		}
+		if (CopyNb==10 || CopyNb==11) {
+			fEventAction->AddDEVAEneTot6(DepEne);
+			if(Pid==22) fEventAction->AddDEVAEneFot6(DepEne);
+			else if(Pid==-11) fEventAction->AddDEVAEnePos6(DepEne);
+			else if(Pid==11) fEventAction->AddDEVAEneEle6(DepEne);
+		}
+		//*/
+		// Version of the scoring into DEVA not dividing for particles, just total energy deposit - less cool but effective
+	
+	/*
+		if (subdet==77 && DepEne>0 && fStoreCaloEnDepFlag) { //avoiding saving 0ene events spares about 20% of disk space...
+			fEventAction->AddDEVAEneTot(DepEne);
+			
+			if (CopyNb==0 || CopyNb==1) {
+				fEventAction->AddDEVAEneTot1(DepEne);
+			} else if (CopyNb==2 || CopyNb==3) {
+				fEventAction->AddDEVAEneTot2(DepEne);
+			}
+			if (CopyNb==4 || CopyNb==5) {
+				fEventAction->AddDEVAEneTot3(DepEne);
+			}
+			if (CopyNb==6 || CopyNb==7) {
+				fEventAction->AddDEVAEneTot4(DepEne);
+			}
+			if (CopyNb==8 || CopyNb==9) {
+				fEventAction->AddDEVAEneTot5(DepEne);
+			}
+			if (CopyNb==10 || CopyNb==11) {
+				fEventAction->AddDEVAEneTot6(DepEne);
+			}
+			*/
+
+		
+		
 	
 	}
 	//-- store info
@@ -144,7 +206,8 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		xvertex = step->GetTrack()->GetVertexPosition();
 		
 		//NEW SCORING
-	
+		
+		if(subdet==77) (runStepAction->GetCopyNb()).push_back(CopyNb);  //I'm interested in CopyNb only for DEVA active components (subdet==77)
 		(runStepAction->GetSubdet()).push_back(subdet);
 		(runStepAction->GetIdp()).push_back(Idp);
 		(runStepAction->GetIpar()).push_back(Ipar);

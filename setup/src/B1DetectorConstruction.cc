@@ -178,7 +178,11 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double zTrk6=2137.4*cm;
 	//	G4double xScintA=5.1*cm+ScintA_sizeX/2.;
 	G4double zCalo=2941*cm;
-	G4double CaloOffset=15*cm; //5cm iniziale - 15cm per iniziare a beccarlo al bordo sotto - 
+	// ############################################
+	// ##########################
+	G4double CaloOffset=21.0*cm; //5cm iniziale - 15cm per iniziare a beccarlo al bordo sotto - 20cm sembra ben centrato per 22GeV
+	// ##########################
+	// ############################################
 	G4double DistXGcalIron=5*cm;
 	G4double DistXIronEcal=2*cm;
 	G4double DistXEcalColumn=10*cm;
@@ -406,7 +410,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	
 	//-- ECAL (Fe) - DEVA
 	G4Box* ecal = new G4Box("Ecal",DEVAenv_sizeX/2, DEVAenv_sizeY/2, DEVAenv_sizeZ/2);
-	G4LogicalVolume* logicEcal = new G4LogicalVolume(ecal, ferro, "Ecal");
+	G4LogicalVolume* logicEcal = new G4LogicalVolume(ecal, aria, "Ecal");
 	//	new G4PVPlacement(G4Transform3D(*rotEcal,posEcal),logicEcal,"Ecal",logicWorld,false,0,checkOverlaps);
 	new G4PVPlacement(rotateEcal*translateEcal,logicEcal,"Ecal",logicWorld,false,0,checkOverlaps);
 	
@@ -419,6 +423,8 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 		if (ii<9) posDevaAct.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ/2-DEVAact_sizeZ*ii-DEVAabs_sizeZ*ii));
 		else posDevaAct.setZ(-(DEVAenv_sizeZ/2-DEVAact_sizeZ/2-DEVAact_sizeZ*ii-DEVAabs_sizeZ*8-DEVAabs_sizeZbis*(ii-8)));
 		new G4PVPlacement(0,posDevaAct, logicDevaAct,"DEVAact",logicEcal,false,ii,checkOverlaps);
+//		new G4PVPlacement(0,posDevaAct, logicDevaAct,"DEVAact",logicEcal,false,0,checkOverlaps);
+
 	}
 	
 	//DEVA absorber components
@@ -443,7 +449,6 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	}
 	
 	//	new G4PVPlacement(G4Transform3D(*rotEcal,posEcal),logicEcal,"Ecal",logicWorld,false,0,checkOverlaps);
-	new G4PVPlacement(0,posDevaAct, logicDevaAct,"DEVAact",logicEcal,false,0,checkOverlaps);
 	//#############################
 	
 	//-- Iron Column
