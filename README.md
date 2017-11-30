@@ -7,13 +7,15 @@ Geant4 simulation of LEMMA test beam, done @CERN on ~August 2017.
 cd build
 cmake -DGeant4_DIR=$G4INSTALL ../setup/
 make
-./mainMCMC
+./mainMCMC {../setup/run1.mac}
 
+Please note that if any changes are done to ../setup/*.mac you need to cmake -XXX again
 ### GEOMETRY
 The geometry is the one of the final configuration
 
 ### PRIMARY PARTICLE
 The simulation is set to simulate primary positrons starting at the origin (0,0,0). It is possible to simulate a realistic beam (energy, angular and position spread), but there is a flag (SimpleFlag) in B1PrimaryGeneratorAction.cc to select the simple case of ideal beam.
+There are flags in the mainMCMC.cc to generate other particles (electrons, muons) and other energies.
 
 ### OUTPUT
 The simulation creates a LemmaMC.root file, in which on an event (i.e. a primary particle) by event basis it is stored:
@@ -52,8 +54,36 @@ INTERACTIONS vector (one entry per interaction happening at the border between t
 - Step: number of current step;
 - InextStep: is 1 if there will be another step, 0 if the particle is going to die.
 
-Please note that due to Geant4 issues regarding multi core root output, multi thread is currently disabled (can be enabled in mainMCMC.cc, but creates N-root files...)
+Please note that due to Geant4 issues regarding multi core root output, multi thread is currently disabled (can be enabled in mainMCMC.cc, but creates N-root files named LemmaMC_t?.root)
 
+### TO MERGE MULTIPLE ROOT OUTPUT FILES:
+TChain * chain = new TChain("LEMMA")
+chain->Add("LemmaMC_t*.root")
+TFile *file = TFile::Open("LemmaMC_Pos22_NoT_Ff.root","RECREATE");
+chain->CloneTree(-1,"fast");
+file->Write();
+
+### FILE NAMES FOR OUTPUT
+TFile *file = TFile::Open("LemmaMC_Tot45PosT_bias.root","RECREATE");
+TFile *file = TFile::Open("LemmaMC_Tot22PosNoT_simple.root","RECREATE");
+
+TFile *file = TFile::Open("LemmaMC_Pos22s_NoT_Ff_calo.root","RECREATE");  //Fixed field  flipped
+TFile *file = TFile::Open("LemmaMC_Pos22_NoT_M_calo.root","RECREATE");    //Map field not flipped
+
+
+
+### OR TO READ TOGETHER WITHOUT MERGING
+
+TChain * chain = new TChain("LEMMA")
+chain->Add("LemmaMC_t?.root")
+LEMMA->Draw("DEVAEneTot")
+
+### COMANDI VARI
+LEMMA->Draw("DEVAEneTot")
+LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
+
+
+#############################
 ### CHANGE-LOG
 2017.09.11 Modified by collamaf (francesco.collamati@roma1.infn.it)
 - added Cerenkov absorber (with generic dimensions)
@@ -78,9 +108,20 @@ Please note that due to Geant4 issues regarding multi core root output, multi th
 - added exact structure of DEVA calorimeter (12 plastic scintillator tiles and 11 lead absorbers)
 - first approach to scoring of deposited energy into DEVA. For now simply saving total energy deposited in each of 12 layers using 12 (+1 total) entries in the root file
 
+2017.10.28 by collamaf
+- expanded scoring of energy depositon into DEVA, dividing for Total, Photons, Electrons and Positrons contribution. However, probably this division does not have much sense in MC.. have to think about it
+- reduced number of reading channel in DEVA from 12 (as layers) to 6 (as in experiment)
+- added a flag to the main to decide if to score calorimeter info
 
+2017.10.30 by collamaf
+- added scoring of CopyNb to know in which layer of DEVA the interaction happens
+- corrected DEVA container material (was full of iron!)
 
+2017.11.28 by collamaf
+- new system of naming for total .root file (not the one(s) produced by Geant, but the ones done with root)
 
+2017.11.29 by collamaf
+- fixed a lot of X and Z positions, due to found error in Z placing of T6 (was moved towards target ~1m, and thus also the chamber position was wrong)
 
 
 

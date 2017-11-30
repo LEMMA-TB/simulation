@@ -112,8 +112,8 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double Gcal_sizeZ = 230.*mm; // ~25Xo
 	
 	// Iron blocks:
-	G4double Iblock_sizeX = 10*cm;
-	G4double Iblock_sizeY = 10*cm;
+	G4double Iblock_sizeX = 20*cm;
+	G4double Iblock_sizeY = 20*cm;
 	G4double Iblock_sizeZ = 400*mm;
 	
 	// Iron column:
@@ -145,7 +145,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	//--> detectors (D-ghost): // ghost-detectors
 	G4double Chamber_sizeX = 2.55*m;
 	G4double Chamber_sizeY = 2.55*m;
-//	G4double Chamber_sizeZ = 29*cm; //entire chamber
+	G4double Chamber_sizeZTot = 29*cm; //entire chamber
 	G4double Chamber_sizeZ = 0.1*cm; //chamber layer is 1.2, but use smaller value since we just use z position
 
 	// Scintillator A behind T6a:
@@ -174,23 +174,42 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double xTrk5=5.1*cm+trk_sizeXb/2.;
 	G4double zTrk5=1563*cm;
 	G4double zBendMagn=zTrk5-260*cm;  //1563-260=1303
-	G4double xTrk6=14.85*cm+trk_sizeXb/2.;
-	G4double zTrk6=2137.4*cm;
+
+//	G4double xTrk6=14.85*cm+trk_sizeXb/2.; //before 2017-11-28
+//	G4double zTrk6=2137.4*cm;   //before 2017-11-28
+	G4double xTrk6=10.5*cm+2.6*cm+trk_sizeXb/2.;
+//	G4double zTrk6=1852*cm; //correcting for 280cm pre T1 offset
+	G4double zTrk6=1776*cm; //believing my measured distance from last geom measurement: 2137.4-280=1852 is measured by geom, but then was moved by Mario and Fabio to match the beam. At the end I add 213cm fro T5 -> 1776cm
+
 	//	G4double xScintA=5.1*cm+ScintA_sizeX/2.;
-	G4double zCalo=2941*cm;
+//	G4double zCalo=2941*cm; //before 2017-11-28
+	G4double zCalo=zTrk6+804*cm; //=2580 using measured distance from T5
+	
+//	G4double zChamber=3132.4*cm;//before 2017-11-28
+	G4double zChamber=zTrk6+995*cm;//=2771 using measured distance from T5
+	
+	//	G4double zShield=3082.4*cm;//before 2017-11-28
+	G4double zShield=zChamber-70*cm; //=2701 using measured distance from chamber
+
+	
+	//	G4double zLeadGlass=3132.4*cm+29*cm+10*cm;//before 2017-11-28
+	G4double zLeadGlass=zChamber+29*cm+10*cm; //= 2810 using measured distance from chamber
+	
+	//	G4double zCerenkov=3132.4*cm+29*cm+10*cm + 10*cm + LeadGlass_sizeZ/2. + Cerenkov_sizeZ/2.;//before 2017-11-28
+	G4double zCerenkov=zChamber+29*cm+10*cm + LeadGlass_sizeZ; //= BOH using measured distance from chamber
 	// ############################################
 	// ##########################
-	G4double CaloOffset=21.0*cm; //5cm iniziale - 15cm per iniziare a beccarlo al bordo sotto - 20cm sembra ben centrato per 22GeV
+	G4double CaloOffset=-4.0*cm; //post 2017-11-29: 0 cm becca bene, 5 cm spizza, 10 quasi tutto fuori (OLD 5cm iniziale - 15cm per iniziare a beccarlo al bordo sotto - 20cm sembra ben centrato) per 22GeV
 	// ##########################
 	// ############################################
 	G4double DistXGcalIron=5*cm;
-	G4double DistXIronEcal=2*cm;
+	G4double DistXIronEcal=4*cm; //was 2, but 4 fits better photos
 	G4double DistXEcalColumn=10*cm;
 	G4double DistZGcalIron=5*cm;
 	G4double ChamberOffsetX=3*cm;
 	G4double X3Corr=1*cm;
 	G4double Y3Corr=-0.5*cm;
-	G4double ChamberLayerZ[12]={-10.75*cm, -9.45*cm, -8.15*cm, -6.85*cm,  7.45*cm, 8.75*cm, 10.05*cm,11.35*cm, 12.85*cm, 14.15*cm, 15.45*cm, 16.75*cm}; //vero da Bertolin ma da capire il significato
+	G4double ChamberLayerZ[12]={-10.75*cm, -9.45*cm, -8.15*cm, -6.85*cm,  7.45*cm, 8.75*cm, 10.05*cm,11.35*cm, 12.85*cm, 14.15*cm, 15.45*cm, 16.75*cm}; //meas. from Bertolin
 //	G4double ChamberLayerZ[12]={0*cm, 1.5*cm, 3*cm, 4.5*cm, 6*cm, 7.5*cm, 9*cm, 10.5*cm, 12*cm, 13.5*cm, 15*cm, 16.5*cm};
 
 	
@@ -209,7 +228,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4ThreeVector posScintA  = G4ThreeVector(xTrk6,0.,zTrk6+ScintA_sizeZ/2.+1*cm); // ScintA behind T6a
 	G4ThreeVector posScintB  = G4ThreeVector(-xTrk6,0.,zTrk6+ScintB_sizeZ/2.+1*cm); // ScintB behind T6b
 	G4ThreeVector posGcal  = G4ThreeVector(CaloOffset,0.,zCalo+Gcal_sizeZ/2.); // GCAL center
-	G4ThreeVector posIblock  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX/2.+DistXGcalIron,0.,zCalo+Iblock_sizeZ/2.+DistZGcalIron); // GCAL center
+	G4ThreeVector posIblock  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX/2.+DistXGcalIron,0.,zCalo+Iblock_sizeZ/2.+DistZGcalIron); // Iron Block center
 	G4ThreeVector posEcal  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX+DistXIronEcal+DistXGcalIron+DEVAenv_sizeX/2.,0.,zCalo+DEVAenv_sizeZ/2.); // ECAL center
 	G4ThreeVector posDevaAct=G4ThreeVector(0, 0, 0);
 	G4ThreeVector posDevaAbs=G4ThreeVector(0, 0, 0);
@@ -218,10 +237,10 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	
 	
 	//	 G4Transform3D transform1 = G4Transform3D(rotEcal,posEcal);
-	G4ThreeVector posShield= G4ThreeVector(92.7/2.*cm,0.*cm,3082.4*cm); // Shield center
-	G4ThreeVector posChamber  = G4ThreeVector(ChamberOffsetX,0.,3132.4*cm); // D-ghost Subdet 70
-	G4ThreeVector posLeadGlass  = G4ThreeVector(-40*cm-LeadGlass_sizeX/2.,0.,3132.4*cm+29*cm+10*cm);
-	G4ThreeVector posCerenkov  = G4ThreeVector(-40*cm-LeadGlass_sizeX/2.,0.,3132.4*cm+29*cm+10*cm + 10*cm + LeadGlass_sizeZ/2. + Cerenkov_sizeZ/2.);  //centered behing LeadGlass
+	G4ThreeVector posShield= G4ThreeVector(92.7/2.*cm,0.*cm,zShield+shield_sizeZ/2.); // Shield center
+	G4ThreeVector posChamber  = G4ThreeVector(ChamberOffsetX,0.,zChamber); // D-ghost Subdet 70
+	G4ThreeVector posLeadGlass  = G4ThreeVector(-40*cm-LeadGlass_sizeX/2.,0.,zLeadGlass+LeadGlass_sizeZ/2.);
+	G4ThreeVector posCerenkov  = G4ThreeVector(-40*cm-LeadGlass_sizeX/2.,0.,zCerenkov+ Cerenkov_sizeZ/2.);  //centered behing LeadGlass
 	
 	
 	G4double EcalAngle=7.94*CLHEP::deg;

@@ -25,7 +25,7 @@
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
 /vis/viewer/set/autoRefresh false
-/vis/verbose errors
+#/vis/verbose errors
 #
 # Draw geometry:
 /vis/drawVolume
@@ -51,8 +51,8 @@
 #/vis/scene/add/hits
 #
 # To draw only gammas:
-#/vis/filtering/trajectories/create/particleFilter
-#/vis/filtering/trajectories/particleFilter-0/add e+
+/vis/filtering/trajectories/create/particleFilter
+/vis/filtering/trajectories/particleFilter-0/add e+
 #/vis/filtering/trajectories/particleFilter-0/add mu-
 #
 # To invert the above, drawing all particles except gammas,
@@ -82,7 +82,8 @@
 #
 # Axes, scale, etc.
 #/vis/scene/add/scale   # Simple scale line
-/vis/scene/add/scale 31.324 m z 0 1 0 manual 0 0 15.662 m
+#/vis/scene/add/scale 31.324 m z 0 1 0 manual 0 0 15.662 m
+/vis/scene/add/scale 27.71 m z 0 1 0 manual 0 0 13.855 m
 /vis/scene/add/axes    # Simple axes: x=red, y=green, z=blue.
 /vis/scene/add/eventID # Drawn at end of event
 #/vis/scene/add/date    # Date stamp
@@ -104,7 +105,7 @@
 # To get nice view
 /vis/geometry/set/visibility World 0 false
 /vis/geometry/set/visibility Envelope 0 false
-/vis/viewer/set/style surface
+#/vis/viewer/set/style surface
 /vis/viewer/set/hiddenMarker true
 /vis/geometry/set/colour Pipe12 0 0.5 0.5 0.5 1
 /vis/geometry/set/colour Pipe34 0 0.5 0.5 0.5 1

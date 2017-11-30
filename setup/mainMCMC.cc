@@ -49,17 +49,19 @@ int main(int argc,char** argv)
 #endif
 	
 	// FLAG DEFINITION TO CHOOSE THE DESIRED CONFIGURATION
-	G4bool MuonBeamFlag=false;  //switching on this flag generates 22GeV mu- beam, and removes the target, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
-	G4bool ElectronBeamFlag=false;  //switching on this flag generates 22GeV e- beam, and removes the target, otherwise 45GeV e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
-	G4double BeamEnergy=26.*GeV; //Primary Beam Energy (18, 22, 26 GeV options for e+ calibration) - 45 GeV for real TB
+	G4bool MuonBeamFlag=false;  //switching on this flag generates mu- beam, otherwise e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
+	G4bool ElectronBeamFlag=false;  //switching on this flag generates e- beam, otherwise e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
+	G4double BeamEnergy=22.*GeV; //Primary Beam Energy (18, 22, 26 GeV options for e+ calibration) - 45 GeV for real TB
 	G4bool SimpleFlag=false;
 
 	G4bool TargetFlag=false;
-	G4bool FlipFieldFlag=true; //non-flipped field sends positrons towards the "clean channel" (just chamber, no calos)
-	G4bool MagMapFlag=true;
-	G4bool StoreCaloEnDepFlag=true; //to disable scoring of energy deposition (gamma, e+, e-, total) in DEVA calorimeter (sparing ~15% of disk space)
+	G4bool FlipFieldFlag=true; //non-flipped (=false) field sends positrons towards the "clean channel" (just chamber, no calos), flipped (=true) sends positrons to "busy" channel
+	G4bool MagMapFlag=false;
+	G4bool StoreCaloEnDepFlag=false; //to disable scoring of energy deposition (gamma, e+, e-, total) in DEVA calorimeter (sparing ~15% of disk space)
 	// INITIALIZE
 
+	
+	
 //==================================================
   G4bool FTFP = false; // standard Geant4 PhysicsList
   G4bool channeling = false;
