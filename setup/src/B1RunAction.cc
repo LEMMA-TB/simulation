@@ -107,7 +107,13 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn(0,"Step", RunVectorStep);
 	analysisManager->CreateNtupleDColumn(0,"InextStep", RunVectorInextStep);
 	analysisManager->CreateNtupleDColumn(0,"CopyNb", RunVectorCopyNb);
-	
+
+	//added on 15.12.2017 @ Padova to compare with data analysis of enetring points in DEVA
+#if 1
+	analysisManager->CreateNtupleDColumn(0,"DEVAInX", RunVectorDEVAInX);
+	analysisManager->CreateNtupleDColumn(0,"DEVAInY", RunVectorDEVAInY);
+	analysisManager->CreateNtupleDColumn(0,"DEVAInZ", RunVectorDEVAInZ);
+#endif
 //	analysisManager->CreateNtupleDColumn(0,"nhits", RunVectorNHits);
 //	analysisManager->CreateNtupleDColumn(0,"itrack", RunVectorItrack);
 	

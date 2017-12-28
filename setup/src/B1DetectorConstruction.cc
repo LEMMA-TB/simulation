@@ -199,7 +199,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double zCerenkov=zChamber+29*cm+10*cm + LeadGlass_sizeZ; //= BOH using measured distance from chamber
 	// ############################################
 	// ##########################
-	G4double CaloOffset=-4.0*cm; //post 2017-11-29: 0 cm becca bene, 5 cm spizza, 10 quasi tutto fuori (OLD 5cm iniziale - 15cm per iniziare a beccarlo al bordo sotto - 20cm sembra ben centrato) per 22GeV
+	G4double CaloOffset=-.0*cm; //post 2017-11-29: 0 cm becca bene, 5 cm spizza, 10 quasi tutto fuori (OLD 5cm iniziale - 15cm per iniziare a beccarlo al bordo sotto - 20cm sembra ben centrato) per 22GeV
 	// ##########################
 	// ############################################
 	G4double DistXGcalIron=5*cm;
@@ -230,6 +230,8 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4ThreeVector posGcal  = G4ThreeVector(CaloOffset,0.,zCalo+Gcal_sizeZ/2.); // GCAL center
 	G4ThreeVector posIblock  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX/2.+DistXGcalIron,0.,zCalo+Iblock_sizeZ/2.+DistZGcalIron); // Iron Block center
 	G4ThreeVector posEcal  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX+DistXIronEcal+DistXGcalIron+DEVAenv_sizeX/2.,0.,zCalo+DEVAenv_sizeZ/2.); // ECAL center
+//	G4ThreeVector posEcalDummy  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX+DistXIronEcal+DistXGcalIron+DEVAenv_sizeX/2.,0.,zCalo-1*cm/2); // ECALDummy center
+	G4ThreeVector posEcalDummy  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX+DistXIronEcal+DistXGcalIron+DEVAenv_sizeX/2.,0.,zCalo+DEVAenv_sizeZ/2.); // ECALDummy center
 	G4ThreeVector posDevaAct=G4ThreeVector(0, 0, 0);
 	G4ThreeVector posDevaAbs=G4ThreeVector(0, 0, 0);
 	
@@ -243,14 +245,20 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4ThreeVector posCerenkov  = G4ThreeVector(-40*cm-LeadGlass_sizeX/2.,0.,zCerenkov+ Cerenkov_sizeZ/2.);  //centered behing LeadGlass
 	
 	
-	G4double EcalAngle=7.94*CLHEP::deg;
+	G4double EcalAngle=1*7.94*CLHEP::deg;
 	//G4RotationMatrix* rotEcal = new G4RotationMatrix;
 	G4RotationMatrix rotEcal;
 	rotEcal.rotateY(EcalAngle); // add rotation angle of the crystal here
 	//	G4Transform3D translateEcal = HepGeom::Translate3D(7*cm*sin(EcalAngle), 7*cm*cos(EcalAngle), 0);
 	G4Transform3D translateEcal = HepGeom::Translate3D(7*cm*sin(EcalAngle), 0, -7*cm*cos(EcalAngle));
+//	G4Transform3D translateEcalDummy = HepGeom::Translate3D((7.5*cm+1*DEVAenv_sizeZ/2.)*sin(EcalAngle), 0, -(7.5*cm+1*DEVAenv_sizeZ/2.)*cos(EcalAngle));
+	G4Transform3D translateEcalDummy = HepGeom::Translate3D(0,0,-(7.69*cm+1*DEVAenv_sizeZ/2.)*cos(EcalAngle));
+//	G4Transform3D translateEcalDummy = HepGeom::Translate3D((7*cm)*sin(EcalAngle), 0, -(7*cm)*cos(EcalAngle));
+	G4cout<<"MERDA "<<(7*cm+DEVAenv_sizeZ/2.)*sin(EcalAngle)/cm<<G4endl;
+	G4cout<<"MERDA "<<-(7*cm+DEVAenv_sizeZ/2.)*cos(EcalAngle)/cm<<G4endl;
 	G4Transform3D rotateEcal(rotEcal,posEcal);
-	
+	G4Transform3D rotateEcalDummy(rotEcal,posEcalDummy);
+
 	// ================
 	// define materials
 	// ================
@@ -426,6 +434,12 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4Box* iblock = new G4Box("IronBlock",Iblock_sizeX/2, Iblock_sizeY/2, Iblock_sizeZ/2);
 	G4LogicalVolume* logicIblock = new G4LogicalVolume(iblock, ferro, "IronBlock");
 	new G4PVPlacement(0,posIblock,logicIblock,"IronBlock",logicWorld,false,0,checkOverlaps);
+	
+	//-- ECAL (Fe) - DEVA Dummy for scoring what enters from front
+	G4Box* ecalDummy = new G4Box("EcalDummy",DEVAenv_sizeX/2, DEVAenv_sizeY/2, 1*cm/2.);
+	G4LogicalVolume* logicEcalDummy = new G4LogicalVolume(ecalDummy, aria, "EcalDummy");
+	//	new G4PVPlacement(G4Transform3D(*rotEcal,posEcal),logicEcal,"Ecal",logicWorld,false,0,checkOverlaps);
+	new G4PVPlacement(rotateEcalDummy*translateEcalDummy,logicEcalDummy,"EcalDummy",logicWorld,false,0,checkOverlaps);
 	
 	//-- ECAL (Fe) - DEVA
 	G4Box* ecal = new G4Box("Ecal",DEVAenv_sizeX/2, DEVAenv_sizeY/2, DEVAenv_sizeZ/2);

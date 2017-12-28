@@ -65,6 +65,14 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	//--------------------------------------------------------
 	G4LogicalVolume* volume =
 	step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
+	
+	G4VPhysicalVolume* ThisVol = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+	G4VPhysicalVolume* NextVol = step->GetPostStepPoint()->GetTouchableHandle()->GetVolume();
+	
+	//	if((NextVol && ThisVol->GetName()=="Resin"
+	
+	
+	
 //	G4VPhysicalVolume* physVol=
 //	step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
 	G4bool SHOW = false;
@@ -165,6 +173,21 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		
 	
 	}
+	
+	
+	
+	//added on 15.12.17 @ Padova
+#if 1
+	if (NextVol && ThisVol->GetName()=="EcalDummy" && NextVol->GetName()=="Ecal") {
+		runStepAction->GetDEVAInX().push_back(step->GetPostStepPoint()->GetPosition().x()/cm);
+		runStepAction->GetDEVAInY().push_back(step->GetPostStepPoint()->GetPosition().y()/cm);
+		runStepAction->GetDEVAInZ().push_back(step->GetPostStepPoint()->GetPosition().z()/cm);
+	}
+#endif
+	
+	
+	
+	
 	//-- store info
 	if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary)
 				   || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary))) {
@@ -206,6 +229,9 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		xvertex = step->GetTrack()->GetVertexPosition();
 		
 		//NEW SCORING
+
+		
+		
 		
 		if(subdet==77) (runStepAction->GetCopyNb()).push_back(CopyNb);  //I'm interested in CopyNb only for DEVA active components (subdet==77)
 		(runStepAction->GetSubdet()).push_back(subdet);

@@ -35,7 +35,7 @@
 
 int main(int argc,char** argv)
 {
-  
+	
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
   G4long seed = time(NULL);
   G4Random::setTheSeed(seed);
@@ -55,7 +55,7 @@ int main(int argc,char** argv)
 	G4bool SimpleFlag=false;
 
 	G4bool TargetFlag=false;
-	G4bool FlipFieldFlag=true; //non-flipped (=false) field sends positrons towards the "clean channel" (just chamber, no calos), flipped (=true) sends positrons to "busy" channel
+	G4bool FlipFieldFlag=true; //non-flipped (=false) field sends positrons towards the "clean channel" (just chamber, no calos), flipped (=true) sends positrons to "busy" channel ("final" setup)
 	G4bool MagMapFlag=false;
 	G4bool StoreCaloEnDepFlag=false; //to disable scoring of energy deposition (gamma, e+, e-, total) in DEVA calorimeter (sparing ~15% of disk space)
 	// INITIALIZE
