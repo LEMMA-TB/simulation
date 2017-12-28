@@ -50,6 +50,10 @@ void B1EventAction::BeginOfEventAction(const G4Event* evt){
 	(fRunAction->GetInextStep()).clear();
 	(fRunAction->GetCopyNb()).clear();
 	
+	(fRunAction->GetDEVAInX()).clear();
+	(fRunAction->GetDEVAInY()).clear();
+	(fRunAction->GetDEVAInZ()).clear();
+
 	
 	fDEVAEneTot1=0;
 	fDEVAEneTot2=0;
