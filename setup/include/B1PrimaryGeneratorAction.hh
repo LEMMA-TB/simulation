@@ -15,7 +15,7 @@ class G4Box;
 class B1PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-	B1PrimaryGeneratorAction(B1EventAction* eventAction, G4double BeamEnergy, G4bool MuonBeamFlag, G4bool ElectronBeamFlag, G4bool SimpleFlag);
+	B1PrimaryGeneratorAction(B1EventAction* eventAction, G4double BeamEnergy, G4bool MuonBeamFlag, G4bool ElectronBeamFlag, G4bool SimpleFlag, G4bool ExtSourceFlagBha, G4bool ExtSourceFlagMu);
 	virtual ~B1PrimaryGeneratorAction();
 	
 	// method from the base class
@@ -32,6 +32,10 @@ private:
 	G4bool fMuonBeamFlag;
 	G4bool fElectronBeamFlag;
 	G4bool fSimpleFlag;
+	G4bool fExtSourceFlagBha;
+	G4bool fExtSourceFlagMu;
+
+	G4VPrimaryGenerator* hepmcAscii;
 	
 };
 

@@ -25,6 +25,15 @@ void B1EventAction::BeginOfEventAction(const G4Event* evt){
 	//Initialize Primaries Info to 0
 
 	
+	(fRunAction->GetBeamX()).clear();
+	(fRunAction->GetBeamY()).clear();
+	(fRunAction->GetBeamZ()).clear();
+	(fRunAction->GetBeamCX()).clear();
+	(fRunAction->GetBeamCY()).clear();
+	(fRunAction->GetBeamCZ()).clear();
+	(fRunAction->GetBeamEne()).clear();
+	(fRunAction->GetBeamPart()).clear();
+
 	(fRunAction->GetSubdet()).clear();
 	(fRunAction->GetIdp()).clear();
 	(fRunAction->GetIpar()).clear();
@@ -93,6 +102,7 @@ void B1EventAction::EndOfEventAction(const G4Event*){
 	
 	auto analysisManager = G4AnalysisManager::Instance();
 
+	/*
 	analysisManager->FillNtupleDColumn(0,fBeamX);
 	analysisManager->FillNtupleDColumn(1,fBeamY);
 	analysisManager->FillNtupleDColumn(2,fBeamZ);
@@ -101,6 +111,7 @@ void B1EventAction::EndOfEventAction(const G4Event*){
 	analysisManager->FillNtupleDColumn(5,fBeamCZ);
 	analysisManager->FillNtupleDColumn(6,fBeamEne);
 	analysisManager->FillNtupleDColumn(7,fBeamPart);
+	 */
 	analysisManager->FillNtupleDColumn(8,fNHits);
 	analysisManager->FillNtupleDColumn(9,fDEVAEneTot1);
 	analysisManager->FillNtupleDColumn(10,fDEVAEneTot2);

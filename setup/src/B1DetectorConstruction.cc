@@ -88,10 +88,10 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double trk_sizeZ6 = 0.8*mm;
 	
 	
-	//--> Be amorphous crystal:
+	//--> Be amorphous crystal target:
 	G4double cry_sizeX = 5.*cm;
 	G4double cry_sizeY = 5.*cm;
-	G4double cry_sizeZ = 30.*mm;
+	G4double cry_sizeZ = 60.*mm; //was "30" till 2017.12.29
 	
 	//--> dipole magnet
 	G4double innerRadius = 0.*cm;

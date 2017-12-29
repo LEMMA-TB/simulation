@@ -46,6 +46,7 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	
 	analysisManager->OpenFile(filename);
 	analysisManager->CreateNtuple("LEMMA", "LemmaMCNtuple");
+	/*
 	analysisManager->CreateNtupleDColumn("BeamX");   //0
 	analysisManager->CreateNtupleDColumn("BeamY");   //1
 	analysisManager->CreateNtupleDColumn("BeamZ");   //2
@@ -54,6 +55,16 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn("BeamCZ");   //5
 	analysisManager->CreateNtupleDColumn("BeamEne");   //6
 	analysisManager->CreateNtupleDColumn("BeamPart");   //7
+*/
+	analysisManager->CreateNtupleDColumn("BeamX", RunVectorBeamX);   //0
+	analysisManager->CreateNtupleDColumn("BeamY", RunVectorBeamY);   //1
+	analysisManager->CreateNtupleDColumn("BeamZ", RunVectorBeamY);   //2
+	analysisManager->CreateNtupleDColumn("BeamCX", RunVectorBeamCX);   //3
+	analysisManager->CreateNtupleDColumn("BeamCY", RunVectorBeamCY);   //4
+	analysisManager->CreateNtupleDColumn("BeamCZ", RunVectorBeamCZ);   //5
+	analysisManager->CreateNtupleDColumn("BeamEne", RunVectorBeamEne);   //6
+	analysisManager->CreateNtupleDColumn("BeamPart", RunVectorBeamPart);   //7
+	
 	analysisManager->CreateNtupleDColumn("nhits");   //8
 	analysisManager->CreateNtupleDColumn("DEVAEneTot1");   //9
 	analysisManager->CreateNtupleDColumn("DEVAEneTot2");   //10

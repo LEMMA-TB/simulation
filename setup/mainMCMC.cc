@@ -41,7 +41,7 @@ int main(int argc,char** argv)
   G4Random::setTheSeed(seed);
   
 //#ifdef G4MULTITHREADED
-#if 1
+#if 0
 	G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads( G4Threading::G4GetNumberOfCores() );
 #else
@@ -60,6 +60,12 @@ int main(int argc,char** argv)
 	G4bool StoreCaloEnDepFlag=false; //to disable scoring of energy deposition (gamma, e+, e-, total) in DEVA calorimeter (sparing ~15% of disk space)
 	// INITIALIZE
 
+	
+	//Flags to force use of externally generated primary files (for bhabha and muon pair production)
+	//Note that the filename is provided in PrimaryGenAction (path must be relative to where the code runs (eg build directory))
+	//These flags ovverride previous ones (MuonBeamFlag, ElectronBeamFlag etc) and also BeamEnergy
+	G4bool ExtSourceFlagBha=false;
+	G4bool ExtSourceFlagMu=false;
 	
 	
 //==================================================
@@ -89,7 +95,7 @@ int main(int argc,char** argv)
   }
   
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new B1ActionInitialization(BeamEnergy, MuonBeamFlag,ElectronBeamFlag, SimpleFlag, StoreCaloEnDepFlag));
+  runManager->SetUserInitialization(new B1ActionInitialization(BeamEnergy, MuonBeamFlag,ElectronBeamFlag, SimpleFlag, StoreCaloEnDepFlag,ExtSourceFlagBha, ExtSourceFlagMu));
   runManager->Initialize();  // init kernel
   
   

@@ -17,6 +17,17 @@ class B1RunAction : public G4UserRunAction
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
 	
+	std::vector<G4double>& GetBeamX() {return RunVectorBeamX; }
+	std::vector<G4double>& GetBeamY() {return RunVectorBeamY; }
+	std::vector<G4double>& GetBeamZ() {return RunVectorBeamZ; }
+	std::vector<G4double>& GetBeamCX() {return RunVectorBeamCX; }
+	std::vector<G4double>& GetBeamCY() {return RunVectorBeamCY; }
+	std::vector<G4double>& GetBeamCZ() {return RunVectorBeamCZ; }
+	std::vector<G4double>& GetBeamEne() {return RunVectorBeamEne; }
+	std::vector<G4double>& GetBeamPart() {return RunVectorBeamPart; }
+
+	
+	
 	std::vector<G4double>& GetSubdet() {return RunVectorSubdet; }
 	std::vector<G4double>& GetIdp() {return RunVectorIdp; }
 	std::vector<G4double>& GetIpar() {return RunVectorIpar; }
@@ -54,6 +65,14 @@ class B1RunAction : public G4UserRunAction
 	
 	
 private:
+	std::vector<G4double> RunVectorBeamX;
+	std::vector<G4double> RunVectorBeamY;
+	std::vector<G4double> RunVectorBeamZ;
+	std::vector<G4double> RunVectorBeamCX;
+	std::vector<G4double> RunVectorBeamCY;
+	std::vector<G4double> RunVectorBeamCZ;
+	std::vector<G4double> RunVectorBeamEne;
+	std::vector<G4double> RunVectorBeamPart;
 
 	std::vector<G4double> RunVectorSubdet;
 	std::vector<G4double> RunVectorIdp;

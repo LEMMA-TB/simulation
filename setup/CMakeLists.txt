@@ -22,12 +22,34 @@ endif()
 # Setup include directory for this project
 #
 include(${Geant4_USE_FILE})
-include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/process_channeling/include)
+
+
+#----------------------------------------------------------------------------
+# Find HepMC (required package)
+#
+find_package(HepMC REQUIRED)
+
+#----------------------------------------------------------------------------
+# Find Pythia6 (optional package)
+#
+find_package(Pythia6 QUIET)
+if(PYTHIA6_FOUND)
+  message(STATUS "G4 Examples: Pythia6 found. --> HepMCEx01 example with Pythia6 enabled.") 
+  add_definitions(-DG4LIB_USE_PYTHIA) 
+else()
+  set(PYTHIA6_LIBRARIES "")  
+endif()
+
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
 #
+include_directories(${PROJECT_SOURCE_DIR}/include 
+                    ${PROJECT_SOURCE_DIR}/process_channeling/include 
+                    ${Geant4_INCLUDE_DIR}
+                    ${HEPMC_INCLUDE_DIR} )
+
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/process_channeling/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh ${PROJECT_SOURCE_DIR}/process_channeling/include/*.hh)
 
@@ -35,7 +57,9 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh ${PROJECT_SOURCE_DIR}/proce
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(mainMCMC mainMCMC.cc ${sources} ${headers})
-target_link_libraries(mainMCMC ${Geant4_LIBRARIES})
+target_link_libraries(mainMCMC ${Geant4_LIBRARIES} 
+                      ${HEPMC_LIBRARIES} 
+                      ${HEPMC_FIO_LIBRARIES} ${PYTHIA6_LIBRARIES}  gfortran)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

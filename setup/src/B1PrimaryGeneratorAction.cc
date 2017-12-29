@@ -8,8 +8,9 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "HepMCG4AsciiReader.hh"
 
-B1PrimaryGeneratorAction::B1PrimaryGeneratorAction(B1EventAction* eventAction, G4double BeamEnergy, G4bool MuonBeamFlag, G4bool ElectronBeamFlag, G4bool SimpleFlag)
+B1PrimaryGeneratorAction::B1PrimaryGeneratorAction(B1EventAction* eventAction, G4double BeamEnergy, G4bool MuonBeamFlag, G4bool ElectronBeamFlag, G4bool SimpleFlag, G4bool ExtSourceFlagBha, G4bool ExtSourceFlagMu)
 : G4VUserPrimaryGeneratorAction(),
 fParticleGun(0),
 fEnvelopeBox(0),
@@ -17,7 +18,9 @@ evtPrimAction(eventAction),
 fBeamEnergy(BeamEnergy),
 fMuonBeamFlag(MuonBeamFlag),
 fElectronBeamFlag(ElectronBeamFlag),
-fSimpleFlag(SimpleFlag)
+fSimpleFlag(SimpleFlag),
+fExtSourceFlagBha(ExtSourceFlagBha),
+fExtSourceFlagMu(ExtSourceFlagMu)
 {
 	G4int n_particle = 1;
 	fParticleGun  = new G4ParticleGun(n_particle);
@@ -25,15 +28,27 @@ fSimpleFlag(SimpleFlag)
 	G4String particleName;
 	
 	G4ParticleDefinition* particle;
-	if(fMuonBeamFlag) {
-		particle = particleTable->FindParticle(particleName="mu-"); //Primary Muon Beam
-		G4cout<<"I am simulating a Mu- primary beam of energy "<<fBeamEnergy/GeV<<" GeV"<<G4endl;
-	} else if(fElectronBeamFlag) {
-		particle = particleTable->FindParticle(particleName="e-"); //Primary Electron Beam
-		G4cout<<"I am simulating a e- primary beam of energy "<<fBeamEnergy/GeV<<" GeV"<<G4endl;
+	particle = particleTable->FindParticle(particleName="e+"); //Primary Positron Beam
+
+	//	hepmcAscii = new HepMCG4AsciiReader();
+	
+	if(fExtSourceFlagBha) {
+		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"I am using as primary particles externally generated e+e- bhabha pairs"<<G4endl;
+		hepmcAscii = new HepMCG4AsciiReader("ExtDataBhabha.dat"); //path must be relative to where the code runs (eg build directory)
+	} else if(fExtSourceFlagMu) {
+		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"I am using as primary particles externally generated mu+mu- pairs"<<G4endl;
+		hepmcAscii = new HepMCG4AsciiReader("ExtDataBhabha.dat");
 	} else {
-		particle = particleTable->FindParticle(particleName="e+"); //Primary Positron Beam
-		G4cout<<"I am simulating a e+ primary beam of energy "<<fBeamEnergy/GeV<<" GeV"<<G4endl;
+		if(fMuonBeamFlag) {
+			particle = particleTable->FindParticle(particleName="mu-"); //Primary Muon Beam
+			G4cout<<"I am simulating a Mu- primary beam of energy "<<fBeamEnergy/GeV<<" GeV"<<G4endl;
+		} else if(fElectronBeamFlag) {
+			particle = particleTable->FindParticle(particleName="e-"); //Primary Electron Beam
+			G4cout<<"I am simulating a e- primary beam of energy "<<fBeamEnergy/GeV<<" GeV"<<G4endl;
+		} else {
+			particle = particleTable->FindParticle(particleName="e+"); //Primary Positron Beam
+			G4cout<<"I am simulating a e+ primary beam of energy "<<fBeamEnergy/GeV<<" GeV"<<G4endl;
+		}
 	}
 	fParticleGun->SetParticleDefinition(particle);
 }
@@ -116,6 +131,7 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	G4double Energy = G4RandGauss::shoot(Energy0, Energy0*EnergySpread);
 	fParticleGun->SetParticleEnergy(Energy);
 	
+#if 0 //this part has been moved to StackingAction by collamaf on 2017.12.29
 	//Save Primary Beam Info
 	evtPrimAction->SetBeamX(x0);
 	evtPrimAction->SetBeamY(y0);
@@ -125,7 +141,7 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	evtPrimAction->SetBeamCZ(sqrt(1-px_smear*px_smear-py_smear*py_smear));   //corrected by collamaf
 	evtPrimAction->SetBeamEne(Energy/GeV);
 	evtPrimAction->SetBeamPart(fParticleGun->GetParticleDefinition()->GetPDGEncoding());
-	
+#endif
 	
 	/*
 	 -- energy spread:
@@ -134,7 +150,17 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	 Energy = G4RandGauss::shoot(Energy,sigmaE);
 	 fParticleGun->SetParticleEnergy(Energy);
   */
-	fParticleGun->GeneratePrimaryVertex(anEvent);
+//
+	
+	if (fExtSourceFlagBha || fExtSourceFlagMu) {
+//		G4cout<<"SPARO DA FUORI"<<G4endl;
+		hepmcAscii->GeneratePrimaryVertex(anEvent);
+	}	else {
+//		G4cout<<"SPARO SORGENTE STANDARD"<<G4endl;
+
+		fParticleGun->GeneratePrimaryVertex(anEvent);
+	}
+	
 }
 
 
