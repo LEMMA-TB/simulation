@@ -7,7 +7,8 @@ Geant4 simulation of LEMMA test beam, done @CERN on ~August 2017.
 cd build
 cmake -DGeant4_DIR=$G4INSTALL ../setup/
 make
-./mainMCMC {../setup/run1.mac}
+./mainMCMC
+./mainMCMC ../setup/run1.mac
 
 Please note that if any changes are done to ../setup/*.mac you need to cmake -XXX again
 ### GEOMETRY
@@ -75,7 +76,7 @@ TFile *file = TFile::Open("LemmaMC_Pos22_NoT_M_calo.root","RECREATE");    //Map 
 ### OR TO READ TOGETHER WITHOUT MERGING
 
 TChain * chain = new TChain("LEMMA")
-chain->Add("LemmaMC_t?.root")
+chain->Add("LemmaMC_t*.root")
 LEMMA->Draw("DEVAEneTot")
 
 ### COMANDI VARI
@@ -123,6 +124,14 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 2017.11.29 by collamaf
 - fixed a lot of X and Z positions, due to found error in Z placing of T6 (was moved towards target ~1m, and thus also the chamber position was wrong)
 
+2017.12.15 by collamaf (@Padova)
+- added additional scoring of XYZ of particles entering DEVA to compare with data analysis
+
+2017.12.29 by collamaf
+- added possibility to use external generator for primary events: there are now 2 new flags in mainMCMC.cc (ExtSourceFlagBha and ExtSourceFlagMu): if true default settings for source are overrided
+- moved from PrimaryAction to StackingAction the lines to save on the root file info on primary particles, in order to be able to do so also for externally generated particels
+- changed structure in the root outpit file to house more than 1 primary per event: now BeamX etc are vectors
+- at the current stage the origin of primary external particles is decided with the generator (e.g. they are all generated at the center of the target), but we will work on it
 
 
 
