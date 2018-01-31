@@ -207,8 +207,8 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double DistXEcalColumn=10*cm;
 	G4double DistZGcalIron=5*cm;
 	G4double ChamberOffsetX=3*cm;
-	G4double X3Corr=1*cm;
-	G4double Y3Corr=-0.5*cm;
+	G4double X3Corr=1*cm; //was 1.cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin
+	G4double Y3Corr=-0.5*cm; //was -.5cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin
 	G4double ChamberLayerZ[12]={-10.75*cm, -9.45*cm, -8.15*cm, -6.85*cm,  7.45*cm, 8.75*cm, 10.05*cm,11.35*cm, 12.85*cm, 14.15*cm, 15.45*cm, 16.75*cm}; //meas. from Bertolin
 //	G4double ChamberLayerZ[12]={0*cm, 1.5*cm, 3*cm, 4.5*cm, 6*cm, 7.5*cm, 9*cm, 10.5*cm, 12*cm, 13.5*cm, 15*cm, 16.5*cm};
 

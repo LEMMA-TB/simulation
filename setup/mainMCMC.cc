@@ -65,7 +65,7 @@ int main(int argc,char** argv)
 	//Note that the filename is provided in PrimaryGenAction (path must be relative to where the code runs (eg build directory))
 	//These flags ovverride previous ones (MuonBeamFlag, ElectronBeamFlag etc) and also BeamEnergy
 	G4bool ExtSourceFlagBha=false;
-	G4bool ExtSourceFlagMu=false;
+	G4bool ExtSourceFlagMu=true;
 	
 	
 //==================================================

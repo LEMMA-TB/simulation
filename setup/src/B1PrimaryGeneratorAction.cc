@@ -34,10 +34,12 @@ fExtSourceFlagMu(ExtSourceFlagMu)
 	
 	if(fExtSourceFlagBha) {
 		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"I am using as primary particles externally generated e+e- bhabha pairs"<<G4endl;
-		hepmcAscii = new HepMCG4AsciiReader("ExtDataBhabha.dat"); //path must be relative to where the code runs (eg build directory)
+//		hepmcAscii = new HepMCG4AsciiReader("ExtDataBhabha.dat"); //path must be relative to where the code runs (eg build directory)
+		hepmcAscii = new HepMCG4AsciiReader("ExtData_ep.dat"); //path must be relative to where the code runs (eg build directory)
 	} else if(fExtSourceFlagMu) {
 		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"I am using as primary particles externally generated mu+mu- pairs"<<G4endl;
-		hepmcAscii = new HepMCG4AsciiReader("ExtDataBhabha.dat");
+//		hepmcAscii = new HepMCG4AsciiReader("ExtDataBhabha.dat");
+		hepmcAscii = new HepMCG4AsciiReader("ExtData_mm.dat");
 	} else {
 		if(fMuonBeamFlag) {
 			particle = particleTable->FindParticle(particleName="mu-"); //Primary Muon Beam

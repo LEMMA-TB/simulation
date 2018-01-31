@@ -113,38 +113,38 @@ void B1EventAction::EndOfEventAction(const G4Event*){
 	analysisManager->FillNtupleDColumn(7,fBeamPart);
 	 */
 	analysisManager->FillNtupleDColumn(8,fNHits);
-	analysisManager->FillNtupleDColumn(9,fDEVAEneTot1);
-	analysisManager->FillNtupleDColumn(10,fDEVAEneTot2);
-	analysisManager->FillNtupleDColumn(11,fDEVAEneTot3);
-	analysisManager->FillNtupleDColumn(12,fDEVAEneTot4);
-	analysisManager->FillNtupleDColumn(13,fDEVAEneTot5);
-	analysisManager->FillNtupleDColumn(14,fDEVAEneTot6);
-	analysisManager->FillNtupleDColumn(15,fDEVAEneTot);
+	analysisManager->FillNtupleDColumn(32,fDEVAEneTot1);
+	analysisManager->FillNtupleDColumn(33,fDEVAEneTot2);
+	analysisManager->FillNtupleDColumn(34,fDEVAEneTot3);
+	analysisManager->FillNtupleDColumn(35,fDEVAEneTot4);
+	analysisManager->FillNtupleDColumn(36,fDEVAEneTot5);
+	analysisManager->FillNtupleDColumn(37,fDEVAEneTot6);
+	analysisManager->FillNtupleDColumn(38,fDEVAEneTot);
 
 //	/*
-	analysisManager->FillNtupleDColumn(16,fDEVAEneFot1);
-	analysisManager->FillNtupleDColumn(17,fDEVAEneFot2);
-	analysisManager->FillNtupleDColumn(18,fDEVAEneFot3);
-	analysisManager->FillNtupleDColumn(19,fDEVAEneFot4);
-	analysisManager->FillNtupleDColumn(20,fDEVAEneFot5);
-	analysisManager->FillNtupleDColumn(21,fDEVAEneFot6);
-	analysisManager->FillNtupleDColumn(22,fDEVAEneFot);
+	analysisManager->FillNtupleDColumn(39,fDEVAEneFot1);
+	analysisManager->FillNtupleDColumn(40,fDEVAEneFot2);
+	analysisManager->FillNtupleDColumn(41,fDEVAEneFot3);
+	analysisManager->FillNtupleDColumn(42,fDEVAEneFot4);
+	analysisManager->FillNtupleDColumn(43,fDEVAEneFot5);
+	analysisManager->FillNtupleDColumn(44,fDEVAEneFot6);
+	analysisManager->FillNtupleDColumn(45,fDEVAEneFot);
+
+	analysisManager->FillNtupleDColumn(46,fDEVAEnePos1);
+	analysisManager->FillNtupleDColumn(47,fDEVAEnePos2);
+	analysisManager->FillNtupleDColumn(48,fDEVAEnePos3);
+	analysisManager->FillNtupleDColumn(49,fDEVAEnePos4);
+	analysisManager->FillNtupleDColumn(50,fDEVAEnePos5);
+	analysisManager->FillNtupleDColumn(51,fDEVAEnePos6);
+	analysisManager->FillNtupleDColumn(52,fDEVAEnePos);
 	
-	analysisManager->FillNtupleDColumn(23,fDEVAEnePos1);
-	analysisManager->FillNtupleDColumn(24,fDEVAEnePos2);
-	analysisManager->FillNtupleDColumn(25,fDEVAEnePos3);
-	analysisManager->FillNtupleDColumn(26,fDEVAEnePos4);
-	analysisManager->FillNtupleDColumn(27,fDEVAEnePos5);
-	analysisManager->FillNtupleDColumn(28,fDEVAEnePos6);
-	analysisManager->FillNtupleDColumn(29,fDEVAEnePos);
-	
-	analysisManager->FillNtupleDColumn(30,fDEVAEneEle1);
-	analysisManager->FillNtupleDColumn(31,fDEVAEneEle2);
-	analysisManager->FillNtupleDColumn(32,fDEVAEneEle3);
-	analysisManager->FillNtupleDColumn(33,fDEVAEneEle4);
-	analysisManager->FillNtupleDColumn(34,fDEVAEneEle5);
-	analysisManager->FillNtupleDColumn(35,fDEVAEneEle6);
-	analysisManager->FillNtupleDColumn(36,fDEVAEneEle);
+	analysisManager->FillNtupleDColumn(53,fDEVAEneEle1);
+	analysisManager->FillNtupleDColumn(54,fDEVAEneEle2);
+	analysisManager->FillNtupleDColumn(55,fDEVAEneEle3);
+	analysisManager->FillNtupleDColumn(56,fDEVAEneEle4);
+	analysisManager->FillNtupleDColumn(57,fDEVAEneEle5);
+	analysisManager->FillNtupleDColumn(58,fDEVAEneEle6);
+	analysisManager->FillNtupleDColumn(59,fDEVAEneEle);
 //*/
 	
 	analysisManager->AddNtupleRow();

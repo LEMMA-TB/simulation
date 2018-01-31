@@ -20,40 +20,45 @@ There are flags in the mainMCMC.cc to generate other particles (electrons, muons
 
 ### OUTPUT
 The simulation creates a LemmaMC.root file, in which on an event (i.e. a primary particle) by event basis it is stored:
-BEAM vector (one entry per primary particle):
-- BeamX: X coordinate of primary particle [mm];
-- BeamY: Y coordinate of primary particle [mm];
-- BeamZ: Z coordinate of primary particle [mm];
-- BeamCX: X directive cosine of primary particle;
-- BeamCY: Y directive cosine  of primary particle;
-- BeamCZ: Z directive cosine  of primary particle;
-- BeamEne: kinetic energy of the beam [GeV];
-- BeamPart: PDG code of primary particle (11=e-, -11=e+, 22=gamma, 13=mu-...);
+BEAM vector (one entry per primary particle, may be more than 1):
+- BeamX[]: X coordinate of primary particle [mm];
+- BeamY[]: Y coordinate of primary particle [mm];
+- BeamZ[]: Z coordinate of primary particle [mm];
+- BeamCX[]: X directive cosine of primary particle;
+- BeamCY[]: Y directive cosine  of primary particle;
+- BeamCZ[]: Z directive cosine  of primary particle;
+- BeamEne[]: kinetic energy of the beam [GeV];
+- BeamPart[]: PDG code of primary particle (11=e-, -11=e+, 22=gamma, 13=mu-...);
 - nhits: number of entries to the INTERACTIONS vector (see below) per event
 
 INTERACTIONS vector (one entry per interaction happening at the border between two different regions, to spare CPU time and disk space):
-- subdet: number of subdetector in which the interactio happened
-- Idp: PDG code of particle interacting (11=e-, -11=e+, 22=gamma, 13=mu-...);
-- ipar: parent ID of the track (0 is primary...);
-- Itrack: track ID of the track;
-- Time: time age of the track [ns];
-- xh: X coordinate of the interaction [cm];
-- yh: Y coordinate of the interaction [cm];
-- zh: Z coordinate of the interaction [cm];
-- P: momentum of the particle [GeV];
-- PX: X component of momentum of the particle [GeV];
-- PY: Y component of momentum of the particle [GeV];
-- PZ: Z component of momentum of the particle [GeV];
-- VertexX: X component of interaction vertex vector [cm];
-- VertexY: Y component of interaction vertex vector [cm];
-- VertexZ: Z component of interaction vertex vector [cm];
-- kinev: vertex kinetic energy [GeV];
-- PXvdir: X component of momentum of interaction vertex vector [normalised to P];
-- PYvdir: Y component of momentum of interaction vertex vector [normalised to P];
-- PZvdir: Z component of momentum of interaction vertex vector [normalised to P];
-- Iev: event id (in this way we also store the number of entries to the INTERACTIONS vector for each event);
-- Step: number of current step;
-- InextStep: is 1 if there will be another step, 0 if the particle is going to die.
+- subdet[]: number of subdetector in which the interactio happened
+- Idp[]: PDG code of particle interacting (11=e-, -11=e+, 22=gamma, 13=mu-...);
+- ipar[]: parent ID of the track (0 is primary...);
+- Itrack[]: track ID of the track;
+- Time[]: time age of the track [ns];
+- xh[]: X coordinate of the interaction [cm];
+- yh[]: Y coordinate of the interaction [cm];
+- zh[]: Z coordinate of the interaction [cm];
+- P[]: momentum of the particle [GeV];
+- PX[]: X component of momentum of the particle [GeV];
+- PY[]: Y component of momentum of the particle [GeV];
+- PZ[]: Z component of momentum of the particle [GeV];
+- VertexX[]: X component of interaction vertex vector [cm];
+- VertexY[]: Y component of interaction vertex vector [cm];
+- VertexZ[]: Z component of interaction vertex vector [cm];
+- kinev[]: vertex kinetic energy [GeV];
+- PXvdir[]: X component of momentum of interaction vertex vector [normalised to P];
+- PYvdir[]: Y component of momentum of interaction vertex vector [normalised to P];
+- PZvdir[]: Z component of momentum of interaction vertex vector [normalised to P];
+- Iev[]: event id (in this way we also store the number of entries to the INTERACTIONS vector for each event);
+- Step[]: number of current step;
+- InextStep[]: is 1 if there will be another step, 0 if the particle is going to die.
+- CopyNb: id of DEVA layer in which the interaction happened
+- DEVEInX: X entering point in DEVA
+- DEVEInY: Y entering point in DEVA
+- DEVEInZ: Z entering point in DEVA
+- DEVAENEXXX?: energy release in DEVA layers
 
 Please note that due to Geant4 issues regarding multi core root output, multi thread is currently disabled (can be enabled in mainMCMC.cc, but creates N-root files named LemmaMC_t?.root)
 
@@ -130,8 +135,13 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 2017.12.29 by collamaf
 - added possibility to use external generator for primary events: there are now 2 new flags in mainMCMC.cc (ExtSourceFlagBha and ExtSourceFlagMu): if true default settings for source are overrided
 - moved from PrimaryAction to StackingAction the lines to save on the root file info on primary particles, in order to be able to do so also for externally generated particels
-- changed structure in the root outpit file to house more than 1 primary per event: now BeamX etc are vectors
+- changed structure in the root output file to house more than 1 primary per event: now BeamX etc are vectors
 - at the current stage the origin of primary external particles is decided with the generator (e.g. they are all generated at the center of the target), but we will work on it
+
+2018.01.31 by collamaf
+- fixed error in SourceZ entry in output root file (was identical to Y)
+- removed offset for Det30
+- reorganization of output root file (ordering)
 
 
 
