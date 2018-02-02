@@ -146,6 +146,14 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 - corrected shape of target, from box to cyl
 - removed offset for Det30
 - added correct structure of Cerenkov absorber
+- added possibility to exclude from output root file photons with energy lower than a certain threshold to be set in main
+
+
+
+TODO LIST
+- forzatura punto di generazione dei mu/bhabha con generatore esterno
+- uccidere muoni nati furi dal bersaglio?
+- aggiungere supporto Si 20 per vedere se genera cose
 
 
 

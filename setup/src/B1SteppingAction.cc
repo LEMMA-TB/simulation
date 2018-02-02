@@ -12,7 +12,7 @@
 //---------------------------
 #include "G4ProcessType.hh"
 
-B1SteppingAction::B1SteppingAction(B1EventAction* eventAction, B1RunAction* runAction, G4bool StoreCaloEnDepFlag)
+B1SteppingAction::B1SteppingAction(B1EventAction* eventAction, B1RunAction* runAction, G4bool StoreCaloEnDepFlag, G4double EThr)
 : G4UserSteppingAction(),
 fEventAction(eventAction),
 runStepAction(runAction),
@@ -31,7 +31,8 @@ fScoringVolume_ScintB(0),
 fScoringVolume_Ecal(0),
 fScoringVolume_DEVA(0),
 fScoringVolume_Gcal(0),
-fStoreCaloEnDepFlag(StoreCaloEnDepFlag)
+fStoreCaloEnDepFlag(StoreCaloEnDepFlag),
+fEThr(EThr)
 {}
 
 B1SteppingAction::~B1SteppingAction()
@@ -57,24 +58,13 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	if (!fScoringVolume_Gcal)   {fScoringVolume_Gcal   = detectorConstruction->GetScoringVolume_Gcal();}
 	//	G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 	
-	
-	
-	//=========================================================
-	//	if (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary){
-	// particle enters a new subdet
-	//--------------------------------------------------------
+
 	G4LogicalVolume* volume =
 	step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
 	
 	G4VPhysicalVolume* ThisVol = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
 	G4VPhysicalVolume* NextVol = step->GetPostStepPoint()->GetTouchableHandle()->GetVolume();
-	
-	//	if((NextVol && ThisVol->GetName()=="Resin"
-	
-	
-	
-//	G4VPhysicalVolume* physVol=
-//	step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+
 	G4bool SHOW = false;
 	G4bool dofill = false;
 	G4int subdet=-10;
@@ -168,30 +158,25 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 				fEventAction->AddDEVAEneTot6(DepEne);
 			}
 			*/
-
-		
-		
-	
 	}
 	
 	
 	
 	//added on 15.12.17 @ Padova
-#if 1
 	if (NextVol && ThisVol->GetName()=="EcalDummy" && NextVol->GetName()=="Ecal") {
 		runStepAction->GetDEVAInX().push_back(step->GetPostStepPoint()->GetPosition().x()/cm);
 		runStepAction->GetDEVAInY().push_back(step->GetPostStepPoint()->GetPosition().y()/cm);
 		runStepAction->GetDEVAInZ().push_back(step->GetPostStepPoint()->GetPosition().z()/cm);
 	}
-#endif
-	
-	
-	
-	
+
+	if (fEThr>0) fCutFlag=true;
+
 	//-- store info
-	if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary)
-				   || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary))) {
-	
+//	if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary)
+//				   || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary)) && !(Pid==22 && step->GetPreStepPoint()->GetMomentum().mag()<EThr) ) { //If Output Cut required do not store photons under a certain energy
+		if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary)
+					   || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary)) && (!fCutFlag || !(Pid==22 && step->GetPreStepPoint()->GetMomentum().mag()<fEThr) )) { //If Output Cut required do not store photons under a certain energy - Logic expression: A & B & !(!C || !(D & E) )
+
 		G4int iev = -999;
 		const G4Event* evt = G4RunManager::GetRunManager()->GetCurrentEvent();
 		if (evt) iev = evt->GetEventID();
@@ -214,25 +199,14 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		G4int Inextstep=1;
 		if (step->GetTrack()->GetTrackStatus()!=fAlive) Inextstep=0;
 		
-		
 		pvertexdir = step->GetTrack()->GetVertexMomentumDirection();
 		kinev = step->GetTrack()->GetVertexKineticEnergy();
 		
 		//process = step->GetTrack()->GetCreatorProcess()->GetProcessName();
 		pro = step->GetTrack()->GetCreatorProcess()->GetProcessSubType();
-		
-//		process = step->GetTrack()->GetCreatorProcess()->GetProcessName();
-		// G4cout<<process<<", "<<pro<<G4endl;
-		
-		
 		//			if (Itrack!=1) { // different from gun particle
 		xvertex = step->GetTrack()->GetVertexPosition();
-		
-		//NEW SCORING
 
-		
-		
-		
 		if(subdet==77) (runStepAction->GetCopyNb()).push_back(CopyNb);  //I'm interested in CopyNb only for DEVA active components (subdet==77)
 		(runStepAction->GetSubdet()).push_back(subdet);
 		(runStepAction->GetIdp()).push_back(Idp);
@@ -259,9 +233,6 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		(runStepAction->GetInextStep()).push_back(Inextstep);
 //		(runStepAction->GetNHits()).push_back(Inextstep);
 //		(runStepAction->GetItrack()).push_back(-999);
-		
-
-
 
 		if (SHOW) G4cout<<
 			"  Evt="<<iev<<

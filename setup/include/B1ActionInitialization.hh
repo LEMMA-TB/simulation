@@ -8,7 +8,7 @@
 class B1ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    B1ActionInitialization(G4double BeamEnergy, G4bool MuonBeamFlag,G4bool ElectronBeamFlag, G4bool SimpleFlag, G4bool StoreCaloEnDepFlag, G4bool ExtSourceFlagBha, G4bool ExtSourceFlagMu);
+    B1ActionInitialization(G4double BeamEnergy, G4bool MuonBeamFlag,G4bool ElectronBeamFlag, G4bool SimpleFlag, G4bool StoreCaloEnDepFlag, G4bool ExtSourceFlagBha, G4bool ExtSourceFlagMu, G4double EThr);
     virtual ~B1ActionInitialization();
 
     virtual void BuildForMaster() const;
@@ -23,6 +23,7 @@ class B1ActionInitialization : public G4VUserActionInitialization
 
 	G4bool fExtSourceFlagBha;
 	G4bool fExtSourceFlagMu;
+	G4double fEThr;
 
 };
 

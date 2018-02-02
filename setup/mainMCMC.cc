@@ -67,6 +67,10 @@ int main(int argc,char** argv)
 	G4bool ExtSourceFlagBha=true;
 	G4bool ExtSourceFlagMu=false;
 	
+	//Flag to cut on output file: photons with energy lower than this value will not be writte. Set negative to write them all
+	G4double RootCutThr=1*GeV;
+	
+	
 	
 //==================================================
   G4bool FTFP = false; // standard Geant4 PhysicsList
@@ -95,7 +99,7 @@ int main(int argc,char** argv)
   }
   
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new B1ActionInitialization(BeamEnergy, MuonBeamFlag,ElectronBeamFlag, SimpleFlag, StoreCaloEnDepFlag,ExtSourceFlagBha, ExtSourceFlagMu));
+  runManager->SetUserInitialization(new B1ActionInitialization(BeamEnergy, MuonBeamFlag,ElectronBeamFlag, SimpleFlag, StoreCaloEnDepFlag,ExtSourceFlagBha, ExtSourceFlagMu, RootCutThr));
   runManager->Initialize();  // init kernel
   
   
