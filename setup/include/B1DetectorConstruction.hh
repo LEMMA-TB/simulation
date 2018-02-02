@@ -53,8 +53,8 @@ protected:
 private:
 	G4bool channeling;
 	G4String ctype;
-	G4bool fMuonBeamFlag;
-	G4bool fElectronBeamFlag;
+//	G4bool fMuonBeamFlag;
+//	G4bool fElectronBeamFlag;
 	G4bool fTargetFlag;
 	G4bool fFlipFieldFlag;
 	G4bool fMagMapFlag;

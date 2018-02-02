@@ -130,6 +130,11 @@
 /vis/geometry/set/colour ScintA 0 0 0 1 1
 /vis/geometry/set/colour ScintB 0 0 0 1  1
 /vis/geometry/set/colour LeadGlass 0 0 1 1   1
+/vis/geometry/set/colour Cerenkov 0 0.5 .5 .5 0.1
+/vis/geometry/set/colour CerenkovAlu 0 0.7 .7 .7 .3
+/vis/geometry/set/colour CerenkovFe 0 0.2 .2 .2 1
+/vis/geometry/set/colour CerenkovSiO 0 1 1 1 1
+
 #/vis/geometry/set/colour [logic name] depth R G B opacity
 #/vis/viewer/set/viewpointThetaPhi 120 150
 #/vis/viewer/set/viewpointThetaPhi 90 0

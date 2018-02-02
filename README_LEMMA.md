@@ -140,8 +140,13 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 
 2018.01.31 by collamaf
 - fixed error in SourceZ entry in output root file (was identical to Y)
-- removed offset for Det30
 - reorganization of output root file (ordering)
+
+2018.02.02 by collamaf
+- corrected shape of target, from box to cyl
+- removed offset for Det30
+- added correct structure of Cerenkov absorber
+
 
 
 

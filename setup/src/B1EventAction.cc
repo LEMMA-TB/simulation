@@ -95,6 +95,8 @@ void B1EventAction::BeginOfEventAction(const G4Event* evt){
 	fDEVAEneEle5=0;
 	fDEVAEneEle6=0;
 	fDEVAEneEle=0;
+	
+	fNHits=0;
 
 }
 
