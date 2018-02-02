@@ -147,13 +147,15 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 - removed offset for Det30
 - added correct structure of Cerenkov absorber
 - added possibility to exclude from output root file photons with energy lower than a certain threshold to be set in main
+- first implementation of killing of muons produced outside the target (in StackingAction), useful in case of high bias of cross section. Works, but reamains to be understood the impact on physics... (e.g.: the positron does however disappear...:( )
 
 
 
 TODO LIST
-- forzatura punto di generazione dei mu/bhabha con generatore esterno
-- uccidere muoni nati furi dal bersaglio?
+- forzatura punto di generazione dei mu/bhabha con generatore esterno - PER ORA RINUNCIO! LA TRACCIA ORIGINARIA SEMBRA INTOCCABILE DENTRO (CONST...) STACKING ACTION
 - aggiungere supporto Si 20 per vedere se genera cose
+- fisica scintillazione/cerenkov + parametri ottici
+- nome file di ouptut contenente dati simulazione
 
 
 

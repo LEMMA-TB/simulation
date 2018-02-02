@@ -51,7 +51,7 @@ int main(int argc,char** argv)
 	// FLAG DEFINITION TO CHOOSE THE DESIRED CONFIGURATION
 	G4bool MuonBeamFlag=false;  //switching on this flag generates mu- beam, otherwise e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
 	G4bool ElectronBeamFlag=false;  //switching on this flag generates e- beam, otherwise e+. The SimpleFlag in PrimGenAction is still considered for the beam distribution
-	G4double BeamEnergy=22.*GeV; //Primary Beam Energy (18, 22, 26 GeV options for e+ calibration) - 45 GeV for real TB
+	G4double BeamEnergy=45.*GeV; //Primary Beam Energy (18, 22, 26 GeV options for e+ calibration) - 45 GeV for real TB
 	G4bool SimpleFlag=false;
 
 	G4bool TargetFlag=false;
@@ -64,7 +64,7 @@ int main(int argc,char** argv)
 	//Flags to force use of externally generated primary files (for bhabha and muon pair production)
 	//Note that the filename is provided in PrimaryGenAction (path must be relative to where the code runs (eg build directory))
 	//These flags ovverride previous ones (MuonBeamFlag, ElectronBeamFlag etc) and also BeamEnergy
-	G4bool ExtSourceFlagBha=true;
+	G4bool ExtSourceFlagBha=false;
 	G4bool ExtSourceFlagMu=false;
 	
 	//Flag to cut on output file: photons with energy lower than this value will not be writte. Set negative to write them all

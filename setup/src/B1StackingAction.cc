@@ -16,15 +16,32 @@ B1StackingAction::~B1StackingAction()
 { }
 
 G4ClassificationOfNewTrack B1StackingAction::ClassifyNewTrack(const G4Track* atrack)
-{  
+{
+//	std::remove_const<atrack>::type  ;
+	
+#if 0
+//Try to kill muons born outside the target, useful in case of high bias of cross section. Works, but reamains to be understood the impact on physics...
+	if (fabs(atrack->GetDynamicParticle()->GetDefinition()->GetPDGEncoding())==13
+		&& fabs(atrack->GetPosition().z()-545.8*cm)>=3*cm
+		) {
+		G4cout <<"Uccido Muone nato fuori dal bersaglio  "<<fabs((atrack->GetPosition().z()-545.8*cm))/cm<<G4endl;
+		return fKill;
+	}
+#endif
+	
 	if (atrack->GetParentID() == 0) { //modified by collamaf on 2017.12.29 - If is a new Primary particle - used to save info on primaries even if red by external file!
-		
 		/*
 		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"DEBUG STACKING ACTION"<<G4endl;
-		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"Particella= "<<atrack->GetDynamicParticle()->GetDefinition()->GetPDGEncoding()
-		<<", ene= "<<atrack->GetKineticEnergy()/GeV
+//		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"Particella= "<<atrack->GetDynamicParticle()->GetDefinition()->GetPDGEncoding()
+		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"Posizione X era= "<<atrack->GetPosition().x()/mm;
+		//step->GetTrack()->GetVertexPosition()
+//		atrack->GetPosition().setX(13/mm);
+//		atrack->SetPosition(0,0,13*mm);
+//		atrack->SetVertexPosition(G4ThreeVector(0,0,0));
+		G4cout<<", la imposto a 13 = "<<atrack->GetPosition().x()/mm
 		<<G4endl;
 		*/
+		
 		frunAction->GetBeamX().push_back(atrack->GetPosition().x()/mm);
 		frunAction->GetBeamY().push_back(atrack->GetPosition().y()/mm);
 		frunAction->GetBeamZ().push_back(atrack->GetPosition().z()/mm);
@@ -45,16 +62,18 @@ G4ClassificationOfNewTrack B1StackingAction::ClassifyNewTrack(const G4Track* atr
 		*/
 	return fUrgent;
 	}
-  G4String process = atrack->GetCreatorProcess()->GetProcessName();    
+#if 0
+	G4String process = atrack->GetCreatorProcess()->GetProcessName();
   G4int Idp = atrack->GetDynamicParticle()->GetDefinition()->GetPDGEncoding();
   //  G4double charge = atrack->GetDefinition()->GetPDGCharge();
   //  G4cout<<process<<", Energy = "<<energy<<G4endl;
-  if (process=="annihil" && Idp==22) {
+
+	if (process=="annihil" && Idp==22) {
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     G4double energy = atrack->GetKineticEnergy();
 //    analysisManager->FillH1(0,energy);
   }
-	
+#endif
   return fUrgent;
 }
 
