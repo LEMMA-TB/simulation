@@ -52,6 +52,8 @@ fScoringVolume_ScintA(0),
 fScoringVolume_ScintB(0),
 fScoringVolume_Ecal(0),
 fScoringVolume_Gcal(0),
+fScoringVolume_Cerenkov(0),
+fScoringVolume_PbGlass(0),
 //fMuonBeamFlag(MuonBeamFlag),
 //fElectronBeamFlag(ElectronBeamFlag),
 fTargetFlag(TargetFlag),
@@ -76,7 +78,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double world_sizeZ = 80*m;
 	
 	//--> trackers (TrkX): Si-trackers
-	G4double trk_sizeXa = 2*cm;
+	G4double trk_sizeXa = 2*cm; 
 	G4double trk_sizeYa = 2*cm;
 	G4double trk_sizeXb = 10*cm;
 	G4double trk_sizeYb = 10*cm;
@@ -312,8 +314,33 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4Material* plastica = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
 	G4Material* alluminium = nist->FindOrBuildMaterial("G4_ALUMINUM_OXIDE");
 	G4Material* piombo = nist->FindOrBuildMaterial("G4_Pb");
+
+	// ================
+	// Optical parameters for Cerenkov detectors
+	// ================
 	
-	
+	//Cerenkov counter
+	const G4int nCerPointsCer = 7;
+	G4double photonEnergyCer[nCerPointsCer] = {6.2*eV, 3.1*eV, 1.55*eV, 1*eV, .775*eV, .517*eV, .387*eV};
+	G4double refractiveIndex_silica[nCerPointsCer] = {1.5, 1.48, 1.457, 1.446, 1.44, 1.43, 1.411 };
+	G4MaterialPropertiesTable* silicaOP = new G4MaterialPropertiesTable();
+	silicaOP->AddProperty("RINDEX", photonEnergyCer, refractiveIndex_silica, nCerPointsCer);
+
+	//Lead Glass counter
+	const G4int nCerPointsPb = 1;
+//	G4double photonEnergyPb[nCerPointsPb] = {6.2*eV, 2.85*eV, 2.55*eV, 2.27*eV, 2.10*eV, 1.88*eV, .387*eV};
+//	G4double refractiveIndex_Pb[nCerPointsPb] = {1.674, 1.674, 1.661, 1.652, 1.648, 1.642, 1.642};
+	G4double photonEnergyPb[nCerPointsPb]={2.11577*eV}; //586nm
+	G4double refractiveIndex_Pb[nCerPointsPb]={1.8467};
+	//as referenced in:
+	/*
+	 SF57 lead glass, from Schott Glaswerke, Hattenbergstrasse 10, D-6500 Mainz 1, Germany. This glass has the following properties: 75% by weight PbO, density 5.54 g cm−3, X0 = 1.50 cm, and refractive index 1.8467 at λ = 586 nm.
+	 https://www.sciencedirect.com/science/article/pii/0168900291905474
+	 */
+	G4MaterialPropertiesTable* PBOP = new G4MaterialPropertiesTable();
+	PBOP->AddProperty("RINDEX", photonEnergyPb, refractiveIndex_Pb, nCerPointsPb);
+//	PBOP->AddProperty("RINDEX", photonEnergyCer, refractiveIndex_silica, nCerPointsCer);
+
 	//	if (fMuonBeamFlag || fElectronBeamFlag) berillio=nist->FindOrBuildMaterial("G4_Galactic");;  //if MuonBeam case I want no target
 	if (!fTargetFlag) berillio=nist->FindOrBuildMaterial("G4_Galactic");;  //if I do not want the target
 	//--PbWO4 G-CAL crystal (CMS)
@@ -328,19 +355,20 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	PbWO4->AddElement(elW,natoms=1);
 	PbWO4->AddElement(elPb,natoms=1);
 	
-	
 	G4Element* elSi = new G4Element("Silicon" ,"Si" , 14., 28.09*g/mole);
 	
 	G4Material* SiO2 =
 	new G4Material("quartz",d= 2.200*g/cm3, natoms=2);
 	SiO2->AddElement(elSi, natoms=1);
 	SiO2->AddElement(elO , natoms=2);
-	
+	SiO2->SetMaterialPropertiesTable(silicaOP);  //toggle cerenkov in SiO2
+
 	// lead glass
 	G4Material* PbGl = new G4Material("Lead Glass", d= 3.85*g/cm3,
 									  natoms=2);
 	PbGl->AddElement(elPb, 0.5316);
 	PbGl->AddMaterial(SiO2, 0.4684);
+	PbGl->SetMaterialPropertiesTable(silicaOP);  //toggle cerenkov in PbGlass - CHECK I leave silicaOP because real PbGlass parameter seem not to work
 	
 	G4bool checkOverlaps = true;
 	
@@ -400,8 +428,6 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 		G4Tubs* targ = new G4Tubs("Target",0,target_R,target_Z/2.,startAngle,spanningAngle);
 		logicTarg = new G4LogicalVolume(targ, berillio, "Target");
 		new G4PVPlacement(0,posTarg1,logicTarg,"Target",logicWorld,false,0,checkOverlaps);
-		
-		
 	}
 	
 	//-- Trk1-Si (subdet=10)
@@ -559,7 +585,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	
 	//-- LeadGlass
 	G4Box* solidLeadGlass = new G4Box("LeadGlass",LeadGlass_sizeX/2,LeadGlass_sizeY/2,LeadGlass_sizeZ/2);
-	G4LogicalVolume* logicLeadGlass = new G4LogicalVolume(solidLeadGlass, vuoto /*PbGl*/,"LeadGlass");
+	G4LogicalVolume* logicLeadGlass = new G4LogicalVolume(solidLeadGlass, PbGl,"LeadGlass");
 	new G4PVPlacement(0,posLeadGlass,logicLeadGlass,"LeadGlass",logicWorld,false,0,checkOverlaps);
 	
 	//-- Cerenkov counter
@@ -574,14 +600,16 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	new G4PVPlacement(0,posCerenkovAlu2,logicCerenkovAlu,"CerenkovAlu2",logicCerenkov,false,2,checkOverlaps);
 	
 	G4Box* solidCerenkovSiO = new G4Box("CerenkovSiO",Cerenkov_SiOX/2,Cerenkov_SiOY/2,Cerenkov_SiOZ/2);
-	G4LogicalVolume* logicCerenkovSiO = new G4LogicalVolume(solidCerenkovSiO,  silicio,"CerenkovSiO");
-	new G4PVPlacement(0,posCerenkovSiO1A,logicCerenkovSiO,"CerenkovSiO1A",logicCerenkov,false,1,checkOverlaps);
-	new G4PVPlacement(0,posCerenkovSiO1B,logicCerenkovSiO,"CerenkovSiO1B",logicCerenkov,false,2,checkOverlaps);
-	new G4PVPlacement(0,posCerenkovSiO1C,logicCerenkovSiO,"CerenkovSiO1C",logicCerenkov,false,3,checkOverlaps);
+	G4LogicalVolume* logicCerenkovSiO = new G4LogicalVolume(solidCerenkovSiO,  SiO2,"CerenkovSiO");
+	new G4PVPlacement(0,posCerenkovSiO1A,logicCerenkovSiO,"CerenkovSiO1A",logicCerenkov,false,0,checkOverlaps);
+	new G4PVPlacement(0,posCerenkovSiO1B,logicCerenkovSiO,"CerenkovSiO1B",logicCerenkov,false,1,checkOverlaps);
+	new G4PVPlacement(0,posCerenkovSiO1C,logicCerenkovSiO,"CerenkovSiO1C",logicCerenkov,false,2,checkOverlaps);
 	
-	new G4PVPlacement(0,posCerenkovSiO2A,logicCerenkovSiO,"CerenkovSiO2A",logicCerenkov,false,4,checkOverlaps);
-	new G4PVPlacement(0,posCerenkovSiO2B,logicCerenkovSiO,"CerenkovSiO2B",logicCerenkov,false,5,checkOverlaps);
-	new G4PVPlacement(0,posCerenkovSiO2C,logicCerenkovSiO,"CerenkovSiO2C",logicCerenkov,false,6,checkOverlaps);
+	new G4PVPlacement(0,posCerenkovSiO2A,logicCerenkovSiO,"CerenkovSiO2A",logicCerenkov,false,3,checkOverlaps);
+	new G4PVPlacement(0,posCerenkovSiO2B,logicCerenkovSiO,"CerenkovSiO2B",logicCerenkov,false,4,checkOverlaps);
+	new G4PVPlacement(0,posCerenkovSiO2C,logicCerenkovSiO,"CerenkovSiO2C",logicCerenkov,false,5,checkOverlaps);
+	
+
 	
 	G4Box* solidCerenkovFe = new G4Box("CerenkovFe",Cerenkov_FeX/2,Cerenkov_FeY/2,Cerenkov_FeZ/2);
 	G4LogicalVolume* logicCerenkovFe = new G4LogicalVolume(solidCerenkovFe,  ferro,"CerenkovFe");
@@ -606,7 +634,9 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	fScoringVolume_Ecal= logicEcal;
 	fScoringVolume_DEVA= logicDevaAct;
 	fScoringVolume_Gcal=logicGcal;
-	
+	fScoringVolume_Cerenkov=logicCerenkovSiO;
+	fScoringVolume_PbGlass=logicLeadGlass;
+
 	G4cout<<" ... Detector construction DONE !"<<G4endl;
 	return physWorld;
 }

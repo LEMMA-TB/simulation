@@ -59,6 +59,14 @@ void B1EventAction::BeginOfEventAction(const G4Event* evt){
 	(fRunAction->GetInextStep()).clear();
 	(fRunAction->GetCopyNb()).clear();
 	
+	(fRunAction->GetDEVADepo()).clear();
+	(fRunAction->GetCerenkovDepo()).clear();
+	(fRunAction->GetCerenkovDepoOpt()).clear();
+
+	(fRunAction->GetDEVADepo()).resize(6);
+	(fRunAction->GetCerenkovDepo()).resize(4);
+	(fRunAction->GetCerenkovDepoOpt()).resize(4);
+
 	(fRunAction->GetDEVAInX()).clear();
 	(fRunAction->GetDEVAInY()).clear();
 	(fRunAction->GetDEVAInZ()).clear();
@@ -97,7 +105,12 @@ void B1EventAction::BeginOfEventAction(const G4Event* evt){
 	fDEVAEneEle=0;
 	
 	fNHits=0;
-
+	fPbGlass_PulseHeight=0;
+	fPbGlass_DepEne=0;
+	fCerenkovEneTot=0;
+	
+	fNCerenkov=0;
+	fNCerenkovPbGlass=0;
 }
 
 void B1EventAction::EndOfEventAction(const G4Event*){
@@ -114,7 +127,17 @@ void B1EventAction::EndOfEventAction(const G4Event*){
 	analysisManager->FillNtupleDColumn(6,fBeamEne);
 	analysisManager->FillNtupleDColumn(7,fBeamPart);
 	 */
+
 	analysisManager->FillNtupleDColumn(8,fNHits);
+	analysisManager->FillNtupleDColumn(32,fDEVAEneTot);
+	analysisManager->FillNtupleDColumn(32,fDEVAEneTot);
+	analysisManager->FillNtupleDColumn(34,fCerenkovEneTot);
+
+	analysisManager->FillNtupleIColumn(37,fPbGlass_PulseHeight);
+	analysisManager->FillNtupleDColumn(38,fPbGlass_DepEne);
+
+	
+	/*
 	analysisManager->FillNtupleDColumn(32,fDEVAEneTot1);
 	analysisManager->FillNtupleDColumn(33,fDEVAEneTot2);
 	analysisManager->FillNtupleDColumn(34,fDEVAEneTot3);
@@ -123,7 +146,7 @@ void B1EventAction::EndOfEventAction(const G4Event*){
 	analysisManager->FillNtupleDColumn(37,fDEVAEneTot6);
 	analysisManager->FillNtupleDColumn(38,fDEVAEneTot);
 
-//	/*
+
 	analysisManager->FillNtupleDColumn(39,fDEVAEneFot1);
 	analysisManager->FillNtupleDColumn(40,fDEVAEneFot2);
 	analysisManager->FillNtupleDColumn(41,fDEVAEneFot3);
@@ -147,7 +170,7 @@ void B1EventAction::EndOfEventAction(const G4Event*){
 	analysisManager->FillNtupleDColumn(57,fDEVAEneEle5);
 	analysisManager->FillNtupleDColumn(58,fDEVAEneEle6);
 	analysisManager->FillNtupleDColumn(59,fDEVAEneEle);
-//*/
+*/
 	
 	analysisManager->AddNtupleRow();
 	

@@ -149,13 +149,20 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 - added possibility to exclude from output root file photons with energy lower than a certain threshold to be set in main
 - first implementation of killing of muons produced outside the target (in StackingAction), useful in case of high bias of cross section. Works, but reamains to be understood the impact on physics... (e.g.: the positron does however disappear...:( )
 
+2018.02.12 by collamaf
+- Fixed up Calo scoring: now for DEVA just one vector with 6 elements, one for couple of layers. Same for Cerenkov and PbGlass
+- Added Cerenkov process for both Cerenkov and PbGlass detectors (optical properties for the latter to be checked, for now same as Cerenkov since others seem not to work)
+- There is a cut in Cerenkov Photons lambda (now at 200nm for Cerenkov, 0 for PbGlass) for scoring them to simulate PMT response, changeable in SteppingAction
+
+
 
 
 TODO LIST
 - forzatura punto di generazione dei mu/bhabha con generatore esterno - PER ORA RINUNCIO! LA TRACCIA ORIGINARIA SEMBRA INTOCCABILE DENTRO (CONST...) STACKING ACTION
 - aggiungere supporto Si 20 per vedere se genera cose
-- fisica scintillazione/cerenkov + parametri ottici
+- controllare parametri ottici PbGlass
 - nome file di ouptut contenente dati simulazione
+
 
 
 

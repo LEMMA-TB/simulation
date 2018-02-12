@@ -12,4 +12,4 @@
 /tracking/verbose 1      # track info for each event
 
 #/gun/energy 32 GeV
-/run/beamOn 10     # number of generated events 10000 high stat
+/run/beamOn 100     # number of generated events 10000 high stat

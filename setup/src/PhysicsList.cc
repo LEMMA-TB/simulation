@@ -42,6 +42,15 @@
 #include "G4ProcessTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4Cerenkov.hh"
+#include "G4Scintillation.hh"
+#include "G4OpAbsorption.hh"
+#include "G4OpRayleigh.hh"
+#include "G4OpMieHG.hh"
+#include "G4OpBoundaryProcess.hh"
+#include "G4ShortLivedConstructor.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
@@ -113,6 +122,7 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   ConstructEM();
   ConstructGeneral();
+	ConstructOp();
 }
 
 void PhysicsList::ConstructEM()
@@ -180,6 +190,40 @@ void PhysicsList::ConstructEM()
   opt.SetDEDXBinning(13*7);      
   opt.SetLambdaBinning(13*7);    
 }
+
+
+
+#include "G4Threading.hh"
+void PhysicsList::ConstructOp() //LB for Cerenkov
+{
+	G4int fMaxNumPhotonsStep = 300;
+	
+	G4Cerenkov* fCerenkovProcess = new G4Cerenkov("Cerenkov");
+	fCerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotonsStep);
+	fCerenkovProcess->SetMaxBetaChangePerStep(10.0);
+	fCerenkovProcess->SetTrackSecondariesFirst(true);
+	G4OpAbsorption* fAbsorptionProcess = new G4OpAbsorption();
+	
+	
+#if (G4VERSION_NUMBER >= 1030)
+	G4ParticleTable::G4PTblDicIterator* theParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
+#endif
+	theParticleIterator->reset();
+	while( (*theParticleIterator)() ){
+		G4ParticleDefinition* particle = theParticleIterator->value();
+		G4ProcessManager* pmanager = particle->GetProcessManager();
+		G4String particleName = particle->GetParticleName();
+		if (fCerenkovProcess->IsApplicable(*particle)) {
+			pmanager->AddProcess(fCerenkovProcess);
+			pmanager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
+		}
+		if (particleName == "opticalphoton") {
+			G4cout << " AddDiscreteProcess to OpticalPhoton " << G4endl;
+			pmanager->AddDiscreteProcess(fAbsorptionProcess);
+		}
+	}
+}
+
 
 
 void PhysicsList::ConstructGeneral()

@@ -57,14 +57,14 @@ int main(int argc,char** argv)
 	G4bool TargetFlag=false;
 	G4bool FlipFieldFlag=true; //non-flipped (=false) field sends positrons towards the "clean channel" (just chamber, no calos), flipped (=true) sends positrons to "busy" channel ("final" setup)
 	G4bool MagMapFlag=false;
-	G4bool StoreCaloEnDepFlag=false; //to disable scoring of energy deposition (gamma, e+, e-, total) in DEVA calorimeter (sparing ~15% of disk space)
+	G4bool StoreCaloEnDepFlag=true; //to disable scoring of energy deposition (gamma, e+, e-, total) in DEVA calorimeter (sparing ~15% of disk space)
 	// INITIALIZE
 
 	
 	//Flags to force use of externally generated primary files (for bhabha and muon pair production)
 	//Note that the filename is provided in PrimaryGenAction (path must be relative to where the code runs (eg build directory))
 	//These flags ovverride previous ones (MuonBeamFlag, ElectronBeamFlag etc) and also BeamEnergy
-	G4bool ExtSourceFlagBha=false;
+	G4bool ExtSourceFlagBha=true;
 	G4bool ExtSourceFlagMu=false;
 	
 	//Flag to cut on output file: photons with energy lower than this value will not be writte. Set negative to write them all

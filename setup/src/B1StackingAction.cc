@@ -29,6 +29,9 @@ G4ClassificationOfNewTrack B1StackingAction::ClassifyNewTrack(const G4Track* atr
 	}
 #endif
 	
+
+	
+	
 	if (atrack->GetParentID() == 0) { //modified by collamaf on 2017.12.29 - If is a new Primary particle - used to save info on primaries even if red by external file!
 		/*
 		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"DEBUG STACKING ACTION"<<G4endl;
@@ -68,6 +71,7 @@ G4ClassificationOfNewTrack B1StackingAction::ClassifyNewTrack(const G4Track* atr
   //  G4double charge = atrack->GetDefinition()->GetPDGCharge();
   //  G4cout<<process<<", Energy = "<<energy<<G4endl;
 
+	
 	if (process=="annihil" && Idp==22) {
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     G4double energy = atrack->GetKineticEnergy();

@@ -92,6 +92,19 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn(0,"InextStep", RunVectorInextStep);
 	analysisManager->CreateNtupleDColumn(0,"CopyNb", RunVectorCopyNb);
 
+	analysisManager->CreateNtupleDColumn("DEVAEneTot");   //32
+
+	//added on 2018.02.12 by collamaf to reproduce Data calo info: one vector per detector
+	analysisManager->CreateNtupleDColumn(0,"Deva_PulseHeight", RunVectorDEVADepo);
+	analysisManager->CreateNtupleDColumn("Cerenkov_DepEneTot");   //34
+
+	analysisManager->CreateNtupleIColumn(0,"Cerenkov_PulseHeight", RunVectorCerenkovDepoOpt);
+	analysisManager->CreateNtupleDColumn(0,"Cerenkov_DepEne", RunVectorCerenkovDepo);
+	analysisManager->CreateNtupleIColumn("PbGlass_PulseHeight");   //37
+	analysisManager->CreateNtupleDColumn("PbGlass_DepEne");   //38
+
+	
+#if 0
 	analysisManager->CreateNtupleDColumn("DEVAEneTot1");   //9
 	analysisManager->CreateNtupleDColumn("DEVAEneTot2");   //10
 	analysisManager->CreateNtupleDColumn("DEVAEneTot3");   //11
@@ -120,6 +133,8 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn("DEVAEneEle5");   //34
 	analysisManager->CreateNtupleDColumn("DEVAEneEle6");   //35
 	analysisManager->CreateNtupleDColumn("DEVAEneEle");   //36
+#endif
+	
 	//added on 15.12.2017 @ Padova to compare with data analysis of enetring points in DEVA
 #if 1
 	analysisManager->CreateNtupleDColumn(0,"DEVAInX", RunVectorDEVAInX);

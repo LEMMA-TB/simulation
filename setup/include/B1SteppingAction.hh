@@ -38,7 +38,9 @@ private:
 	G4LogicalVolume* fScoringVolume_Ecal;
 	G4LogicalVolume* fScoringVolume_DEVA;
 	G4LogicalVolume* fScoringVolume_Gcal;
-	
+	G4LogicalVolume* fScoringVolume_PbGlass;
+	G4LogicalVolume* fScoringVolume_Cerenkov;
+
 	G4bool fStoreCaloEnDepFlag;
 	
 	

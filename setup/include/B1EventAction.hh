@@ -57,6 +57,13 @@ public:
 	void AddDEVAEneEle5(G4double ene) {fDEVAEneEle5+=ene;}
 	void AddDEVAEneEle6(G4double ene) {fDEVAEneEle6+=ene;}
 	void AddDEVAEneEle(G4double ene) {fDEVAEneEle+=ene;}
+
+	void AddPbGlassEne(G4double ene) {fPbGlass_DepEne+=ene;}
+	void AddPbGlassCere(G4int nfot) {fPbGlass_PulseHeight+=nfot;}
+
+	void AddCerenkovEneTot(G4double ene) {fCerenkovEneTot+=ene;}
+//	void AddCerenkovNFot(G4double nfot) {fNCerenkov+=ene;}
+
 	
 private:
 	B1RunAction* fRunAction;
@@ -102,6 +109,15 @@ private:
 	G4double fDEVAEneEle5;
 	G4double fDEVAEneEle6;
 	G4double fDEVAEneEle;
+	
+	G4int fPbGlass_PulseHeight;
+	G4double fPbGlass_DepEne;
+
+	G4double fCerenkovEneTot;
+	
+	G4int fNCerenkov;
+	G4int fNCerenkovPbGlass;
+
 };
 
 

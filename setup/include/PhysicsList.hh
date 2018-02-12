@@ -30,6 +30,7 @@ public:
   void SetGammaToMuPairFac(G4double);
   void SetAnnihiToMuPairFac(G4double);
   void SetAnnihiToHadronFac(G4double);
+	void ConstructOp();
   //PhysicsListMessenger*  fMes;
 private:
    PhysicsListMessenger*  fMes;
