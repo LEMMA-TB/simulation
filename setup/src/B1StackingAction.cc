@@ -31,8 +31,11 @@ G4ClassificationOfNewTrack B1StackingAction::ClassifyNewTrack(const G4Track* atr
 	
 
 	
-	
-	if (atrack->GetParentID() == 0) { //modified by collamaf on 2017.12.29 - If is a new Primary particle - used to save info on primaries even if red by external file!
+	// atrack->GetDynamicParticle()->GetDefinition()->GetPDGEncoding()
+	if (atrack->GetParentID() == 0 && atrack->GetCurrentStepNumber()==0) { //modified by collamaf on 2017.12.29 - If is a new Primary particle - used to save info on primaries even if red by external file!
+		// on 2018.02.12 added StepNumberCheck to avoid counting here also new particles created thereafter (eg optical photons)
+		
+//		G4cout<<"DEBUG!!! Track id= "<<atrack->GetTrackID()<<", Creator Process= "<<atrack->GetCreatorProcess()<<", StepNumber= "<<atrack->GetCurrentStepNumber()<<", PDG code= "<<atrack->GetDynamicParticle()->GetDefinition()->GetPDGEncoding()<<G4endl;
 		/*
 		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"DEBUG STACKING ACTION"<<G4endl;
 //		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"Particella= "<<atrack->GetDynamicParticle()->GetDefinition()->GetPDGEncoding()
