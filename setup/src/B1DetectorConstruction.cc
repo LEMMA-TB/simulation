@@ -278,7 +278,6 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	
 	G4ThreeVector posCerenkovFe  = G4ThreeVector(0, 0,-Cerenkov_sizeZ/2.+Cerenkov_AluZ+Cerenkov_SiOZ+Cerenkov_AirZ+Cerenkov_FeZ/2.); //in Cerenkov mother volume
 	
-	
 	G4ThreeVector posCerenkovSiO2A  = G4ThreeVector(0, -Cerenkov_SiOY,-Cerenkov_sizeZ/2.+Cerenkov_AluZ+Cerenkov_SiOZ+Cerenkov_AirZ+Cerenkov_FeZ +Cerenkov_Air2Z +Cerenkov_SiOZ/2.); //in Cerenkov mother volume
 	G4ThreeVector posCerenkovSiO2B  = G4ThreeVector(0, 0,-Cerenkov_sizeZ/2.+Cerenkov_AluZ+Cerenkov_SiOZ+Cerenkov_AirZ+Cerenkov_FeZ +Cerenkov_Air2Z +Cerenkov_SiOZ/2.); //in Cerenkov mother volume
 	G4ThreeVector posCerenkovSiO2C  = G4ThreeVector(0, +Cerenkov_SiOY,-Cerenkov_sizeZ/2.+Cerenkov_AluZ+Cerenkov_SiOZ+Cerenkov_AirZ+Cerenkov_FeZ +Cerenkov_Air2Z +Cerenkov_SiOZ/2.); //in Cerenkov mother volume

@@ -154,7 +154,8 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 - Added Cerenkov process for both Cerenkov and PbGlass detectors (optical properties for the latter to be checked, for now same as Cerenkov since others seem not to work)
 - There is a cut in Cerenkov Photons lambda (now at 200nm for Cerenkov, 0 for PbGlass) for scoring them to simulate PMT response, changeable in SteppingAction
 
-
+2018.02.15 by collamaf
+- Added support structure for T3 (Si30) of alluminum
 
 
 TODO LIST

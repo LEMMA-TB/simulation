@@ -41,7 +41,7 @@ int main(int argc,char** argv)
   G4Random::setTheSeed(seed);
   
 //#ifdef G4MULTITHREADED
-#if 0
+#if 1
 	G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads( G4Threading::G4GetNumberOfCores() );
 #else
