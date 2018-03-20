@@ -67,7 +67,7 @@ int main(int argc,char** argv)
 	G4bool ExtSourceFlagBha=true;
 	G4bool ExtSourceFlagMu=false;
 	
-	//Flag to cut on output file: photons with energy lower than this value will not be writte. Set negative to write them all
+	//Flag to cut on output file: photons with energy lower than this value will not be written. Set negative to write them all
 	G4double RootCutThr=1*GeV;
 	
 	

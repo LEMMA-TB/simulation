@@ -245,7 +245,7 @@ void PhysicsList::ConstructGeneral()
       }
   }
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  // Scale muon pair cross section 
+  // Scale muon pair cross section toggle bias
   // Function call moved from SetCuts to ConstructGeneral
   // to allow proper funcionalities with MultiThread
 //	SetAnnihiToMuPairFac(1.e3);
