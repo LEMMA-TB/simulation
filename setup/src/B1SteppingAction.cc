@@ -139,6 +139,12 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		}
 	}
 	
+	if (subdet==72 && DepEne>0 && fStoreCaloEnDepFlag) { //Scint72 deposited energy
+		(runStepAction->GetScint72DepEne()).push_back(DepEne);
+	}
+	if (subdet==74 && DepEne>0 && fStoreCaloEnDepFlag) { //Scint74 deposited energy
+		(runStepAction->GetScint74DepEne()).push_back(DepEne);
+	}
 	//added on 15.12.17 @ Padova
 	if (NextVol && ThisVol->GetName()=="EcalDummy" && NextVol->GetName()=="Ecal") {
 		runStepAction->GetDEVAInX().push_back(step->GetPostStepPoint()->GetPosition().x()/cm);

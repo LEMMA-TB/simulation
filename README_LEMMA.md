@@ -157,13 +157,17 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 2018.02.15 by collamaf
 - Added support structure for T3 (Si30) of alluminum
 
+2018.03.29 by collamaf
+- Added entire structure for Si30
+- Added scoring of energy release into Scintillators 72/74
+
 
 TODO LIST
 - forzatura punto di generazione dei mu/bhabha con generatore esterno - PER ORA RINUNCIO! LA TRACCIA ORIGINARIA SEMBRA INTOCCABILE DENTRO (CONST...) STACKING ACTION
 - aggiungere supporto Si 20 per vedere se genera cose
 - controllare parametri ottici PbGlass
 - nome file di ouptut contenente dati simulazione
-
+- controllare quei misteriosi "0.X" negli Z dei silici
 
 
 

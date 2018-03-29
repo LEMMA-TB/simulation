@@ -56,8 +56,14 @@
 #/vis/filtering/trajectories/particleFilter-0/add mu-
 #
 # To invert the above, drawing all particles except gammas,
-/vis/filtering/trajectories/create/particleFilter
-/vis/filtering/trajectories/particleFilter-0/add opticalphoton
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add e+
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+
+#/vis/filtering/trajectories/particleFilter-0/add opticalphoton
 # keep the above two lines but also add:
 #/vis/filtering/trajectories/particleFilter-0/invert true
 #
@@ -107,14 +113,26 @@
 # To get nice view
 /vis/geometry/set/visibility World 0 false
 /vis/geometry/set/visibility Envelope 0 false
-#/vis/viewer/set/style surface
+/vis/viewer/set/style surface
 /vis/viewer/set/hiddenMarker true
+#/vis/specify Vetronite30
+#/vis/specify Box30 2
 /vis/geometry/set/colour Pipe12 0 0.5 0.5 0.5 1
 /vis/geometry/set/colour Pipe34 0 0.5 0.5 0.5 1
 /vis/geometry/set/colour Bend 0 1 0 0 1
 /vis/geometry/set/colour Trk1 0 1 1 0 1
 /vis/geometry/set/colour Trk2 0 1 1 0 1
-/vis/geometry/set/colour Trk3 0 1 1 0 1
+/vis/geometry/set/colour Trk3 0 1 0 0 1
+
+/vis/geometry/set/colour Box30 0 0.5 .5 .5 0.3
+#/vis/geometry/set/colour Box30in 0 0.5 .5 .5 0
+#/vis/geometry/set/colour Box30HoleB 0 0 0 0 1
+#/vis/geometry/set/colour Box30HoleF 0 0 0 0 1
+/vis/geometry/set/colour Vetronite30 0 1 1 0 1
+#/vis/geometry/set/colour Vetronite30Hole 0 0 0 0 1
+/vis/geometry/set/colour AluBar30 0 0.5 .5 .5 1
+
+
 /vis/geometry/set/colour Target 0 0 1 0 1
 /vis/geometry/set/colour Trk4 0 1 1 0 1
 /vis/geometry/set/colour Trk5a 0 1 1 0 1
@@ -141,7 +159,7 @@
 /vis/viewer/set/viewpointThetaPhi -90 270 deg
 #
 # Re-establish auto refreshing and verbosity:
-/vis/viewer/set/autoRefresh true
+#/vis/viewer/set/autoRefresh true
 /vis/verbose warnings
 #
 # For file-based drivers, use this to create an empty detector view:

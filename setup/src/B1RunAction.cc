@@ -104,37 +104,6 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 	analysisManager->CreateNtupleDColumn("PbGlass_DepEne");   //38
 
 	
-#if 0
-	analysisManager->CreateNtupleDColumn("DEVAEneTot1");   //9
-	analysisManager->CreateNtupleDColumn("DEVAEneTot2");   //10
-	analysisManager->CreateNtupleDColumn("DEVAEneTot3");   //11
-	analysisManager->CreateNtupleDColumn("DEVAEneTot4");   //12
-	analysisManager->CreateNtupleDColumn("DEVAEneTot5");   //13
-	analysisManager->CreateNtupleDColumn("DEVAEneTot6");   //14
-	analysisManager->CreateNtupleDColumn("DEVAEneTot");   //15
-	analysisManager->CreateNtupleDColumn("DEVAEneFot1");   //16
-	analysisManager->CreateNtupleDColumn("DEVAEneFot2");   //17
-	analysisManager->CreateNtupleDColumn("DEVAEneFot3");   //18
-	analysisManager->CreateNtupleDColumn("DEVAEneFot4");   //19
-	analysisManager->CreateNtupleDColumn("DEVAEneFot5");   //20
-	analysisManager->CreateNtupleDColumn("DEVAEneFot6");   //21
-	analysisManager->CreateNtupleDColumn("DEVAEneFot");   //22
-	analysisManager->CreateNtupleDColumn("DEVAEnePos1");   //23
-	analysisManager->CreateNtupleDColumn("DEVAEnePos2");   //24
-	analysisManager->CreateNtupleDColumn("DEVAEnePos3");   //25
-	analysisManager->CreateNtupleDColumn("DEVAEnePos4");   //26
-	analysisManager->CreateNtupleDColumn("DEVAEnePos5");   //27
-	analysisManager->CreateNtupleDColumn("DEVAEnePos6");   //28
-	analysisManager->CreateNtupleDColumn("DEVAEnePos");   //29
-	analysisManager->CreateNtupleDColumn("DEVAEneEle1");   //30
-	analysisManager->CreateNtupleDColumn("DEVAEneEle2");   //31
-	analysisManager->CreateNtupleDColumn("DEVAEneEle3");   //32
-	analysisManager->CreateNtupleDColumn("DEVAEneEle4");   //33
-	analysisManager->CreateNtupleDColumn("DEVAEneEle5");   //34
-	analysisManager->CreateNtupleDColumn("DEVAEneEle6");   //35
-	analysisManager->CreateNtupleDColumn("DEVAEneEle");   //36
-#endif
-	
 	//added on 15.12.2017 @ Padova to compare with data analysis of enetring points in DEVA
 #if 1
 	analysisManager->CreateNtupleDColumn(0,"DEVAInX", RunVectorDEVAInX);
@@ -144,7 +113,9 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 //	analysisManager->CreateNtupleDColumn(0,"nhits", RunVectorNHits);
 //	analysisManager->CreateNtupleDColumn(0,"itrack", RunVectorItrack);
 	
-	
+	analysisManager->CreateNtupleDColumn(0,"Scint72DepEne", RunVectorScint72DepEne);
+	analysisManager->CreateNtupleDColumn(0,"Scint74DepEne", RunVectorScint74DepEne);
+
 	/*
   analysisManager->CreateNtupleIColumn("subdet");
   analysisManager->CreateNtupleIColumn("idp");

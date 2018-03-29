@@ -33,6 +33,7 @@
 #include <G4ChordFinder.hh>
 #include "G4PhysicalVolumeStore.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4SubtractionSolid.hh"
 
 
 
@@ -89,7 +90,22 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double trk_sizeZ5 = 0.8*mm;
 	G4double trk_sizeZ6 = 0.8*mm;
 	
-	
+	G4double Si30Box_sizeX=125*mm;
+	G4double Si30Box_sizeY=125*mm;
+	G4double Si30Box_sizeZ=45*mm; //was 40...
+	G4double Si30Box_AluThicknessX=10*mm;
+	G4double Si30Box_AluThicknessY=10*mm;
+	G4double Si30Box_AluThicknessZ=3.3*mm;
+	G4double Si30AluBar_sizeX=100*mm;
+	G4double Si30AluBar_sizeY=13*mm;
+	G4double Si30AluBar_sizeZ=13*mm;
+	G4double DistXSi30Bar=0;
+	G4double DistYSi30Bar=-Si30Box_sizeY/2.+Si30Box_AluThicknessY+Si30AluBar_sizeY/2.;
+	G4double DistZSi30Bar=-Si30Box_sizeZ/2.+Si30Box_AluThicknessZ+Si30AluBar_sizeZ/2.;
+	G4double Si30Vetronite_sizeX=100*mm;
+	G4double Si30Vetronite_sizeY=100*mm;
+	G4double Si30Vetronite_sizeZ=11*mm;
+
 	//--> Be amorphous crystal target:
 	//	G4double cry_sizeX = 5.*cm;
 	//	G4double cry_sizeY = 5.*cm;
@@ -229,8 +245,8 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double DistZGcalIron=5*cm;
 	G4double DistLeadCerenkov=10*cm;
 	G4double ChamberOffsetX=3*cm;
-	G4double X3Corr=0*cm; //was 1.cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin
-	G4double Y3Corr=0*cm; //was -.5cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin
+	G4double X3Corr=1*cm; //was 1.cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin
+	G4double Y3Corr=-.5*cm; //was -.5cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin
 	G4double ChamberLayerZ[12]={-10.75*cm, -9.45*cm, -8.15*cm, -6.85*cm,  7.45*cm, 8.75*cm, 10.05*cm,11.35*cm, 12.85*cm, 14.15*cm, 15.45*cm, 16.75*cm}; //meas. from Bertolin
 	//	G4double ChamberLayerZ[12]={0*cm, 1.5*cm, 3*cm, 4.5*cm, 6*cm, 7.5*cm, 9*cm, 10.5*cm, 12*cm, 13.5*cm, 15*cm, 16.5*cm};
 	
@@ -240,6 +256,14 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4ThreeVector posTrk2  = G4ThreeVector(0.,0.,516.8*cm); // Si-Trk2  Subdet 20
 	G4ThreeVector posTarg1 = G4ThreeVector(0.,0.,545.8*cm); // TARGET
 	G4ThreeVector posTrk3  = G4ThreeVector(X3Corr,Y3Corr,577.8*cm); // Si-Trk3  Subdet 30
+	G4ThreeVector Hole30Shift= G4ThreeVector(2.35*cm,2.65*cm,0); //calculated to have the active area @e.6cm from bottom and 2.9 cm from right edges
+	G4ThreeVector posBox30  = posTrk3+Hole30Shift; // Si-Trk3  Subdet 30
+	G4ThreeVector posVetronite30  = posTrk3+Hole30Shift; // Si-Trk3  Subdet 30
+//	G4ThreeVector posAlu30Bar  = G4ThreeVector(DistXSi30Bar,DistYSi30Bar,DistZSi30Bar); // added on 2018.03.28
+//	G4ThreeVector posAlu30Bar  = G4ThreeVector(posTrk3.x()+DistXSi30Bar,posTrk3.y()+DistYSi30Bar,posTrk3.z()+DistZSi30Bar); // added on 2018.03.28
+	G4ThreeVector posAlu30Bar  = posBox30+G4ThreeVector(DistXSi30Bar, DistYSi30Bar, DistZSi30Bar); // added on 2018.03.28
+	G4ThreeVector posTrk3HoleF  = G4ThreeVector(0,0,-Si30Box_sizeZ/2.+Si30Box_AluThicknessZ/2.)-Hole30Shift; // added on 2018.03.28
+	G4ThreeVector posTrk3HoleB  = G4ThreeVector(0,0,Si30Box_sizeZ/2.-Si30Box_AluThicknessZ/2.)-Hole30Shift; // added on 2018.03.28
 	G4ThreeVector posPipe34  = G4ThreeVector(0.,0.,903.95*cm); // Pipe between T3 and T4
 	G4ThreeVector posTrk4  = G4ThreeVector(0.,0.,1152.1*cm); // Si-Trk4  Subdet 40
 	G4ThreeVector posBend  = G4ThreeVector(0.,0.,zBendMagn); // Dipole magnet center era 1203
@@ -356,18 +380,36 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	
 	G4Element* elSi = new G4Element("Silicon" ,"Si" , 14., 28.09*g/mole);
 	
+
+	
+	
 	G4Material* SiO2 =
 	new G4Material("quartz",d= 2.200*g/cm3, natoms=2);
 	SiO2->AddElement(elSi, natoms=1);
 	SiO2->AddElement(elO , natoms=2);
-	SiO2->SetMaterialPropertiesTable(silicaOP);  //toggle cerenkov in SiO2
+//	SiO2->SetMaterialPropertiesTable(silicaOP);  //toggle cerenkov in SiO2
+	
+	A=1.008*g/mole; Z=1; G4Element* elH = new G4Element("Hydrogen","H",Z,A);
+	A=12.011*g/mole; Z=6; G4Element* elC = new G4Element("Carbon","C",Z,A);
+	//Epoxy (for FR4 )
+	d = 1.2*g/cm3;
+	G4Material* Epoxy = new G4Material("Epoxy" , d, 2);
+	Epoxy->AddElement(elH, natoms=2);
+	Epoxy->AddElement(elC, natoms=2);
+	
+	
+	//FR4 (Glass + Epoxy)
+	d = 1.86*g/cm3;
+	G4Material* FR4 = new G4Material("FR4"  , d, 2);
+	FR4->AddMaterial(SiO2, 0.528);
+	FR4->AddMaterial(Epoxy, 0.472);
 
 	// lead glass
 	G4Material* PbGl = new G4Material("Lead Glass", d= 3.85*g/cm3,
 									  natoms=2);
 	PbGl->AddElement(elPb, 0.5316);
 	PbGl->AddMaterial(SiO2, 0.4684);
-	PbGl->SetMaterialPropertiesTable(silicaOP);  //toggle cerenkov in PbGlass - CHECK I leave silicaOP because real PbGlass parameter seem not to work
+//	PbGl->SetMaterialPropertiesTable(silicaOP);  //toggle cerenkov in PbGlass - CHECK I leave silicaOP because real PbGlass parameter seem not to work
 	
 	G4bool checkOverlaps = true;
 	
@@ -444,7 +486,32 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4LogicalVolume* logicTrk2 = new G4LogicalVolume(trk2, silicio, "Trk2");
 	new G4PVPlacement(0,posTrk2,logicTrk2,"Trk2",logicWorld,false,0,checkOverlaps);
 	
+//	Si30Box_sizeX DistZSi30Bar posTrk3HoleF Si30Vetronite_sizeX
 	//-- Trk3-Si (30)
+	//I build the Alu Box by subtracting several pieces from a whole box
+	G4Box* Box30out = new G4Box("Box30out", Si30Box_sizeX/2, Si30Box_sizeY/2, Si30Box_sizeZ/2);
+	G4Box* Box30in = new G4Box("Box30in", Si30Box_sizeX/2-Si30Box_AluThicknessX, Si30Box_sizeY/2-Si30Box_AluThicknessY, Si30Box_sizeZ/2-Si30Box_AluThicknessZ);
+	G4VSolid* Box30a= new G4SubtractionSolid("Box30a", Box30out, Box30in);
+	G4Box* Box30HoleF = new G4Box("Box30HoleF", trk_sizeXa/2, trk_sizeYa/2, Si30Box_AluThicknessZ);
+	G4VSolid* Box30b= new G4SubtractionSolid("Box30b", Box30a, Box30HoleF, 0, posTrk3HoleF);
+	G4Box* Box30HoleB = new G4Box("Box30HoleB", trk_sizeXa/2, trk_sizeYa/2, Si30Box_AluThicknessZ);
+	G4VSolid* Box30= new G4SubtractionSolid("Box30", Box30b, Box30HoleB, 0, posTrk3HoleB);
+	
+	G4LogicalVolume* logicBox30 = new G4LogicalVolume(Box30, ferro, "Box30");
+	new G4PVPlacement(0,posBox30,logicBox30,"Box30",logicWorld,false,0,checkOverlaps);
+
+	G4Box* AluBar30 = new G4Box("AluBar30", Si30AluBar_sizeX/2, Si30AluBar_sizeY/2, Si30AluBar_sizeZ/2);
+	G4LogicalVolume* logicAluBar30 = new G4LogicalVolume(AluBar30, ferro, "AluBar30");
+	new G4PVPlacement(0,posAlu30Bar,logicAluBar30,"AluBar30",logicWorld,false,0,checkOverlaps);
+	
+		//I build the Vetroniet holder by subtracting several pieces from a whole box
+	G4Box* Vetronite30ext = new G4Box("Vetronite30ext", Si30Vetronite_sizeX/2, Si30Vetronite_sizeY/2, Si30Vetronite_sizeZ/2);
+	G4Box* Vetronite30Hole = new G4Box("Vetronite30Hole", trk_sizeXa/2, trk_sizeYa/2, Si30Vetronite_sizeZ/2+0.1);
+	//subtracting the hole with a shift: Hole30Shift
+	G4VSolid* Vetronite30= new G4SubtractionSolid("Vetronite30", Vetronite30ext, Vetronite30Hole, 0, -Hole30Shift);
+	G4LogicalVolume* logicVetronite30 = new G4LogicalVolume(Vetronite30, FR4, "Vetronite30");
+	new G4PVPlacement(0,posVetronite30,logicVetronite30,"Vetronite30",logicWorld,false,0,checkOverlaps);
+	
 	G4Box* trk3 = new G4Box("Trk3", trk_sizeXa/2, trk_sizeYa/2, 0.8*trk_sizeZ3/2);
 	G4LogicalVolume* logicTrk3 = new G4LogicalVolume(trk3, silicio, "Trk3");
 	new G4PVPlacement(0,posTrk3,logicTrk3,"Trk3",logicWorld,false,0,checkOverlaps);
@@ -466,22 +533,22 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4LogicalVolume* logicBend = new G4LogicalVolume(bend,aria,"Bend");
 	new G4PVPlacement(xRot,posBend,logicBend,"Bend",logicWorld,false,0,checkOverlaps);
 	
-	//-- Trk5a-Si (40)
+	//-- Trk5a-Si (51)
 	G4Box* trk5a = new G4Box("Trk5a", trk_sizeXb/2, trk_sizeYb/2, trk_sizeZ5/2);
 	G4LogicalVolume* logicTrk5a = new G4LogicalVolume(trk5a, vuoto, "Trk5a");
 	new G4PVPlacement(0,posTrk5a,logicTrk5a,"Trk5a",logicWorld,false,0,checkOverlaps);
 	
-	//-- Trk5b-Si (40)
+	//-- Trk5b-Si (50)
 	G4Box* trk5b = new G4Box("Trk5b", trk_sizeXb/2, trk_sizeYb/2, trk_sizeZ5/2);
 	G4LogicalVolume* logicTrk5b = new G4LogicalVolume(trk5b, vuoto, "Trk5b");
 	new G4PVPlacement(0,posTrk5b,logicTrk5b,"Trk5b",logicWorld,false,0,checkOverlaps);
 	
-	//-- Trk6a-Si (40)
+	//-- Trk6a-Si (56)
 	G4Box* trk6a = new G4Box("Trk6a", trk_sizeXb/2, trk_sizeYb/2, trk_sizeZ6/2);
 	G4LogicalVolume* logicTrk6a = new G4LogicalVolume(trk6a, vuoto, "Trk6a");
 	new G4PVPlacement(0,posTrk6a,logicTrk6a,"Trk6a",logicWorld,false,0,checkOverlaps);
 	
-	//-- Trk6b-Si (40)
+	//-- Trk6b-Si (55)
 	G4Box* trk6b = new G4Box("Trk6b", trk_sizeXb/2, trk_sizeYb/2, trk_sizeZ6/2);
 	G4LogicalVolume* logicTrk6b = new G4LogicalVolume(trk6b, vuoto, "Trk6b");
 	new G4PVPlacement(0,posTrk6b,logicTrk6b,"Trk6b",logicWorld,false,0,checkOverlaps);

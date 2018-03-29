@@ -64,6 +64,7 @@ public:
 	void AddCerenkovEneTot(G4double ene) {fCerenkovEneTot+=ene;}
 //	void AddCerenkovNFot(G4double nfot) {fNCerenkov+=ene;}
 
+
 	
 private:
 	B1RunAction* fRunAction;
@@ -117,6 +118,7 @@ private:
 	
 	G4int fNCerenkov;
 	G4int fNCerenkovPbGlass;
+
 
 };
 

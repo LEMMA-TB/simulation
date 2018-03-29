@@ -152,7 +152,11 @@ AnaLEMMA::AnaLEMMA(TTree *tree) : fChain(0)
 		TChain * chain = new TChain("LEMMA","");
 		
 		chain->Add("LemmaMC_Pos45_T_Ff_RealMu.root/LEMMA");
-		tree = chain;
+		/*
+		for (int aa=0; aa<56; aa++)
+		chain->Add(Form("/data_collamaf/TBGeant/build/HighStatRootNoTarg/LemmaMC_t%d.root/LEMMA",aa));
+*/
+		 tree = chain;
 #endif // SINGLE_TREE
 		
 		outputfile=new TFile(Form("%s_out.root", "LEMMA"), "RECREATE");

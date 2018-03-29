@@ -41,7 +41,7 @@ int main(int argc,char** argv)
   G4Random::setTheSeed(seed);
   
 //#ifdef G4MULTITHREADED
-#if 1
+#if 0
 	G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads( G4Threading::G4GetNumberOfCores() );
 #else
@@ -54,7 +54,7 @@ int main(int argc,char** argv)
 	G4double BeamEnergy=45.*GeV; //Primary Beam Energy (18, 22, 26 GeV options for e+ calibration) - 45 GeV for real TB
 	G4bool SimpleFlag=false;
 
-	G4bool TargetFlag=false;
+	G4bool TargetFlag=true;
 	G4bool FlipFieldFlag=true; //non-flipped (=false) field sends positrons towards the "clean channel" (just chamber, no calos), flipped (=true) sends positrons to "busy" channel ("final" setup)
 	G4bool MagMapFlag=false;
 	G4bool StoreCaloEnDepFlag=true; //to disable scoring of energy deposition (gamma, e+, e-, total) in DEVA calorimeter (sparing ~15% of disk space)
@@ -64,7 +64,7 @@ int main(int argc,char** argv)
 	//Flags to force use of externally generated primary files (for bhabha and muon pair production)
 	//Note that the filename is provided in PrimaryGenAction (path must be relative to where the code runs (eg build directory))
 	//These flags ovverride previous ones (MuonBeamFlag, ElectronBeamFlag etc) and also BeamEnergy
-	G4bool ExtSourceFlagBha=true;
+	G4bool ExtSourceFlagBha=false;
 	G4bool ExtSourceFlagMu=false;
 	
 	//Flag to cut on output file: photons with energy lower than this value will not be written. Set negative to write them all
