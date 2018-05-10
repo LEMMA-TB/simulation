@@ -145,7 +145,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	if (subdet==74 && DepEne>0 && fStoreCaloEnDepFlag) { //Scint74 deposited energy
 		(runStepAction->GetScint74DepEne()).push_back(DepEne);
 	}
-	//added on 15.12.17 @ Padova
+	//added on 15.12.17 @ Padova - What enters DEVA
 	if (NextVol && ThisVol->GetName()=="EcalDummy" && NextVol->GetName()=="Ecal") {
 		runStepAction->GetDEVAInX().push_back(step->GetPostStepPoint()->GetPosition().x()/cm);
 		runStepAction->GetDEVAInY().push_back(step->GetPostStepPoint()->GetPosition().y()/cm);
@@ -166,7 +166,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 
 						// se sono nel detector di PbGlass
 						if (subdet==79 && CerFotLambda>0) {
-							(fEventAction->AddPbGlassCere(1)); //incremento di 1 il contatore di fotoni cerenkov del rispettivo
+							(fEventAction->AddPbGlassCere(1)); //incremento di 1 il contatore di fotoni cerenkov
 						}
 						// se sono nel detector di Cerenkov
 						else if (subdet==80 && CerFotLambda>CerFotLambdaCut) {
@@ -185,8 +185,15 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 	//-- store info
 	//	if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary)
 	//				   || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary)) && !(Pid==22 && step->GetPreStepPoint()->GetMomentum().mag()<EThr) ) { //If Output Cut required do not store photons under a certain energy
-	if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary)
-				   || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary)) && (!fCutFlag || !(Pid==22 && step->GetPreStepPoint()->GetMomentum().mag()<fEThr) )) { //If Output Cut required do not store photons under a certain energy - Logic expression: A & B & !(!C || !(D & E) )
+	//#### NORMAL
+	if (dofill && ((step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary) || (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary)) && (!fCutFlag || !(Pid==22 && step->GetPreStepPoint()->GetMomentum().mag()<fEThr) )) { //If Output Cut required do not store photons under a certain energy - Logic expression: A & B & !(!C || !(D & E) )
+  //### FINE NORMAL
+
+//	ALL
+//	if (dofill  && subdet!=76  && subdet!=77  && subdet!=78 && (!fCutFlag || !(Pid==22 && step->GetPreStepPoint()->GetMomentum().mag()<fEThr) )) { //If Output Cut required do not store photons under a certain energy - Logic expression: A & B & !(!C || !(D & E) )
+
+	// SOLO PRE/POST
+//	if (dofill && (step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary) && (!fCutFlag || !(Pid==22 && step->GetPreStepPoint()->GetMomentum().mag()<fEThr) )) { //If Output Cut required do not store photons under a certain energy - Logic expression: A & B & !(!C || !(D & E) )
 		
 		G4int iev = -999;
 		const G4Event* evt = G4RunManager::GetRunManager()->GetCurrentEvent();
@@ -214,7 +221,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		kinev = step->GetTrack()->GetVertexKineticEnergy();
 		
 		//process = step->GetTrack()->GetCreatorProcess()->GetProcessName();
-		pro = step->GetTrack()->GetCreatorProcess()->GetProcessSubType();
+		if (step->GetTrack()->GetCreatorProcess()) pro = step->GetTrack()->GetCreatorProcess()->GetProcessSubType();
 		//			if (Itrack!=1) { // different from gun particle
 		xvertex = step->GetTrack()->GetVertexPosition();
 		
@@ -238,13 +245,25 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step){
 		(runStepAction->GetVectorPXvdir()).push_back(pvertexdir.x()/GeV);
 		(runStepAction->GetVectorPYvdir()).push_back(pvertexdir.y()/GeV);
 		(runStepAction->GetVectorPZvdir()).push_back(pvertexdir.z()/GeV);
-		(runStepAction->GetProcess()).push_back(1);
+		(runStepAction->GetProcess()).push_back(pro);
 		(runStepAction->GetIev()).push_back(iev);
 		(runStepAction->GetStep()).push_back(Istep);
 		(runStepAction->GetInextStep()).push_back(Inextstep);
 		//		(runStepAction->GetNHits()).push_back(Inextstep);
 		//		(runStepAction->GetItrack()).push_back(-999);
 		
+
+		if (step->GetPreStepPoint() && step->GetPreStepPoint()->GetStepStatus()==fGeomBoundary) {
+			(runStepAction->GetVectorCross()).push_back(-1);
+		} else	if (step->GetPostStepPoint() && step->GetPostStepPoint()->GetStepStatus()==fGeomBoundary) {
+			(runStepAction->GetVectorCross()).push_back(1);
+//		} else 	{
+//			(runStepAction->GetVectorCross()).push_back(0);
+		}
+			
+			
+			
+			
 		if (SHOW) G4cout<<
 			"  Evt="<<iev<<
 			", IDtrack="<<Itrack<<

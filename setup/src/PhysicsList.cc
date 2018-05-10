@@ -267,7 +267,7 @@ void PhysicsList::ConstructGeneral()
    SetCutValue(1.*mm, "e-");
    SetCutValue(1.*mm, "e+");  
    //+++++++++++++++++++++++++
-//   SetAnnihiToMuPairFac(1.e6);  // enhance cross section for this process
+//   SetAnnihiToMuPairFac(1.e6);  // enhance cross section for this process DEPRECATED!
    //+++++++++++++++++++++++++    
    if (verboseLevel>0) DumpCutValuesTable();
  }

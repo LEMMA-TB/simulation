@@ -35,7 +35,7 @@ INTERACTIONS vector (one entry per interaction happening at the border between t
 - subdet[]: number of subdetector in which the interactio happened
 - Idp[]: PDG code of particle interacting (11=e-, -11=e+, 22=gamma, 13=mu-...);
 - ipar[]: parent ID of the track (0 is primary...);
-- Itrack[]: track ID of the track;
+- itrack[]: track ID of the track;
 - Time[]: time age of the track [ns];
 - xh[]: X coordinate of the interaction [cm];
 - yh[]: Y coordinate of the interaction [cm];
@@ -65,7 +65,7 @@ Please note that due to Geant4 issues regarding multi core root output, multi th
 ### TO MERGE MULTIPLE ROOT OUTPUT FILES:
 TChain * chain = new TChain("LEMMA")
 chain->Add("LemmaMC_t*.root")
-TFile *file = TFile::Open("LemmaMC_Pos22_NoT_Ff.root","RECREATE");
+TFile *file = TFile::Open("LemmaMC_MuMu_Ff_calo.root","RECREATE");
 chain->CloneTree(-1,"fast");
 file->Write();
 
@@ -76,7 +76,11 @@ TFile *file = TFile::Open("LemmaMC_Tot22PosNoT_simple.root","RECREATE");
 TFile *file = TFile::Open("LemmaMC_Pos22s_NoT_Ff_calo.root","RECREATE");  //Fixed field  flipped
 TFile *file = TFile::Open("LemmaMC_Pos22_NoT_M_calo.root","RECREATE");    //Map field not flipped
 
+TFile *file = TFile::Open("LemmaMC_Pos45_T_Ff_MuBias1e3p.root","RECREATE");
 
+TFile *file = TFile::Open("LemmaMC_MuMu_Ff_calo.root","RECREATE"); //Mu Mu pairs from ext gen
+
+git add -u
 
 ### OR TO READ TOGETHER WITHOUT MERGING
 
@@ -161,10 +165,12 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 - Added entire structure for Si30
 - Added scoring of energy release into Scintillators 72/74
 
+2018.04.16 by collamaf
+- Added new entry in root file to save if a track was "starting on" a boundary (Cross=-1) or "ending on" a boundary (Cross=1) (0 if niether the cases, but should not happen..)
 
 TODO LIST
+- per qualche motivo con generatore eserno in MT crasha.. tocca girarlo in ST (sembra essere colpa dell'attivazione dello store dei calo!)
 - forzatura punto di generazione dei mu/bhabha con generatore esterno - PER ORA RINUNCIO! LA TRACCIA ORIGINARIA SEMBRA INTOCCABILE DENTRO (CONST...) STACKING ACTION
-- aggiungere supporto Si 20 per vedere se genera cose
 - controllare parametri ottici PbGlass
 - nome file di ouptut contenente dati simulazione
 - controllare quei misteriosi "0.X" negli Z dei silici

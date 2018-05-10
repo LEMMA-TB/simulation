@@ -64,6 +64,9 @@ class B1RunAction : public G4UserRunAction
 	std::vector<G4double>& GetScint72DepEne() {return RunVectorScint72DepEne; }
 	std::vector<G4double>& GetScint74DepEne() {return RunVectorScint74DepEne; }
 
+	std::vector<G4double>& GetVectorCross() {return RunVectorCross; }
+
+	
 //	std::vector<G4double>& GetNHits() {return RunVectorNHits; }
 //	std::vector<G4double>& GetItrack() {return RunVectorItrack; }
 
@@ -112,6 +115,8 @@ private:
 	
 	std::vector<G4double> RunVectorScint72DepEne;
 	std::vector<G4double> RunVectorScint74DepEne;
+
+	std::vector<G4double> RunVectorCross;
 
 	
 	

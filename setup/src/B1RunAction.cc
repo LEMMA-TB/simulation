@@ -113,8 +113,16 @@ void B1RunAction::BeginOfRunAction(const G4Run*){
 //	analysisManager->CreateNtupleDColumn(0,"nhits", RunVectorNHits);
 //	analysisManager->CreateNtupleDColumn(0,"itrack", RunVectorItrack);
 	
+	
+	analysisManager->CreateNtupleIColumn(0,"Proc", RunVectorProcess);
+
+	
 	analysisManager->CreateNtupleDColumn(0,"Scint72DepEne", RunVectorScint72DepEne);
 	analysisManager->CreateNtupleDColumn(0,"Scint74DepEne", RunVectorScint74DepEne);
+
+	analysisManager->CreateNtupleDColumn(0,"BCross", RunVectorCross);
+
+	
 
 	/*
   analysisManager->CreateNtupleIColumn("subdet");

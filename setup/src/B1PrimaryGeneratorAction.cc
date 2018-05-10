@@ -8,7 +8,10 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#define HEPFLAG //Toggle this flag to enable HepMC External generator at pre-processor level
+#ifdef HEPFLAG
 #include "HepMCG4AsciiReader.hh"
+#endif
 
 B1PrimaryGeneratorAction::B1PrimaryGeneratorAction(B1EventAction* eventAction, G4double BeamEnergy, G4bool MuonBeamFlag, G4bool ElectronBeamFlag, G4bool SimpleFlag, G4bool ExtSourceFlagBha, G4bool ExtSourceFlagMu)
 : G4VUserPrimaryGeneratorAction(),
@@ -35,11 +38,15 @@ fExtSourceFlagMu(ExtSourceFlagMu)
 	if(fExtSourceFlagBha) {
 		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"I am using as primary particles externally generated e+e- bhabha pairs"<<G4endl;
 //		hepmcAscii = new HepMCG4AsciiReader("ExtDataBhabha.dat"); //path must be relative to where the code runs (eg build directory)
+#ifdef HEPFLAG
 		hepmcAscii = new HepMCG4AsciiReader("ExtData_ep.dat"); //path must be relative to where the code runs (eg build directory)
+#endif
 	} else if(fExtSourceFlagMu) {
 		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"I am using as primary particles externally generated mu+mu- pairs"<<G4endl;
 //		hepmcAscii = new HepMCG4AsciiReader("ExtDataBhabha.dat");
+#ifdef HEPFLAG
 		hepmcAscii = new HepMCG4AsciiReader("ExtData_mm.dat");
+#endif
 	} else {
 		if(fMuonBeamFlag) {
 			particle = particleTable->FindParticle(particleName="mu-"); //Primary Muon Beam
@@ -78,7 +85,7 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	//  y0 = G4RandGauss::shoot(0.,sizeY);
 	//    if ( abs(x0)<cut && abs(y0)<cut ) break;
 	//    }
-	z0 = -1.e-5*mm;
+	z0 = -1*mm; //was -1.e-5 until 6.4.18, but is inside T1!!!
 	
 	
 	
@@ -156,7 +163,9 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	
 	if (fExtSourceFlagBha || fExtSourceFlagMu) {
 //		G4cout<<"SPARO DA FUORI"<<G4endl;
+#ifdef HEPFLAG
 		hepmcAscii->GeneratePrimaryVertex(anEvent);
+#endif
 	}	else {
 //		G4cout<<"SPARO SORGENTE STANDARD"<<G4endl;
 

@@ -73,6 +73,8 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	// Detector parameters and size
 	// =============================
 	
+	G4bool Si30Shift=false; //toggle shift of Si30 wrt beam center
+	
 	//--> WORLD:
 	G4double world_sizeX = 4*m;
 	G4double world_sizeY = 3*m;
@@ -208,13 +210,16 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	// ============
 	//   positions
 	// ============
-	G4double xTrk5=5.1*cm+trk_sizeXb/2.;
+	G4double xTrk5a=3.9*cm+trk_sizeXb/2.; //Det 51
+	G4double xTrk5b=-5*cm-trk_sizeXb/2.; //Det 50
 	G4double zTrk5=1563*cm;
 	G4double zBendMagn=zTrk5-260*cm;  //1563-260=1303
 	
 	//	G4double xTrk6=14.85*cm+trk_sizeXb/2.; //before 2017-11-28
 	//	G4double zTrk6=2137.4*cm;   //before 2017-11-28
-	G4double xTrk6=10.5*cm+2.6*cm+trk_sizeXb/2.;
+//	G4double xTrk6=10.5*cm+2.6*cm+trk_sizeXb/2.; //before 3.3.18
+	G4double xTrk6a=11.3*cm+trk_sizeXb/2.; //Det 56
+	G4double xTrk6b=-12.5*cm-trk_sizeXb/2.; //Det 55
 	//	G4double zTrk6=1852*cm; //correcting for 280cm pre T1 offset
 	G4double zTrk6=1776*cm; //believing my measured distance from last geom measurement: 2137.4-280=1852 is measured by geom, but then was moved by Mario and Fabio to match the beam. At the end I add 213cm fro T5 -> 1776cm
 	
@@ -245,8 +250,12 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4double DistZGcalIron=5*cm;
 	G4double DistLeadCerenkov=10*cm;
 	G4double ChamberOffsetX=3*cm;
-	G4double X3Corr=1*cm; //was 1.cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin
-	G4double Y3Corr=-.5*cm; //was -.5cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin
+	G4double X3Corr=-1.052*cm; //was 1.cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin - changed to -1.052cm on 3-3-18 according to M Rotondo
+	G4double Y3Corr=-.885*cm; //was -.5cm according to exp data, changed to 0 on 2018-01-31 by collamaf after discussion with Bertolin - changed to -0.885cm on 3-3-18 according to M Rotondo
+	if (!Si30Shift) {
+		X3Corr=0;
+		Y3Corr=0;
+	}
 	G4double ChamberLayerZ[12]={-10.75*cm, -9.45*cm, -8.15*cm, -6.85*cm,  7.45*cm, 8.75*cm, 10.05*cm,11.35*cm, 12.85*cm, 14.15*cm, 15.45*cm, 16.75*cm}; //meas. from Bertolin
 	//	G4double ChamberLayerZ[12]={0*cm, 1.5*cm, 3*cm, 4.5*cm, 6*cm, 7.5*cm, 9*cm, 10.5*cm, 12*cm, 13.5*cm, 15*cm, 16.5*cm};
 	
@@ -267,12 +276,12 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct(){
 	G4ThreeVector posPipe34  = G4ThreeVector(0.,0.,903.95*cm); // Pipe between T3 and T4
 	G4ThreeVector posTrk4  = G4ThreeVector(0.,0.,1152.1*cm); // Si-Trk4  Subdet 40
 	G4ThreeVector posBend  = G4ThreeVector(0.,0.,zBendMagn); // Dipole magnet center era 1203
-	G4ThreeVector posTrk5a  = G4ThreeVector(xTrk5,0.,zTrk5); // Si-Trk5a
-	G4ThreeVector posTrk5b  = G4ThreeVector(-xTrk5,0.,zTrk5); // Si-Trk5b
-	G4ThreeVector posTrk6a  = G4ThreeVector(xTrk6,0.,zTrk6); // Si-Trk6a
-	G4ThreeVector posTrk6b  = G4ThreeVector(-xTrk6,0.,zTrk6); // Si-Trk6b
-	G4ThreeVector posScintA  = G4ThreeVector(xTrk6,0.,zTrk6+ScintA_sizeZ/2.+1*cm); // ScintA behind T6a
-	G4ThreeVector posScintB  = G4ThreeVector(-xTrk6,0.,zTrk6+ScintB_sizeZ/2.+1*cm); // ScintB behind T6b
+	G4ThreeVector posTrk5a  = G4ThreeVector(xTrk5a,0.,zTrk5); // Si-Trk5a
+	G4ThreeVector posTrk5b  = G4ThreeVector(xTrk5b,0.,zTrk5); // Si-Trk5b
+	G4ThreeVector posTrk6a  = G4ThreeVector(xTrk6a,0.,zTrk6); // Si-Trk6a
+	G4ThreeVector posTrk6b  = G4ThreeVector(xTrk6b,0.,zTrk6); // Si-Trk6b
+	G4ThreeVector posScintA  = G4ThreeVector(xTrk6a,0.,zTrk6+ScintA_sizeZ/2.+1*cm); // ScintA behind T6a
+	G4ThreeVector posScintB  = G4ThreeVector(xTrk6b,0.,zTrk6+ScintB_sizeZ/2.+1*cm); // ScintB behind T6b
 	G4ThreeVector posGcal  = G4ThreeVector(CaloOffset,0.,zCalo+Gcal_sizeZ/2.); // GCAL center
 	G4ThreeVector posIblock  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX/2.+DistXGcalIron,0.,zCalo+Iblock_sizeZ/2.+DistZGcalIron); // Iron Block center
 	G4ThreeVector posEcal  = G4ThreeVector(CaloOffset+Gcal_sizeX/2.+Iblock_sizeX+DistXIronEcal+DistXGcalIron+DEVAenv_sizeX/2.,0.,zCalo+DEVAenv_sizeZ/2.); // ECAL center
