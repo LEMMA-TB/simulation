@@ -168,12 +168,14 @@ LEMMA->Draw("Kinev:CopyNb","subdet==77&&Idp==-11","lego")
 2018.04.16 by collamaf
 - Added new entry in root file to save if a track was "starting on" a boundary (Cross=-1) or "ending on" a boundary (Cross=1) (0 if niether the cases, but should not happen..)
 
+2018.06.05 by collamaf
+- Now the format of the output filename is created in the main according to various flags and printed as very last text in the terminal to be issed as a command (both in case of MT or ST)
+
+
 TODO LIST
 - per qualche motivo con generatore eserno in MT crasha.. tocca girarlo in ST (sembra essere colpa dell'attivazione dello store dei calo!)
-- forzatura punto di generazione dei mu/bhabha con generatore esterno - PER ORA RINUNCIO! LA TRACCIA ORIGINARIA SEMBRA INTOCCABILE DENTRO (CONST...) STACKING ACTION
 - controllare parametri ottici PbGlass
 - nome file di ouptut contenente dati simulazione
-- controllare quei misteriosi "0.X" negli Z dei silici
 
 
 

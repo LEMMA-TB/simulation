@@ -40,9 +40,12 @@ int main(int argc,char** argv)
 	G4long seed = time(NULL);
 //	G4long seed = 12345;
   G4Random::setTheSeed(seed);
-  
+	
+	
+	G4bool MTFlag=FALSE;
 //#ifdef G4MULTITHREADED
 #if 1
+	MTFlag=TRUE;
 	G4MTRunManager* runManager = new G4MTRunManager;
 //  runManager->SetNumberOfThreads( G4Threading::G4GetNumberOfCores() );
 	runManager->SetNumberOfThreads( G4Threading::G4GetNumberOfCores() );
@@ -66,13 +69,38 @@ int main(int argc,char** argv)
 	//Flags to force use of externally generated primary files (for bhabha and muon pair production)
 	//Note that the filename is provided in PrimaryGenAction (path must be relative to where the code runs (eg build directory))
 	//These flags ovverride previous ones (MuonBeamFlag, ElectronBeamFlag etc) and also BeamEnergy
-	G4bool ExtSourceFlagBha=true;
-	G4bool ExtSourceFlagMu=false;
+	G4bool ExtSourceFlagBha=false;
+	G4bool ExtSourceFlagMu=true;
 	
 	//Flag to cut on output file: photons with energy lower than this value will not be written. Set negative to write them all
 	G4double RootCutThr=1*GeV;
 	
+	G4String OutputFilename = "LemmaMC2017";
+	G4String OutputFilenameFirstNote ="";
+	OutputFilename.append(OutputFilenameFirstNote);
 	
+	
+	if (ExtSourceFlagMu) OutputFilename.append("_MuMu");
+	else if (ExtSourceFlagBha) OutputFilename.append("_Bhabha");
+	else if (ElectronBeamFlag) OutputFilename.append("_Ele"+ std::to_string(G4int (BeamEnergy)) );
+	else OutputFilename.append("_Pos"+ std::to_string(G4int (BeamEnergy)) );
+	
+	if (SimpleFlag) OutputFilename.append("_simple");
+	
+	
+	if (TargetFlag) OutputFilename.append("_T");
+	else  OutputFilename.append("_NoT");
+	
+	if (MagMapFlag) OutputFilename.append("_M"); //Map
+	else  OutputFilename.append("_F"); //Fixed
+	
+	if (FlipFieldFlag) OutputFilename.append("f");
+	
+	if (StoreCaloEnDepFlag) OutputFilename.append("_calo");
+	
+	
+	G4String OutputFilenameSecondNote ="";
+	OutputFilename.append(OutputFilenameSecondNote);
 	
 //==================================================
   G4bool FTFP = false; // standard Geant4 PhysicsList
@@ -138,6 +166,29 @@ int main(int argc,char** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  delete runManager;  
+  delete runManager;
+	
+	
+	if (MTFlag) {
+		G4cout<<
+		"\n ##################################### \n ##################################### \n########### TO CREATE PROPER ROOT FILE FOR THIS SIMULATION \n TChain * chain = new TChain(\"LEMMA\");\n	chain->Add(\"LemmaMC_t*.root\");\n TFile *file = TFile::Open(\""<< OutputFilename<<".root\",\"RECREATE\");\n 	chain->CloneTree(-1,\"fast\"); \n file->Write();\n ##################################### \n ##################################### "
+		<<G4endl;
+		//	"########### TO ANALYZE THIS SIMULATION \n TChain * chain = new TChain(\"LEMMA\");\n	chain->Add(\"LemmaMC_t*.root\");\n TChain * chain2 = new TChain(\"Beam\");\n	chain2->Add(\"LemmaMC_t*.root\")\n ;TFile *file = TFile::Open(\"LemmaMC2018_MuMuBert_T_MfCurrent650_10k_PreStepZ_Large.root\",\"RECREATE\");\n 	chain->CloneTree(-1,\"fast\"); \n 	chain2->CloneTree(-1,\"fast\");\n file->Write(); "
+	} else {
+		
+		G4cout<<
+		"\n ##################################### \n ##################################### \n ########### TO CREATE PROPER ROOT FILE FOR THIS SIMULATION \n mv LemmaMC.root "<< OutputFilename<<".root\n ##################################### \n ##################################### "
+		<<G4endl;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
   return 0;
 }

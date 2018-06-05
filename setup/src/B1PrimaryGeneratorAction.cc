@@ -45,7 +45,8 @@ fExtSourceFlagMu(ExtSourceFlagMu)
 		G4cout<<"# # # # # # # # # # # # # # # # # # # # # # # # # # # "<<G4endl<<"I am using as primary particles externally generated mu+mu- pairs"<<G4endl;
 //		hepmcAscii = new HepMCG4AsciiReader("ExtDataBhabha.dat");
 #ifdef HEPFLAG
-		hepmcAscii = new HepMCG4AsciiReader("ExtData_mm.dat");
+//		hepmcAscii = new HepMCG4AsciiReader("ExtData_mm.dat");
+		hepmcAscii = new HepMCG4AsciiReader("ExtData_mm-prepared.dat"); //by Bertolin 4-6-2018
 #endif
 	} else {
 		if(fMuonBeamFlag) {
